@@ -294,72 +294,6 @@
             color: #667eea;
         }
 
-        .accordion-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px 25px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
-            margin-bottom: 5px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .accordion-header:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .accordion-header h3 {
-            margin: 0;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .accordion-summary {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .accordion-summary-item {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .accordion-icon {
-            font-size: 24px;
-            transition: transform 0.3s;
-        }
-
-        .accordion-icon.active {
-            transform: rotate(180deg);
-        }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-            background: #f8f9fa;
-            border-radius: 0 0 12px 12px;
-            margin-top: -5px;
-        }
-
-        .accordion-content.active {
-            max-height: 2500px;
-            transition: max-height 0.5s ease-in;
-        }
-
-        .accordion-inner {
-            padding: 25px;
-        }
-
-        .staff-category {
             background: white;
             padding: 20px;
             border-radius: 10px;
@@ -698,23 +632,15 @@
             <div class="section">
                 <h2>📊 Genel Bilgiler</h2>
                 <div class="form-group">
-                    <label>Lokasyon Adı</label>
+                    <label>Lokasyon Adı <span class="info-icon" data-tooltip="Otopark lokasyonunun adı. Örnek: Olivium AVM, Zorlu Center, Metropol İstanbul vb.">i</span></label>
                     <input type="text" id="locationName" placeholder="Örn: Olivium AVM">
                 </div>
                 <div class="form-group">
-                    <label>Satılabilir Kapasite <span class="info-icon" data-tooltip="Otopark için satılabilir toplam araç kapasitesi. Fiziksel kapasiteden rezerv alanlar düşüldükten sonra kalan sayı.">i</span></label>
-                    <input type="number" id="capacity" value="1670" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Devinim <span class="info-icon" data-tooltip="Bir park yerinin günde kaç kez kullanıldığını gösteren oran. Örnek: 1.5 = Her park yeri günde ortalama 1.5 kez kullanılıyor.">i</span></label>
+                    <label>Devinim <span class="info-icon" data-tooltip="Bir park yerinin günde kaç kez kullanıldığını gösteren oran. Örnek: 1.5 = Her park yeri günde ortalama 1.5 kez kullanılıyor. Yüksek devinim = Daha fazla kazanç.">i</span></label>
                     <input type="number" id="devinim" value="1.5" min="0" step="0.1">
                 </div>
                 <div class="form-group">
-                    <label>Çalışılan Gün (Aylık) <span class="info-icon" data-tooltip="Bir ayda kaç gün çalışıldığı. Genelde hafta içi günleri için 22-23 gün kullanılır.">i</span></label>
-                    <input type="number" id="workingDays" value="22" min="1" max="31">
-                </div>
-                <div class="form-group">
-                    <label>Çalışılan Ay (Yıllık)</label>
+                    <label>Çalışılan Ay (Yıllık) <span class="info-icon" data-tooltip="Yıl içinde kaç ay otopark çalışacak. Genellikle 12 ay (tüm yıl) seçilir. Mevsimlik otoparklar için daha az olabilir.">i</span></label>
                     <input type="number" id="workingMonths" value="12" min="1" max="12">
                 </div>
             </div>
@@ -818,6 +744,11 @@
                     <input type="text" id="staffCostTotal" readonly value="104.244,84" 
                            style="background-color: #f0fff4; cursor: not-allowed; font-weight: 700; font-size: 18px; color: #28a745; border: 2px solid #28a745;">
                 </div>
+            </div>
+
+            <!-- Maliyet ve Giderler -->
+            <div class="section">
+                <h2>💰 Maliyet ve Giderler</h2>
                 <div class="form-group">
                     <label>Yatırım Maliyeti KDV'li (₺) <span class="info-icon" data-tooltip="Otopark sisteminin kurulum maliyeti. Yazılım, donanım, montaj dahil toplam yatırım tutarı (KDV dahil).">i</span></label>
                     <input type="text" id="investmentCost" value="1.074.165" 
@@ -837,105 +768,6 @@
                     <label>Kira Oranı (%) <span class="info-icon" data-tooltip="İşletmeye (AVM/Plaza) ödenen kira oranı. Hasılat üzerinden hesaplanır. Örnek: %35 = Hasılatın %35'i işletmeye ödenir.">i</span></label>
                     <input type="number" id="rentRate" value="35" min="0" max="100" step="0.1">
                 </div>
-                
-                <!-- Personel Accordion -->
-                <div style="margin-top: 30px;">
-                    <div class="accordion-header" onclick="toggleAccordion()">
-                        <div>
-                            <h3>👥 Personel Bilgileri</h3>
-                            <div class="accordion-summary">
-                                <div class="accordion-summary-item">Toplam: <strong id="accordionStaffCount">2</strong> Personel</div>
-                                <div class="accordion-summary-item">Maliyet: <strong id="accordionStaffCost">104.244,84 ₺</strong></div>
-                            </div>
-                        </div>
-                        <div class="accordion-icon" id="accordionIcon">▼</div>
-                    </div>
-                    
-                    <div class="accordion-content" id="accordionContent">
-                        <div class="accordion-inner">
-                            <!-- Asgari Ücretli -->
-                            <div class="staff-category">
-                                <h4>💼 Asgari Ücretli Personel <span class="info-icon" data-tooltip="Asgari ücretle çalışan personel. İşverene maliyet: 39.486,68₺ (SGK, vergi dahil). Katsayı ve KDV ile son maliyet: 52.122,42₺">i</span></h4>
-                <div class="form-group">
-                    <label>Personel Sayısı</label>
-                    <input type="number" id="staffMinWage" value="2" min="0" onchange="calculateTotalStaffCost()" onkeyup="calculateTotalStaffCost()">
-                </div>
-                <div class="form-group">
-                    <label>İşverene Maliyet</label>
-                    <input type="text" readonly value="39.486,68 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
-                </div>
-                <div class="form-group">
-                    <label>Katsayılı (x1.1)</label>
-                    <input type="text" readonly value="43.435,35 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
-                </div>
-                <div class="form-group">
-                    <label>KDV'li + Katsayılı (x1.32) ✓</label>
-                    <input type="text" readonly value="52.122,42 ₺" style="background-color: #f0fff4; cursor: not-allowed; font-weight: 700; color: #28a745; border: 2px solid #28a745;">
-                </div>
-                            </div>
-                
-                            <!-- 25k Ücretli -->
-                            <div class="staff-category">
-                                <h4>💰 25.000₺ Ücretli Personel <span class="info-icon" data-tooltip="25.000₺ maaşlı personel. İşverene maliyet: 44.082,00₺ (SGK, vergi dahil). Katsayı ve KDV ile son maliyet: 58.188,24₺">i</span></h4>
-                <div class="form-group" style="margin-top: 25px;">
-                    <label>Personel Sayısı</label>
-                    <input type="number" id="staff25k" value="0" min="0" onchange="calculateTotalStaffCost()" onkeyup="calculateTotalStaffCost()">
-                </div>
-                <div class="form-group">
-                    <label>İşverene Maliyet</label>
-                    <input type="text" readonly value="44.082,00 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
-                </div>
-                <div class="form-group">
-                    <label>Katsayılı (x1.1)</label>
-                    <input type="text" readonly value="48.490,20 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
-                </div>
-                <div class="form-group">
-                    <label>KDV'li + Katsayılı (x1.32) ✓</label>
-                    <input type="text" readonly value="58.188,24 ₺" style="background-color: #f0fff4; cursor: not-allowed; font-weight: 700; color: #28a745; border: 2px solid #28a745;">
-                </div>
-                            </div>
-                
-                            <!-- Yönetici -->
-                            <div class="staff-category">
-                                <h4>👔 Yönetici <span class="info-icon" data-tooltip="Yönetici kadrosundaki personel. İşverene maliyet: 70.435,00₺ (SGK, vergi dahil). Katsayı ve KDV ile son maliyet: 92.974,20₺">i</span></h4>
-                <div class="form-group" style="margin-top: 25px;">
-                    <label>Personel Sayısı</label>
-                    <input type="number" id="staffManager" value="0" min="0" onchange="calculateTotalStaffCost()" onkeyup="calculateTotalStaffCost()">
-                </div>
-                <div class="form-group">
-                    <label>İşverene Maliyet</label>
-                    <input type="text" readonly value="70.435,00 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
-                </div>
-                <div class="form-group">
-                    <label>Katsayılı (x1.1)</label>
-                    <input type="text" readonly value="77.478,50 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
-                </div>
-                <div class="form-group">
-                    <label>KDV'li + Katsayılı (x1.32) ✓</label>
-                    <input type="text" readonly value="92.974,20 ₺" style="background-color: #f0fff4; cursor: not-allowed; font-weight: 700; color: #28a745; border: 2px solid #28a745;">
-                </div>
-                            </div>
-                
-                            <!-- Toplam -->
-                            <div class="staff-total-display">
-                                <div class="staff-total-row">
-                                    <div class="staff-total-label">📊 Toplam Personel Sayısı:</div>
-                                    <div class="staff-total-value" id="staffCountTotal">2</div>
-                                </div>
-                                <div class="staff-total-row">
-                                    <div class="staff-total-label">💵 Aylık Personel Maliyeti:</div>
-                                    <div class="staff-total-value final" id="staffCostTotal">104.244,84 ₺</div>
-                                </div>
-                                <div style="font-size: 12px; color: #6c757d; margin-top: 10px; text-align: center;">
-                                    * KDV'li + Katsayılı hesaplanan toplam maliyet
-                                </div>
-                                <!-- Hidden inputs for compatibility -->
-                                <input type="hidden" id="staffCountTotalInput" value="2">
-                                <input type="hidden" id="staffCostTotalInput" value="104.244,84">
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Abonelikler -->
@@ -943,20 +775,20 @@
                 <h2>👥 ABONELİKLER</h2>
                 
                 <div class="form-group">
-                    <label>Personel Abone Sayısı</label>
+                    <label>Personel Abone Sayısı <span class="info-icon" data-tooltip="İşletmede çalışan personele özel abonelik sayısı. Genellikle indirimli fiyatla verilir.">i</span></label>
                     <input type="number" id="personelSubs" value="0" min="0">
                 </div>
                 <div class="form-group">
-                    <label>Personel Abone Fiyatı (Aylık) (₺)</label>
+                    <label>Personel Abone Fiyatı (Aylık) (₺) <span class="info-icon" data-tooltip="Personel aboneliği aylık ücreti. İşletme personeline verilen özel fiyat.">i</span></label>
                     <input type="number" id="personelPrice" value="0" min="0">
                 </div>
                 
                 <div class="form-group">
-                    <label>Dış Abonelik Sayısı</label>
+                    <label>Dış Abonelik Sayısı <span class="info-icon" data-tooltip="İşletme dışından (harici müşteriler) alınan aylık abonelik sayısı. Normal fiyattan satılır.">i</span></label>
                     <input type="number" id="externalSubs" value="0" min="0">
                 </div>
                 <div class="form-group">
-                    <label>Dış Abonelik Fiyatı (Aylık) (₺)</label>
+                    <label>Dış Abonelik Fiyatı (Aylık) (₺) <span class="info-icon" data-tooltip="Harici müşterilere verilen aylık abonelik ücreti. Market fiyatıdır.">i</span></label>
                     <input type="number" id="externalPrice" value="0" min="0">
                 </div>
             </div>
@@ -964,6 +796,15 @@
             <!-- Hafta İçi Tarifeleri -->
             <div class="section">
                 <h2>📅 HAFTAİÇİ TARİFELERİ</h2>
+
+                <div class="form-group">
+                    <label>Hafta İçi Satılabilir Kapasite <span class="info-icon" data-tooltip="Hafta içi günlerde satılabilir toplam araç kapasitesi. Fiziksel kapasiteden rezerv ve abonelik alanları düşüldükten sonra kalan sayı.">i</span></label>
+                    <input type="number" id="weekdayCapacity" value="1670" min="0" onchange="calculateWeekendCapacity()" onkeyup="calculateWeekendCapacity()">
+                </div>
+                <div class="form-group">
+                    <label>Çalışılan Gün (Aylık) <span class="info-icon" data-tooltip="Bir ayda kaç gün hafta içi çalışıldığı. Genelde 22-23 gün kullanılır (Pzt-Cum toplam).">i</span></label>
+                    <input type="number" id="workingDays" value="22" min="1" max="31">
+                </div>
 
                 <div class="time-slot">
                     <label>Saat Dilimi</label>
@@ -1012,8 +853,14 @@
             <!-- Hafta Sonu Tarifeleri -->
             <div class="section">
                 <h2>📅 HAFTASONU TARİFELERİ</h2>
+                
                 <div class="form-group">
-                    <label>Çalışılan Gün (Aylık)</label>
+                    <label>Hafta Sonu Satılabilir Kapasite <span class="info-icon" data-tooltip="Hafta sonu günlerde satılabilir araç kapasitesi. Otomatik olarak hafta içi kapasitenin 1.5 katı olarak hesaplanır.">i</span></label>
+                    <input type="number" id="weekendCapacity" value="2505" min="0" readonly 
+                           style="background-color: #f0f4ff; cursor: not-allowed; font-weight: 600; color: #667eea;">
+                </div>
+                <div class="form-group">
+                    <label>Çalışılan Gün (Aylık) <span class="info-icon" data-tooltip="Bir ayda kaç gün hafta sonu çalışıldığı. Genelde 8-9 gün kullanılır (Cmt+Paz toplam).">i</span></label>
                     <input type="number" id="weekendDays" value="8" min="0" max="31">
                 </div>
 
@@ -1102,19 +949,6 @@
             }
         }
 
-        // Personel accordion toggle
-        function toggleAccordion() {
-            const content = document.getElementById('accordionContent');
-            const icon = document.getElementById('accordionIcon');
-            
-            if (content.classList.contains('active')) {
-                content.classList.remove('active');
-                icon.classList.remove('active');
-            } else {
-                content.classList.add('active');
-                icon.classList.add('active');
-            }
-        }
 
         // Personel detaylarını göster/gizle
         function toggleStaffDetails() {
@@ -1124,6 +958,13 @@
             } else {
                 detailsSection.style.display = 'none';
             }
+        }
+
+        // Hafta sonu kapasitesini otomatik hesapla
+        function calculateWeekendCapacity() {
+            const weekdayCapacity = parseFloat(document.getElementById('weekdayCapacity').value) || 0;
+            const weekendCapacity = Math.round(weekdayCapacity * 1.5);
+            document.getElementById('weekendCapacity').value = weekendCapacity;
         }
 
         // Personel maliyeti otomatik hesaplama (kategori bazlı)
@@ -1144,10 +985,6 @@
             
             document.getElementById('staffCountTotal').value = totalCount;
             document.getElementById('staffCostTotal').value = totalCostFormatted;
-            
-            // Accordion başlığını güncelle
-            document.getElementById('accordionStaffCount').textContent = totalCount;
-            document.getElementById('accordionStaffCost').textContent = totalCostFormatted + ' ₺';
         }
 
         // Logo yükleme
@@ -1177,6 +1014,9 @@
             
             // Personel maliyeti hesaplamasını başlat
             calculateTotalStaffCost();
+            
+            // Hafta sonu kapasitesini hesapla
+            calculateWeekendCapacity();
         });
 
         function printReport() {
@@ -1205,7 +1045,8 @@
         function calculate() {
             // Genel Bilgiler
             const locationName = document.getElementById('locationName').value || 'Lokasyon';
-            const capacity = parseFloat(document.getElementById('capacity').value) || 0;
+            const weekdayCapacity = parseFloat(document.getElementById('weekdayCapacity').value) || 0;
+            const weekendCapacity = parseFloat(document.getElementById('weekendCapacity').value) || 0;
             const devinim = parseFloat(document.getElementById('devinim').value) || 1;
             const workingDays = parseFloat(document.getElementById('workingDays').value) || 22;
             const workingMonths = parseFloat(document.getElementById('workingMonths').value) || 12;
@@ -1354,10 +1195,15 @@
                     <div class="value">${formatCurrency(monthlyAmortization)}</div>
                     <div class="small-text">${amortizationMonths} Ay • %${amortizationPercentage.toFixed(1)} Oran</div>
                 </div>
-                <div class="result-card warning">
-                    <h3>Kapasite</h3>
-                    <div class="value">${capacity}</div>
+                <div class="result-card">
+                    <h3>Hafta İçi Kapasite</h3>
+                    <div class="value">${weekdayCapacity}</div>
                     <div class="small-text">Satılabilir Park Yeri</div>
+                </div>
+                <div class="result-card">
+                    <h3>Hafta Sonu Kapasite</h3>
+                    <div class="value">${weekendCapacity}</div>
+                    <div class="small-text">x1.5 Otomatik</div>
                 </div>
                 <div class="result-card">
                     <h3>Devinim</h3>
@@ -1403,7 +1249,8 @@
         function generateManagerReport() {
             // Tüm değerleri tekrar al
             const locationName = document.getElementById('locationName').value || 'Lokasyon';
-            const capacity = parseFloat(document.getElementById('capacity').value) || 0;
+            const weekdayCapacity = parseFloat(document.getElementById('weekdayCapacity').value) || 0;
+            const weekendCapacity = parseFloat(document.getElementById('weekendCapacity').value) || 0;
             const workingDays = parseFloat(document.getElementById('workingDays').value) || 22;
             
             // Maliyetler
@@ -1486,8 +1333,12 @@
                 
                 <div class="manager-report-grid">
                     <div class="manager-report-card">
-                        <h4>Kapasite</h4>
-                        <div class="value">${capacity}</div>
+                        <h4>Hafta İçi Kapasite</h4>
+                        <div class="value">${weekdayCapacity}</div>
+                    </div>
+                    <div class="manager-report-card">
+                        <h4>Hafta Sonu Kapasite</h4>
+                        <div class="value">${weekendCapacity}</div>
                     </div>
                     <div class="manager-report-card">
                         <h4>Personel</h4>
