@@ -32,6 +32,21 @@
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            max-height: 80px;
+            max-width: 200px;
+            object-fit: contain;
         }
 
         .header h1 {
@@ -42,6 +57,54 @@
         .header p {
             font-size: 16px;
             opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px 24px;
+            background: white;
+            color: #1e3c72;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .logo-upload {
+            display: none;
+        }
+
+        .upload-logo-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-logo-btn:hover {
+            background: rgba(255,255,255,0.3);
         }
 
         .content {
@@ -242,13 +305,71 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .header {
+                background: #1e3c72 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                page-break-after: avoid;
+            }
+
+            .logo-container {
+                page-break-inside: avoid;
+            }
+
+            .section {
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+            }
+
+            .results {
+                page-break-before: always;
+            }
+
+            .calculate-btn, .action-buttons, .upload-logo-btn {
+                display: none !important;
+            }
+
+            .result-card {
+                page-break-inside: avoid;
+            }
+
+            .form-group input, .form-group select, .time-slot input {
+                border: 1px solid #dee2e6;
+                background: white;
+            }
+
+            @page {
+                margin: 1cm;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🅿️ PARKEXPERT FİZİBİLİTE HESAPLAMA</h1>
-            <p>Otopark Lokasyonu Karlılık Analizi</p>
+            <div class="logo-container">
+                <img id="companyLogo" src="" alt="Logo" style="display: none;">
+                <div>
+                    <h1>🅿️ PARKEXPERT FİZİBİLİTE HESAPLAMA</h1>
+                    <p>Otopark Lokasyonu Karlılık Analizi</p>
+                </div>
+            </div>
+            <input type="file" id="logoUpload" class="logo-upload" accept="image/*">
+            <button class="upload-logo-btn" onclick="document.getElementById('logoUpload').click()">
+                📸 Logo Yükle
+            </button>
         </div>
 
         <div class="content">
@@ -403,6 +524,16 @@
             <!-- Hesapla Butonu -->
             <button class="calculate-btn" onclick="calculate()">📊 FİZİBİLİTE HESAPLA</button>
 
+            <!-- Yazdır ve PDF Butonları -->
+            <div class="action-buttons">
+                <button class="action-btn" onclick="printReport()">
+                    🖨️ Yazdır
+                </button>
+                <button class="action-btn" onclick="downloadPDF()">
+                    📥 PDF İndir
+                </button>
+            </div>
+
             <!-- Sonuçlar -->
             <div class="results" id="results" style="display: none;">
                 <h2>📈 FİZİBİLİTE SONUÇLARI</h2>
@@ -412,6 +543,55 @@
     </div>
 
     <script>
+        // Logo yükleme
+        document.getElementById('logoUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const logoImg = document.getElementById('companyLogo');
+                    logoImg.src = event.target.result;
+                    logoImg.style.display = 'block';
+                    // Logo'yu localStorage'a kaydet
+                    localStorage.setItem('parkexpertLogo', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Sayfa yüklendiğinde logo'yu kontrol et
+        window.addEventListener('load', function() {
+            const savedLogo = localStorage.getItem('parkexpertLogo');
+            if (savedLogo) {
+                const logoImg = document.getElementById('companyLogo');
+                logoImg.src = savedLogo;
+                logoImg.style.display = 'block';
+            }
+        });
+
+        function printReport() {
+            // Önce hesaplama yapılmış mı kontrol et
+            const resultsDiv = document.getElementById('results');
+            if (resultsDiv.style.display === 'none') {
+                alert('Lütfen önce fizibilite hesaplaması yapın.');
+                return;
+            }
+            window.print();
+        }
+
+        function downloadPDF() {
+            // Önce hesaplama yapılmış mı kontrol et
+            const resultsDiv = document.getElementById('results');
+            if (resultsDiv.style.display === 'none') {
+                alert('Lütfen önce fizibilite hesaplaması yapın.');
+                return;
+            }
+            
+            // Kullanıcıya PDF olarak kaydetme talimatı
+            alert('PDF indirmek için açılacak yazdırma penceresinden "PDF olarak kaydet" seçeneğini seçin.');
+            window.print();
+        }
+
         function calculate() {
             // Genel Bilgiler
             const locationName = document.getElementById('locationName').value || 'Lokasyon';
