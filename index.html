@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parkexpert - Otopark Fizibilite Hesaplama</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -427,6 +430,37 @@
         .manager-report-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(245, 87, 108, 0.3);
+        }
+
+        .export-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .excel-btn {
+            background: linear-gradient(135deg, #1d6f42 0%, #26a65b 100%);
+        }
+
+        .excel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(38, 166, 91, 0.3);
+        }
+
+        .pdf-btn {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+        }
+
+        .pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
         }
 
         .manager-report {
@@ -1138,6 +1172,16 @@
                 📊 Yönetici Özet Raporu Oluştur
             </button>
 
+            <!-- Export Butonları -->
+            <div id="exportButtons" style="display: none; margin-top: 15px; display: flex; gap: 15px; justify-content: center;">
+                <button class="export-btn excel-btn" onclick="exportToExcel()">
+                    📊 Excel'e Aktar
+                </button>
+                <button class="export-btn pdf-btn" onclick="exportToPDF()">
+                    📄 PDF İndir (Grafiklerle)
+                </button>
+            </div>
+
             <!-- Sonuçlar -->
             <div class="results" id="results" style="display: none;">
                 <h2>📈 FİZİBİLİTE SONUÇLARI</h2>
@@ -1475,6 +1519,9 @@
 
             // Yönetici raporu butonunu göster
             document.getElementById('managerReportBtn').style.display = 'block';
+            
+            // Export butonlarını göster
+            document.getElementById('exportButtons').style.display = 'flex';
             
             // Grafikleri göster ve oluştur
             document.getElementById('chartsSection').style.display = 'block';
@@ -2073,6 +2120,236 @@
             
             showLoadModal(); // Listeyi yenile
             alert('✅ Hesaplama silindi!');
+        }
+
+        // EXPORT FONKSİYONLARI
+
+        function exportToExcel() {
+            const data = getAllFormData();
+            const locationName = document.getElementById('locationName').value || 'Fizibilite';
+            
+            // Excel dosyası için worksheetler
+            const wb = XLSX.utils.book_new();
+            
+            // 1. Genel Bilgiler Sayfası
+            const generalData = [
+                ['PARKEXPERT FİZİBİLİTE RAPORU'],
+                [''],
+                ['Lokasyon:', data.locationName],
+                ['Tarih:', new Date().toLocaleDateString('tr-TR')],
+                [''],
+                ['KAPASITE BİLGİLERİ'],
+                ['Hafta İçi Kapasite:', data.weekdayCapacity],
+                ['Hafta Sonu Kapasite:', data.weekendCapacity],
+                ['Devinim:', data.devinim],
+                [''],
+                ['ÇALIŞMA SÜRELERİ'],
+                ['Hafta İçi Çalışılan Gün (Aylık):', data.workingDays],
+                ['Hafta Sonu Çalışılan Gün (Aylık):', data.weekendDays],
+                ['Çalışılan Ay (Yıllık):', data.workingMonths]
+            ];
+            const ws1 = XLSX.utils.aoa_to_sheet(generalData);
+            XLSX.utils.book_append_sheet(wb, ws1, 'Genel Bilgiler');
+            
+            // 2. Personel Sayfası
+            const personnelData = [
+                ['PERSONEL BİLGİLERİ'],
+                [''],
+                ['Kategori', 'Sayı', 'Birim Maliyet', 'Toplam'],
+                ['Asgari Ücretli', data.staffMinWage, '52.122,42 ₺', (parseInt(data.staffMinWage) * 52122.42).toFixed(2) + ' ₺'],
+                ['25.000₺ Ücretli', data.staff25k, '58.188,24 ₺', (parseInt(data.staff25k) * 58188.24).toFixed(2) + ' ₺'],
+                ['Yönetici', data.staffManager, '92.974,20 ₺', (parseInt(data.staffManager) * 92974.20).toFixed(2) + ' ₺'],
+                [''],
+                ['TOPLAM PERSONEL:', parseInt(data.staffMinWage) + parseInt(data.staff25k) + parseInt(data.staffManager)],
+                ['TOPLAM AYLIK MALİYET:', document.getElementById('staffCostTotal').value + ' ₺']
+            ];
+            const ws2 = XLSX.utils.aoa_to_sheet(personnelData);
+            XLSX.utils.book_append_sheet(wb, ws2, 'Personel');
+            
+            // 3. Maliyet ve Giderler
+            const costData = [
+                ['MALİYET VE GİDERLER'],
+                [''],
+                ['Yatırım Maliyeti (KDV Dahil):', data.investmentCost + ' ₺'],
+                ['Amortisman Süresi:', data.amortizationMonths + ' Ay'],
+                ['Operasyonel Gider Oranı:', '%' + data.operationalRate],
+                ['Kira Oranı:', '%' + data.rentRate]
+            ];
+            const ws3 = XLSX.utils.aoa_to_sheet(costData);
+            XLSX.utils.book_append_sheet(wb, ws3, 'Maliyetler');
+            
+            // 4. Abonelikler
+            const subscriptionData = [
+                ['ABONELİKLER'],
+                [''],
+                ['Tip', 'Sayı', 'Fiyat', 'Aylık Toplam'],
+                ['Personel Abone', data.personelSubs, data.personelPrice + ' ₺', (parseInt(data.personelSubs) * parseInt(data.personelPrice)) + ' ₺'],
+                ['Dış Abonelik', data.externalSubs, data.externalPrice + ' ₺', (parseInt(data.externalSubs) * parseInt(data.externalPrice)) + ' ₺']
+            ];
+            const ws4 = XLSX.utils.aoa_to_sheet(subscriptionData);
+            XLSX.utils.book_append_sheet(wb, ws4, 'Abonelikler');
+            
+            // 5. Hafta İçi Tarifeler
+            const weekdayTariffsData = [
+                ['HAFTA İÇİ TARİFELER'],
+                [''],
+                ['Saat Dilimi', 'Tarife (₺)', 'Kullanım %', 'Park/Gün']
+            ];
+            data.weekdaySlots.forEach(slot => {
+                weekdayTariffsData.push([slot.hours, slot.tariff, slot.usage, slot.parking]);
+            });
+            const ws5 = XLSX.utils.aoa_to_sheet(weekdayTariffsData);
+            XLSX.utils.book_append_sheet(wb, ws5, 'Hafta İçi');
+            
+            // 6. Hafta Sonu Tarifeler
+            const weekendTariffsData = [
+                ['HAFTA SONU TARİFELER'],
+                [''],
+                ['Saat Dilimi', 'Tarife (₺)', 'Kullanım %', 'Park/Gün']
+            ];
+            data.weekendSlots.forEach(slot => {
+                weekendTariffsData.push([slot.hours, slot.tariff, slot.usage, slot.parking]);
+            });
+            const ws6 = XLSX.utils.aoa_to_sheet(weekendTariffsData);
+            XLSX.utils.book_append_sheet(wb, ws6, 'Hafta Sonu');
+            
+            // Excel dosyasını indir
+            const fileName = `Parkexpert_Fizibilite_${locationName.replace(/[^a-z0-9]/gi, '_')}_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+            
+            alert('✅ Excel dosyası başarıyla indirildi!');
+        }
+
+        async function exportToPDF() {
+            const locationName = document.getElementById('locationName').value || 'Fizibilite Raporu';
+            
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                let yPosition = 20;
+                
+                // Başlık
+                pdf.setFontSize(20);
+                pdf.setTextColor(30, 60, 114);
+                pdf.text('🅿️ PARKEXPERT FİZİBİLİTE RAPORU', pageWidth / 2, yPosition, { align: 'center' });
+                
+                yPosition += 10;
+                pdf.setFontSize(16);
+                pdf.setTextColor(102, 126, 234);
+                pdf.text(locationName, pageWidth / 2, yPosition, { align: 'center' });
+                
+                yPosition += 8;
+                pdf.setFontSize(10);
+                pdf.setTextColor(108, 117, 125);
+                pdf.text('Tarih: ' + new Date().toLocaleDateString('tr-TR', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                }), pageWidth / 2, yPosition, { align: 'center' });
+                
+                yPosition += 15;
+                
+                // Sonuçlar bölümünü yazdır
+                const resultsElement = document.getElementById('results');
+                if (resultsElement && resultsElement.style.display !== 'none') {
+                    const canvas = await html2canvas(resultsElement, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        backgroundColor: '#ffffff'
+                    });
+                    
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    const imgWidth = pageWidth - 20;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    
+                    // Yeni sayfa gerekiyorsa ekle
+                    if (yPosition + imgHeight > pageHeight - 20) {
+                        pdf.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    pdf.addImage(imgData, 'JPEG', 10, yPosition, imgWidth, imgHeight);
+                    yPosition += imgHeight + 10;
+                }
+                
+                // Grafikleri ekle
+                const chartsSection = document.getElementById('chartsSection');
+                if (chartsSection && chartsSection.style.display !== 'none') {
+                    pdf.addPage();
+                    yPosition = 20;
+                    
+                    pdf.setFontSize(16);
+                    pdf.setTextColor(30, 60, 114);
+                    pdf.text('📊 Grafik Analizler', pageWidth / 2, yPosition, { align: 'center' });
+                    yPosition += 15;
+                    
+                    const chartContainers = chartsSection.querySelectorAll('.chart-container');
+                    
+                    for (let i = 0; i < chartContainers.length; i++) {
+                        const chartContainer = chartContainers[i];
+                        
+                        const canvas = await html2canvas(chartContainer, {
+                            scale: 2,
+                            useCORS: true,
+                            logging: false,
+                            backgroundColor: '#ffffff'
+                        });
+                        
+                        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                        const imgWidth = (pageWidth - 30) / 2;
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                        
+                        const xPosition = (i % 2 === 0) ? 10 : pageWidth / 2 + 5;
+                        
+                        if (i % 2 === 0 && i > 0) {
+                            yPosition += imgHeight + 10;
+                        }
+                        
+                        if (yPosition + imgHeight > pageHeight - 20) {
+                            pdf.addPage();
+                            yPosition = 20;
+                        }
+                        
+                        pdf.addImage(imgData, 'JPEG', xPosition, yPosition, imgWidth, imgHeight);
+                        
+                        if (i === chartContainers.length - 1 && i % 2 === 0) {
+                            yPosition += imgHeight + 10;
+                        }
+                    }
+                }
+                
+                // Yönetici raporunu ekle
+                const managerReport = document.getElementById('managerReport');
+                if (managerReport && managerReport.style.display !== 'none') {
+                    pdf.addPage();
+                    yPosition = 20;
+                    
+                    const canvas = await html2canvas(managerReport, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        backgroundColor: '#667eea'
+                    });
+                    
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    const imgWidth = pageWidth - 20;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    
+                    pdf.addImage(imgData, 'JPEG', 10, yPosition, imgWidth, imgHeight);
+                }
+                
+                // PDF'i kaydet
+                const fileName = `Parkexpert_Fizibilite_${locationName.replace(/[^a-z0-9]/gi, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+                pdf.save(fileName);
+                
+                alert('✅ PDF dosyası başarıyla indirildi!');
+            } catch (error) {
+                console.error('PDF oluşturma hatası:', error);
+                alert('❌ PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+            }
         }
 
         // Modal dışına tıklayınca kapat
