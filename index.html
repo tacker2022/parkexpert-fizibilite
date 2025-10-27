@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parkexpert - Otopark Fizibilite Hesaplama</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -105,6 +106,207 @@
 
         .upload-logo-btn:hover {
             background: rgba(255,255,255,0.3);
+        }
+
+        .save-load-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-load-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .close-modal {
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .close-modal:hover {
+            transform: scale(1.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .saved-calculation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        .saved-calculation:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .saved-calculation h3 {
+            margin: 0 0 10px 0;
+            color: #1e3c72;
+            font-size: 18px;
+        }
+
+        .saved-calculation-info {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .saved-calculation-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-load, .btn-delete {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-load {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-load:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        /* Chart Styles */
+        .charts-section {
+            grid-column: 1 / -1;
+            margin-top: 30px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e9ecef;
+        }
+
+        .chart-container h3 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .chart-wrapper canvas {
+            max-height: 300px;
         }
 
         .content {
@@ -625,6 +827,16 @@
             <button class="upload-logo-btn" onclick="document.getElementById('logoUpload').click()">
                 📸 Logo Yükle
             </button>
+            
+            <!-- Kaydet/Yükle Butonları -->
+            <div style="display: flex; gap: 10px; margin-top: 15px; justify-content: center;">
+                <button class="save-load-btn" onclick="saveCalculation()">
+                    💾 Hesaplamayı Kaydet
+                </button>
+                <button class="save-load-btn" onclick="showLoadModal()">
+                    📂 Kayıtlı Hesaplamalar
+                </button>
+            </div>
         </div>
 
         <div class="content">
@@ -932,6 +1144,37 @@
                 <div class="result-grid" id="resultGrid"></div>
             </div>
 
+            <!-- Grafikler Bölümü -->
+            <div class="charts-section" id="chartsSection" style="display: none;">
+                <h2 style="text-align: center; color: #1e3c72; margin-bottom: 10px;">📊 GRAFİK ANALİZLER</h2>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>📊 Hafta İçi vs Hafta Sonu Hasılat</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="revenueComparisonChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>🥧 Gider Dağılımı</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="expenseDistributionChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>📈 Aylık Gelir vs Gider</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="incomeExpenseChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>💰 12 Aylık Kar/Zarar Projeksiyonu</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="yearlyProjectionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Yönetici Raporu -->
             <div class="manager-report" id="managerReport">
                 <h2>📊 YÖNETİCİ ÖZET RAPORU</h2>
@@ -1232,9 +1475,246 @@
 
             // Yönetici raporu butonunu göster
             document.getElementById('managerReportBtn').style.display = 'block';
+            
+            // Grafikleri göster ve oluştur
+            document.getElementById('chartsSection').style.display = 'block';
+            createCharts(weekdayDailyRevenue, weekdayMonthlyRevenue, weekendDailyRevenue, weekendMonthlyRevenue, 
+                        monthlySubRevenue, totalMonthlyRevenue, monthlyStaffCost, monthlyOperationalCost, 
+                        monthlyRent, totalMonthlyExpenses, monthlyNetProfit);
 
             // Scroll to results
             resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Grafik Oluşturma Fonksiyonu
+        let chartInstances = {};
+
+        function createCharts(weekdayDaily, weekdayMonthly, weekendDaily, weekendMonthly, subRevenue, 
+                             totalRevenue, staffCost, opCost, rent, totalExpenses, netProfit) {
+            
+            // Eski grafikleri temizle
+            Object.values(chartInstances).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+            chartInstances = {};
+
+            // 1. Hafta İçi vs Hafta Sonu Hasılat Karşılaştırması
+            const ctx1 = document.getElementById('revenueComparisonChart');
+            if (ctx1) {
+                chartInstances.revenueComparison = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Günlük Hasılat', 'Aylık Hasılat'],
+                        datasets: [{
+                            label: 'Hafta İçi',
+                            data: [weekdayDaily, weekdayMonthly],
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                            borderColor: 'rgba(102, 126, 234, 1)',
+                            borderWidth: 2
+                        }, {
+                            label: 'Hafta Sonu',
+                            data: [weekendDaily, weekendMonthly],
+                            backgroundColor: 'rgba(118, 75, 162, 0.8)',
+                            borderColor: 'rgba(118, 75, 162, 1)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + 
+                                               new Intl.NumberFormat('tr-TR', {style: 'currency', currency: 'TRY'}).format(context.raw);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return new Intl.NumberFormat('tr-TR', {notation: 'compact', compactDisplay: 'short'}).format(value) + '₺';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 2. Gider Dağılımı (Pasta)
+            const ctx2 = document.getElementById('expenseDistributionChart');
+            if (ctx2) {
+                chartInstances.expenseDistribution = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Personel', 'Operasyonel', 'Kira'],
+                        datasets: [{
+                            data: [staffCost, opCost, rent],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.8)',
+                                'rgba(54, 162, 235, 0.8)',
+                                'rgba(255, 206, 86, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return label + ': ' + 
+                                               new Intl.NumberFormat('tr-TR', {style: 'currency', currency: 'TRY'}).format(value) +
+                                               ' (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 3. Gelir vs Gider Karşılaştırması
+            const ctx3 = document.getElementById('incomeExpenseChart');
+            if (ctx3) {
+                chartInstances.incomeExpense = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Aylık'],
+                        datasets: [{
+                            label: 'Toplam Gelir',
+                            data: [totalRevenue],
+                            backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2
+                        }, {
+                            label: 'Toplam Gider',
+                            data: [totalExpenses],
+                            backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2
+                        }, {
+                            label: 'Net Kar',
+                            data: [netProfit],
+                            backgroundColor: netProfit > 0 ? 'rgba(40, 167, 69, 0.8)' : 'rgba(220, 53, 69, 0.8)',
+                            borderColor: netProfit > 0 ? 'rgba(40, 167, 69, 1)' : 'rgba(220, 53, 69, 1)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + 
+                                               new Intl.NumberFormat('tr-TR', {style: 'currency', currency: 'TRY'}).format(context.raw);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return new Intl.NumberFormat('tr-TR', {notation: 'compact', compactDisplay: 'short'}).format(value) + '₺';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 4. 12 Aylık Projeksiyonu (Çizgi Grafik)
+            const ctx4 = document.getElementById('yearlyProjectionChart');
+            if (ctx4) {
+                const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+                const monthlyData = months.map(() => netProfit);
+                const cumulativeData = months.map((_, i) => netProfit * (i + 1));
+                
+                chartInstances.yearlyProjection = new Chart(ctx4, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Aylık Kar/Zarar',
+                            data: monthlyData,
+                            borderColor: netProfit > 0 ? 'rgba(40, 167, 69, 1)' : 'rgba(220, 53, 69, 1)',
+                            backgroundColor: netProfit > 0 ? 'rgba(40, 167, 69, 0.1)' : 'rgba(220, 53, 69, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Kümülatif Kar/Zarar',
+                            data: cumulativeData,
+                            borderColor: 'rgba(102, 126, 234, 1)',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + 
+                                               new Intl.NumberFormat('tr-TR', {style: 'currency', currency: 'TRY'}).format(context.raw);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return new Intl.NumberFormat('tr-TR', {notation: 'compact', compactDisplay: 'short'}).format(value) + '₺';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         function formatCurrency(value) {
@@ -1368,6 +1848,240 @@
             document.getElementById('managerReport').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
+        // KAYDETME/YÜKLEME FONKSİYONLARI
+        function getAllFormData() {
+            const data = {
+                // Genel bilgiler
+                locationName: document.getElementById('locationName').value,
+                devinim: document.getElementById('devinim').value,
+                workingMonths: document.getElementById('workingMonths').value,
+                
+                // Kapasite
+                weekdayCapacity: document.getElementById('weekdayCapacity').value,
+                weekendCapacity: document.getElementById('weekendCapacity').value,
+                workingDays: document.getElementById('workingDays').value,
+                weekendDays: document.getElementById('weekendDays').value,
+                
+                // Personel
+                staffMinWage: document.getElementById('staffMinWage').value,
+                staff25k: document.getElementById('staff25k').value,
+                staffManager: document.getElementById('staffManager').value,
+                
+                // Maliyet
+                investmentCost: document.getElementById('investmentCost').value,
+                amortizationMonths: document.getElementById('amortizationMonths').value,
+                operationalRate: document.getElementById('operationalRate').value,
+                rentRate: document.getElementById('rentRate').value,
+                
+                // Abonelik
+                personelSubs: document.getElementById('personelSubs').value,
+                personelPrice: document.getElementById('personelPrice').value,
+                externalSubs: document.getElementById('externalSubs').value,
+                externalPrice: document.getElementById('externalPrice').value,
+                
+                // Hafta içi tarifeler
+                weekdaySlots: [],
+                // Hafta sonu tarifeler
+                weekendSlots: []
+            };
+            
+            // Hafta içi saat dilimlerini topla
+            for (let i = 1; i <= 6; i++) {
+                data.weekdaySlots.push({
+                    hours: document.getElementById(`wd_slot${i}_hours`).value,
+                    tariff: document.getElementById(`wd_slot${i}_tariff`).value,
+                    usage: document.getElementById(`wd_slot${i}_usage`).value,
+                    parking: document.getElementById(`wd_slot${i}_parking`).value
+                });
+            }
+            
+            // Hafta sonu saat dilimlerini topla
+            for (let i = 1; i <= 6; i++) {
+                data.weekendSlots.push({
+                    hours: document.getElementById(`we_slot${i}_hours`).value,
+                    tariff: document.getElementById(`we_slot${i}_tariff`).value,
+                    usage: document.getElementById(`we_slot${i}_usage`).value,
+                    parking: document.getElementById(`we_slot${i}_parking`).value
+                });
+            }
+            
+            return data;
+        }
+
+        function setAllFormData(data) {
+            // Genel bilgiler
+            document.getElementById('locationName').value = data.locationName || '';
+            document.getElementById('devinim').value = data.devinim || '1.5';
+            document.getElementById('workingMonths').value = data.workingMonths || '12';
+            
+            // Kapasite
+            document.getElementById('weekdayCapacity').value = data.weekdayCapacity || '1670';
+            document.getElementById('weekendCapacity').value = data.weekendCapacity || '2505';
+            document.getElementById('workingDays').value = data.workingDays || '22';
+            document.getElementById('weekendDays').value = data.weekendDays || '8';
+            
+            // Personel
+            document.getElementById('staffMinWage').value = data.staffMinWage || '0';
+            document.getElementById('staff25k').value = data.staff25k || '0';
+            document.getElementById('staffManager').value = data.staffManager || '0';
+            
+            // Maliyet
+            document.getElementById('investmentCost').value = data.investmentCost || '1.074.165';
+            document.getElementById('amortizationMonths').value = data.amortizationMonths || '36';
+            document.getElementById('operationalRate').value = data.operationalRate || '10';
+            document.getElementById('rentRate').value = data.rentRate || '35';
+            
+            // Abonelik
+            document.getElementById('personelSubs').value = data.personelSubs || '0';
+            document.getElementById('personelPrice').value = data.personelPrice || '0';
+            document.getElementById('externalSubs').value = data.externalSubs || '0';
+            document.getElementById('externalPrice').value = data.externalPrice || '0';
+            
+            // Hafta içi tarifeler
+            if (data.weekdaySlots) {
+                data.weekdaySlots.forEach((slot, i) => {
+                    const index = i + 1;
+                    document.getElementById(`wd_slot${index}_hours`).value = slot.hours || '';
+                    document.getElementById(`wd_slot${index}_tariff`).value = slot.tariff || '0';
+                    document.getElementById(`wd_slot${index}_usage`).value = slot.usage || '0';
+                    document.getElementById(`wd_slot${index}_parking`).value = slot.parking || '0';
+                });
+            }
+            
+            // Hafta sonu tarifeler
+            if (data.weekendSlots) {
+                data.weekendSlots.forEach((slot, i) => {
+                    const index = i + 1;
+                    document.getElementById(`we_slot${index}_hours`).value = slot.hours || '';
+                    document.getElementById(`we_slot${index}_tariff`).value = slot.tariff || '0';
+                    document.getElementById(`we_slot${index}_usage`).value = slot.usage || '0';
+                    document.getElementById(`we_slot${index}_parking`).value = slot.parking || '0';
+                });
+            }
+            
+            // Otomatik hesaplamaları tetikle
+            calculateTotalStaffCost();
+            calculateWeekendCapacity();
+        }
+
+        function saveCalculation() {
+            document.getElementById('saveModal').style.display = 'block';
+            document.getElementById('saveName').value = document.getElementById('locationName').value || '';
+        }
+
+        function closeSaveModal() {
+            document.getElementById('saveModal').style.display = 'none';
+        }
+
+        function confirmSave() {
+            const saveName = document.getElementById('saveName').value.trim();
+            if (!saveName) {
+                alert('Lütfen bir kayıt adı girin!');
+                return;
+            }
+            
+            const data = getAllFormData();
+            const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+            
+            const calculation = {
+                id: Date.now(),
+                name: saveName,
+                data: data,
+                savedAt: new Date().toISOString()
+            };
+            
+            savedCalculations.push(calculation);
+            localStorage.setItem('parkexpertCalculations', JSON.stringify(savedCalculations));
+            
+            closeSaveModal();
+            alert('✅ Hesaplama başarıyla kaydedildi!');
+        }
+
+        function showLoadModal() {
+            const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+            const listContainer = document.getElementById('savedCalculationsList');
+            
+            if (savedCalculations.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📂</div>
+                        <h3>Henüz kayıtlı hesaplama yok</h3>
+                        <p>Hesaplamalarınızı kaydetmek için "💾 Hesaplamayı Kaydet" butonunu kullanın.</p>
+                    </div>
+                `;
+            } else {
+                listContainer.innerHTML = savedCalculations.reverse().map(calc => {
+                    const date = new Date(calc.savedAt);
+                    const dateStr = date.toLocaleDateString('tr-TR', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    return `
+                        <div class="saved-calculation">
+                            <h3>${calc.name}</h3>
+                            <div class="saved-calculation-info">
+                                <span>📅 ${dateStr}</span>
+                                <span>📍 ${calc.data.locationName || 'Belirtilmemiş'}</span>
+                                <span>🚗 ${calc.data.weekdayCapacity || 0} Kapasite</span>
+                            </div>
+                            <div class="saved-calculation-actions">
+                                <button class="btn-load" onclick="loadCalculation(${calc.id})">
+                                    📂 Yükle
+                                </button>
+                                <button class="btn-delete" onclick="deleteCalculation(${calc.id})">
+                                    🗑️ Sil
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            document.getElementById('loadModal').style.display = 'block';
+        }
+
+        function closeLoadModal() {
+            document.getElementById('loadModal').style.display = 'none';
+        }
+
+        function loadCalculation(id) {
+            const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+            const calculation = savedCalculations.find(c => c.id === id);
+            
+            if (calculation) {
+                setAllFormData(calculation.data);
+                closeLoadModal();
+                alert('✅ Hesaplama yüklendi!');
+                
+                // Sayfayı en üste kaydır
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function deleteCalculation(id) {
+            if (!confirm('Bu hesaplamayı silmek istediğinizden emin misiniz?')) {
+                return;
+            }
+            
+            let savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+            savedCalculations = savedCalculations.filter(c => c.id !== id);
+            localStorage.setItem('parkexpertCalculations', JSON.stringify(savedCalculations));
+            
+            showLoadModal(); // Listeyi yenile
+            alert('✅ Hesaplama silindi!');
+        }
+
+        // Modal dışına tıklayınca kapat
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+
         // Enter tuşu ile hesaplama
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -1375,5 +2089,44 @@
             }
         });
     </script>
+
+    <!-- Kayıtlı Hesaplamalar Modal -->
+    <div id="loadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📂 Kayıtlı Hesaplamalar</h2>
+                <button class="close-modal" onclick="closeLoadModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="savedCalculationsList">
+                <!-- Buraya JavaScript ile liste gelecek -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Kaydet Modal -->
+    <div id="saveModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💾 Hesaplamayı Kaydet</h2>
+                <button class="close-modal" onclick="closeSaveModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label style="font-size: 16px; font-weight: 600; margin-bottom: 10px; display: block;">Kayıt Adı</label>
+                    <input type="text" id="saveName" placeholder="Örn: Olivium AVM - Ocak 2025" 
+                           style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px;">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn-load" onclick="confirmSave()" style="flex: 1;">
+                        💾 Kaydet
+                    </button>
+                    <button class="btn-delete" onclick="closeSaveModal()" style="flex: 1; background: #6c757d;">
+                        ❌ İptal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
