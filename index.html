@@ -385,6 +385,10 @@
                     <input type="number" id="capacity" value="1670" min="0">
                 </div>
                 <div class="form-group">
+                    <label>Devinim</label>
+                    <input type="number" id="devinim" value="1.5" min="0" step="0.1">
+                </div>
+                <div class="form-group">
                     <label>Çalışılan Gün (Aylık)</label>
                     <input type="number" id="workingDays" value="22" min="1" max="31">
                 </div>
@@ -422,10 +426,38 @@
             <!-- Hafta İçi Tarifeleri -->
             <div class="section">
                 <h2>📅 HAFTAİÇİ TARİFELERİ</h2>
+                
+                <h3 style="color: #495057; font-size: 16px; margin: 20px 0 15px 0; font-weight: 600;">Abonelikler</h3>
+                
+                <div class="form-group">
+                    <label>Personel Abone Sayısı</label>
+                    <input type="number" id="weekdayPersonelSubs" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Personel Abone Fiyatı (₺)</label>
+                    <input type="number" id="weekdayPersonelPrice" value="0" min="0">
+                </div>
+                
                 <div class="form-group">
                     <label>Abone Sayısı</label>
                     <input type="number" id="weekdaySubscribers" value="1670" min="0">
                 </div>
+                <div class="form-group">
+                    <label>Abone Fiyatı (₺)</label>
+                    <input type="number" id="weekdaySubPrice" value="0" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>Dış Abonelik Sayısı</label>
+                    <input type="number" id="weekdayExternalSubs" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Dış Abonelik Fiyatı (₺)</label>
+                    <input type="number" id="weekdayExternalPrice" value="0" min="0">
+                </div>
+
+                <h3 style="color: #495057; font-size: 16px; margin: 30px 0 15px 0; font-weight: 600;">Saat Dilimleri</h3>
+
                 <div class="time-slot">
                     <label>Saat Dilimi</label>
                     <label>Tarife (₺)</label>
@@ -433,40 +465,40 @@
                     <label>Park/Gün</label>
                 </div>
                 <div class="time-slot">
-                    <span>0-3</span>
-                    <input type="number" id="wd_0_3_tariff" value="0" min="0">
-                    <input type="number" id="wd_0_3_usage" value="90" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_0_3_parking" value="1503" min="0">
+                    <input type="text" id="wd_slot1_hours" value="0-3" placeholder="0-3">
+                    <input type="number" id="wd_slot1_tariff" value="0" min="0">
+                    <input type="number" id="wd_slot1_usage" value="90" min="0" max="100" step="0.01">
+                    <input type="number" id="wd_slot1_parking" value="1503" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>3-4</span>
-                    <input type="number" id="wd_3_4_tariff" value="150" min="0">
-                    <input type="number" id="wd_3_4_usage" value="7" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_3_4_parking" value="117" min="0">
+                    <input type="text" id="wd_slot2_hours" value="3-4" placeholder="3-4">
+                    <input type="number" id="wd_slot2_tariff" value="150" min="0">
+                    <input type="number" id="wd_slot2_usage" value="7" min="0" max="100" step="0.01">
+                    <input type="number" id="wd_slot2_parking" value="117" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>4-5</span>
-                    <input type="number" id="wd_4_5_tariff" value="175" min="0">
-                    <input type="number" id="wd_4_5_usage" value="2.19" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_4_5_parking" value="37" min="0">
+                    <input type="text" id="wd_slot3_hours" value="4-5" placeholder="4-5">
+                    <input type="number" id="wd_slot3_tariff" value="175" min="0">
+                    <input type="number" id="wd_slot3_usage" value="2.19" min="0" max="100" step="0.01">
+                    <input type="number" id="wd_slot3_parking" value="37" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>5-6</span>
-                    <input type="number" id="wd_5_6_tariff" value="200" min="0">
-                    <input type="number" id="wd_5_6_usage" value="0.77" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_5_6_parking" value="13" min="0">
+                    <input type="text" id="wd_slot4_hours" value="5-6" placeholder="5-6">
+                    <input type="number" id="wd_slot4_tariff" value="200" min="0">
+                    <input type="number" id="wd_slot4_usage" value="0.77" min="0" max="100" step="0.01">
+                    <input type="number" id="wd_slot4_parking" value="13" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>6-12</span>
-                    <input type="number" id="wd_6_12_tariff" value="250" min="0">
-                    <input type="number" id="wd_6_12_usage" value="0.02" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_6_12_parking" value="0" min="0">
+                    <input type="text" id="wd_slot5_hours" value="6-12" placeholder="6-12">
+                    <input type="number" id="wd_slot5_tariff" value="250" min="0">
+                    <input type="number" id="wd_slot5_usage" value="0.02" min="0" max="100" step="0.01">
+                    <input type="number" id="wd_slot5_parking" value="0" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>12-24</span>
-                    <input type="number" id="wd_12_24_tariff" value="500" min="0">
-                    <input type="number" id="wd_12_24_usage" value="0.02" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_12_24_parking" value="0" min="0">
+                    <input type="text" id="wd_slot6_hours" value="12-24" placeholder="12-24">
+                    <input type="number" id="wd_slot6_tariff" value="500" min="0">
+                    <input type="number" id="wd_slot6_usage" value="0.02" min="0" max="100" step="0.01">
+                    <input type="number" id="wd_slot6_parking" value="0" min="0">
                 </div>
             </div>
 
@@ -474,9 +506,41 @@
             <div class="section">
                 <h2>📅 HAFTASONU TARİFELERİ</h2>
                 <div class="form-group">
-                    <label>Çalışılan Gün (Haftalık)</label>
+                    <label>Çalışılan Gün (Aylık)</label>
                     <input type="number" id="weekendDays" value="8" min="0" max="31">
                 </div>
+
+                <h3 style="color: #495057; font-size: 16px; margin: 20px 0 15px 0; font-weight: 600;">Abonelikler</h3>
+                
+                <div class="form-group">
+                    <label>Personel Abone Sayısı</label>
+                    <input type="number" id="weekendPersonelSubs" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Personel Abone Fiyatı (₺)</label>
+                    <input type="number" id="weekendPersonelPrice" value="0" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>Abone Sayısı</label>
+                    <input type="number" id="weekendSubscribers" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Abone Fiyatı (₺)</label>
+                    <input type="number" id="weekendSubPrice" value="0" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>Dış Abonelik Sayısı</label>
+                    <input type="number" id="weekendExternalSubs" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Dış Abonelik Fiyatı (₺)</label>
+                    <input type="number" id="weekendExternalPrice" value="0" min="0">
+                </div>
+
+                <h3 style="color: #495057; font-size: 16px; margin: 30px 0 15px 0; font-weight: 600;">Saat Dilimleri</h3>
+
                 <div class="time-slot">
                     <label>Saat Dilimi</label>
                     <label>Tarife (₺)</label>
@@ -484,40 +548,40 @@
                     <label>Park/Gün</label>
                 </div>
                 <div class="time-slot">
-                    <span>0-3</span>
-                    <input type="number" id="we_0_3_tariff" value="0" min="0">
-                    <input type="number" id="we_0_3_usage" value="85" min="0" max="100" step="0.01">
-                    <input type="number" id="we_0_3_parking" value="1828" min="0">
+                    <input type="text" id="we_slot1_hours" value="0-3" placeholder="0-3">
+                    <input type="number" id="we_slot1_tariff" value="0" min="0">
+                    <input type="number" id="we_slot1_usage" value="85" min="0" max="100" step="0.01">
+                    <input type="number" id="we_slot1_parking" value="1828" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>3-4</span>
-                    <input type="number" id="we_3_4_tariff" value="150" min="0">
-                    <input type="number" id="we_3_4_usage" value="9" min="0" max="100" step="0.01">
-                    <input type="number" id="we_3_4_parking" value="194" min="0">
+                    <input type="text" id="we_slot2_hours" value="3-4" placeholder="3-4">
+                    <input type="number" id="we_slot2_tariff" value="150" min="0">
+                    <input type="number" id="we_slot2_usage" value="9" min="0" max="100" step="0.01">
+                    <input type="number" id="we_slot2_parking" value="194" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>4-5</span>
-                    <input type="number" id="we_4_5_tariff" value="175" min="0">
-                    <input type="number" id="we_4_5_usage" value="3" min="0" max="100" step="0.01">
-                    <input type="number" id="we_4_5_parking" value="65" min="0">
+                    <input type="text" id="we_slot3_hours" value="4-5" placeholder="4-5">
+                    <input type="number" id="we_slot3_tariff" value="175" min="0">
+                    <input type="number" id="we_slot3_usage" value="3" min="0" max="100" step="0.01">
+                    <input type="number" id="we_slot3_parking" value="65" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>5-6</span>
-                    <input type="number" id="we_5_6_tariff" value="200" min="0">
-                    <input type="number" id="we_5_6_usage" value="2" min="0" max="100" step="0.01">
-                    <input type="number" id="we_5_6_parking" value="43" min="0">
+                    <input type="text" id="we_slot4_hours" value="5-6" placeholder="5-6">
+                    <input type="number" id="we_slot4_tariff" value="200" min="0">
+                    <input type="number" id="we_slot4_usage" value="2" min="0" max="100" step="0.01">
+                    <input type="number" id="we_slot4_parking" value="43" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>6-12</span>
-                    <input type="number" id="we_6_12_tariff" value="250" min="0">
-                    <input type="number" id="we_6_12_usage" value="0.5" min="0" max="100" step="0.01">
-                    <input type="number" id="we_6_12_parking" value="11" min="0">
+                    <input type="text" id="we_slot5_hours" value="6-12" placeholder="6-12">
+                    <input type="number" id="we_slot5_tariff" value="250" min="0">
+                    <input type="number" id="we_slot5_usage" value="0.5" min="0" max="100" step="0.01">
+                    <input type="number" id="we_slot5_parking" value="11" min="0">
                 </div>
                 <div class="time-slot">
-                    <span>12-24</span>
-                    <input type="number" id="we_12_24_tariff" value="500" min="0">
-                    <input type="number" id="we_12_24_usage" value="0.5" min="0" max="100" step="0.01">
-                    <input type="number" id="we_12_24_parking" value="11" min="0">
+                    <input type="text" id="we_slot6_hours" value="12-24" placeholder="12-24">
+                    <input type="number" id="we_slot6_tariff" value="500" min="0">
+                    <input type="number" id="we_slot6_usage" value="0.5" min="0" max="100" step="0.01">
+                    <input type="number" id="we_slot6_parking" value="11" min="0">
                 </div>
             </div>
 
@@ -596,6 +660,7 @@
             // Genel Bilgiler
             const locationName = document.getElementById('locationName').value || 'Lokasyon';
             const capacity = parseFloat(document.getElementById('capacity').value) || 0;
+            const devinim = parseFloat(document.getElementById('devinim').value) || 1;
             const workingDays = parseFloat(document.getElementById('workingDays').value) || 22;
             const workingMonths = parseFloat(document.getElementById('workingMonths').value) || 12;
 
@@ -606,33 +671,48 @@
             const staffCount = parseFloat(document.getElementById('staffCount').value) || 0;
             const staffCost = parseFloat(document.getElementById('staffCost').value) || 0;
 
-            // Hafta İçi Hesaplamaları
-            const weekdaySubscribers = parseFloat(document.getElementById('weekdaySubscribers').value) || 0;
-            let weekdayDailyRevenue = 0;
-            
-            const weekdaySlots = ['0_3', '3_4', '4_5', '5_6', '6_12', '12_24'];
-            weekdaySlots.forEach(slot => {
-                const tariff = parseFloat(document.getElementById(`wd_${slot}_tariff`).value) || 0;
-                const parking = parseFloat(document.getElementById(`wd_${slot}_parking`).value) || 0;
-                weekdayDailyRevenue += tariff * parking;
-            });
+            // Hafta İçi Abonelik Hesaplamaları
+            const wdPersonelSubs = parseFloat(document.getElementById('weekdayPersonelSubs').value) || 0;
+            const wdPersonelPrice = parseFloat(document.getElementById('weekdayPersonelPrice').value) || 0;
+            const wdSubs = parseFloat(document.getElementById('weekdaySubscribers').value) || 0;
+            const wdSubPrice = parseFloat(document.getElementById('weekdaySubPrice').value) || 0;
+            const wdExternalSubs = parseFloat(document.getElementById('weekdayExternalSubs').value) || 0;
+            const wdExternalPrice = parseFloat(document.getElementById('weekdayExternalPrice').value) || 0;
 
-            // Hafta Sonu Hesaplamaları
+            const weekdaySubRevenue = (wdPersonelSubs * wdPersonelPrice) + (wdSubs * wdSubPrice) + (wdExternalSubs * wdExternalPrice);
+
+            // Hafta İçi Saat Dilimi Hesaplamaları
+            let weekdayDailyRevenue = 0;
+            for (let i = 1; i <= 6; i++) {
+                const tariff = parseFloat(document.getElementById(`wd_slot${i}_tariff`).value) || 0;
+                const parking = parseFloat(document.getElementById(`wd_slot${i}_parking`).value) || 0;
+                weekdayDailyRevenue += tariff * parking;
+            }
+
+            // Hafta Sonu Abonelik Hesaplamaları
             const weekendDays = parseFloat(document.getElementById('weekendDays').value) || 8;
+            const wePersonelSubs = parseFloat(document.getElementById('weekendPersonelSubs').value) || 0;
+            const wePersonelPrice = parseFloat(document.getElementById('weekendPersonelPrice').value) || 0;
+            const weSubs = parseFloat(document.getElementById('weekendSubscribers').value) || 0;
+            const weSubPrice = parseFloat(document.getElementById('weekendSubPrice').value) || 0;
+            const weExternalSubs = parseFloat(document.getElementById('weekendExternalSubs').value) || 0;
+            const weExternalPrice = parseFloat(document.getElementById('weekendExternalPrice').value) || 0;
+
+            const weekendSubRevenue = (wePersonelSubs * wePersonelPrice) + (weSubs * weSubPrice) + (weExternalSubs * weExternalPrice);
+
+            // Hafta Sonu Saat Dilimi Hesaplamaları
             let weekendDailyRevenue = 0;
-            
-            const weekendSlots = ['0_3', '3_4', '4_5', '5_6', '6_12', '12_24'];
-            weekendSlots.forEach(slot => {
-                const tariff = parseFloat(document.getElementById(`we_${slot}_tariff`).value) || 0;
-                const parking = parseFloat(document.getElementById(`we_${slot}_parking`).value) || 0;
+            for (let i = 1; i <= 6; i++) {
+                const tariff = parseFloat(document.getElementById(`we_slot${i}_tariff`).value) || 0;
+                const parking = parseFloat(document.getElementById(`we_slot${i}_parking`).value) || 0;
                 weekendDailyRevenue += tariff * parking;
-            });
+            }
 
             // Toplam Hasılat Hesaplamaları
-            const weekdayMonthlyRevenue = weekdayDailyRevenue * workingDays;
+            const weekdayMonthlyRevenue = (weekdayDailyRevenue * workingDays) + weekdaySubRevenue;
             const weekdayYearlyRevenue = weekdayMonthlyRevenue * workingMonths;
 
-            const weekendMonthlyRevenue = weekendDailyRevenue * weekendDays;
+            const weekendMonthlyRevenue = (weekendDailyRevenue * weekendDays) + weekendSubRevenue;
             const weekendYearlyRevenue = weekendMonthlyRevenue * workingMonths;
 
             const totalMonthlyRevenue = weekdayMonthlyRevenue + weekendMonthlyRevenue;
@@ -656,7 +736,7 @@
             const yearlyNetProfit = totalYearlyRevenue - totalYearlyExpenses;
 
             // Yatırım Geri Dönüş Süresi (Ay)
-            const paybackPeriod = investmentCost / monthlyNetProfit;
+            const paybackPeriod = monthlyNetProfit > 0 ? investmentCost / monthlyNetProfit : 0;
 
             // Sonuçları Göster
             const resultsDiv = document.getElementById('results');
@@ -674,9 +754,19 @@
                     <div class="small-text">Aylık: ${formatCurrency(weekdayMonthlyRevenue)}</div>
                 </div>
                 <div class="result-card">
+                    <h3>Hafta İçi Abonelik Hasılatı</h3>
+                    <div class="value">${formatCurrency(weekdaySubRevenue)}</div>
+                    <div class="small-text">Aylık Toplam</div>
+                </div>
+                <div class="result-card">
                     <h3>Hafta Sonu Günlük Hasılat</h3>
                     <div class="value">${formatCurrency(weekendDailyRevenue)}</div>
                     <div class="small-text">Aylık: ${formatCurrency(weekendMonthlyRevenue)}</div>
+                </div>
+                <div class="result-card">
+                    <h3>Hafta Sonu Abonelik Hasılatı</h3>
+                    <div class="value">${formatCurrency(weekendSubRevenue)}</div>
+                    <div class="small-text">Aylık Toplam</div>
                 </div>
                 <div class="result-card warning">
                     <h3>Aylık Toplam Hasılat</h3>
@@ -715,8 +805,8 @@
                 </div>
                 <div class="result-card ${paybackPeriod < 24 ? 'positive' : paybackPeriod < 48 ? 'warning' : 'negative'}">
                     <h3>Yatırım Geri Dönüş</h3>
-                    <div class="value">${paybackPeriod.toFixed(1)} ay</div>
-                    <div class="small-text">${(paybackPeriod/12).toFixed(1)} yıl</div>
+                    <div class="value">${paybackPeriod > 0 ? paybackPeriod.toFixed(1) + ' ay' : 'Belirsiz'}</div>
+                    <div class="small-text">${paybackPeriod > 0 ? (paybackPeriod/12).toFixed(1) + ' yıl' : ''}</div>
                 </div>
                 <div class="result-card">
                     <h3>Yatırım Maliyeti</h3>
@@ -727,6 +817,11 @@
                     <h3>Kapasite</h3>
                     <div class="value">${capacity}</div>
                     <div class="small-text">Satılabilir Park Yeri</div>
+                </div>
+                <div class="result-card">
+                    <h3>Devinim</h3>
+                    <div class="value">${devinim.toFixed(2)}</div>
+                    <div class="small-text">Park Dönüş Oranı</div>
                 </div>
             `;
 
