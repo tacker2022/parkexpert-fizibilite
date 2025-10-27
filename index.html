@@ -156,6 +156,255 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
+        .form-group input[readonly] {
+            background-color: #e9ecef !important;
+            cursor: not-allowed;
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .info-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 18px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: help;
+            margin-left: 8px;
+            position: relative;
+        }
+
+        .info-icon:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 25px;
+            top: -10px;
+            background: #2d3748;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            white-space: normal;
+            width: 280px;
+            font-size: 13px;
+            font-weight: normal;
+            line-height: 1.5;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .info-icon:hover::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 4px;
+            border: 6px solid transparent;
+            border-right-color: #2d3748;
+            z-index: 1001;
+        }
+
+        .manager-report-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .manager-report-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(245, 87, 108, 0.3);
+        }
+
+        .manager-report {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 20px;
+            color: white;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .manager-report h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .manager-report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .manager-report-card {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 12px;
+            color: #1e3c72;
+        }
+
+        .manager-report-card h4 {
+            font-size: 13px;
+            color: #6c757d;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .manager-report-card .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+
+        .manager-summary {
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            color: #1e3c72;
+        }
+
+        .manager-summary h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .manager-summary p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .accordion-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            margin-bottom: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .accordion-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .accordion-header h3 {
+            margin: 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .accordion-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .accordion-summary-item {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .accordion-icon {
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+
+        .accordion-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            background: #f8f9fa;
+            border-radius: 0 0 12px 12px;
+            margin-top: -5px;
+        }
+
+        .accordion-content.active {
+            max-height: 2500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .accordion-inner {
+            padding: 25px;
+        }
+
+        .staff-category {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .staff-category h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .staff-total-display {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #667eea;
+        }
+
+        .staff-total-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .staff-total-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .staff-total-value {
+            font-weight: 700;
+            font-size: 18px;
+            color: #1e3c72;
+            text-align: right;
+        }
+
+        .staff-total-value.final {
+            color: #28a745;
+            font-size: 20px;
+        }
+
         .time-slot {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -262,6 +511,70 @@
             color: #ffc107;
         }
 
+        .result-card-large {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            border-left: 6px solid #667eea;
+            grid-column: span 1;
+        }
+
+        .result-card-large h3 {
+            font-size: 18px;
+            color: #6c757d;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-card-large .value {
+            font-size: 42px;
+            font-weight: 800;
+            color: #1e3c72;
+        }
+
+        .result-card-large.rent-card {
+            border-left-color: #dc3545;
+        }
+
+        .result-card-large.rent-card .value {
+            color: #dc3545;
+        }
+
+        .result-card-large.profit-card.positive {
+            border-left-color: #28a745;
+        }
+
+        .result-card-large.profit-card.positive .value {
+            color: #28a745;
+        }
+
+        .result-card-large.profit-card.negative {
+            border-left-color: #dc3545;
+        }
+
+        .result-card-large.profit-card.negative .value {
+            color: #dc3545;
+        }
+
+        .result-card-large .small-text {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .comparison-section {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 3px solid #667eea;
+        }
+
         .period-tabs {
             display: flex;
             gap: 10px;
@@ -303,6 +616,14 @@
 
             .result-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .comparison-section {
+                grid-template-columns: 1fr;
+            }
+
+            .result-card-large .value {
+                font-size: 32px;
             }
         }
 
@@ -381,15 +702,15 @@
                     <input type="text" id="locationName" placeholder="Örn: Olivium AVM">
                 </div>
                 <div class="form-group">
-                    <label>Satılabilir Kapasite</label>
+                    <label>Satılabilir Kapasite <span class="info-icon" data-tooltip="Otopark için satılabilir toplam araç kapasitesi. Fiziksel kapasiteden rezerv alanlar düşüldükten sonra kalan sayı.">i</span></label>
                     <input type="number" id="capacity" value="1670" min="0">
                 </div>
                 <div class="form-group">
-                    <label>Devinim</label>
+                    <label>Devinim <span class="info-icon" data-tooltip="Bir park yerinin günde kaç kez kullanıldığını gösteren oran. Örnek: 1.5 = Her park yeri günde ortalama 1.5 kez kullanılıyor.">i</span></label>
                     <input type="number" id="devinim" value="1.5" min="0" step="0.1">
                 </div>
                 <div class="form-group">
-                    <label>Çalışılan Gün (Aylık)</label>
+                    <label>Çalışılan Gün (Aylık) <span class="info-icon" data-tooltip="Bir ayda kaç gün çalışıldığı. Genelde hafta içi günleri için 22-23 gün kullanılır.">i</span></label>
                     <input type="number" id="workingDays" value="22" min="1" max="31">
                 </div>
                 <div class="form-group">
@@ -402,61 +723,158 @@
             <div class="section">
                 <h2>💰 Maliyet ve Giderler</h2>
                 <div class="form-group">
-                    <label>Yatırım Maliyeti KDV'li (₺)</label>
-                    <input type="number" id="investmentCost" value="1074165" min="0">
+                    <label>Yatırım Maliyeti KDV'li (₺) <span class="info-icon" data-tooltip="Otopark sisteminin kurulum maliyeti. Yazılım, donanım, montaj dahil toplam yatırım tutarı (KDV dahil).">i</span></label>
+                    <input type="text" id="investmentCost" value="1.074.165" 
+                           onkeyup="formatNumberInput(this)" 
+                           onblur="formatNumberInput(this)">
                 </div>
                 <div class="form-group">
-                    <label>Operasyonel Gider Oranı (%)</label>
+                    <label>Amortisman Süresi (Ay) <span class="info-icon" data-tooltip="Yatırımın kaç ayda itfa edileceği. Örnek: 36 ay = 3 yıl. Bu sürede yatırım maliyeti aylık gider olarak dağıtılır.">i</span></label>
+                    <input type="number" id="amortizationMonths" value="36" min="1" max="120">
+                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">Yatırımın kaç ayda itfa edileceği</div>
+                </div>
+                <div class="form-group">
+                    <label>Operasyonel Gider Oranı (%) <span class="info-icon" data-tooltip="Hasılat üzerinden hesaplanan işletme giderleri. Elektrik, su, bakım-onarım, temizlik vb. masraflar için ayrılan oran.">i</span></label>
                     <input type="number" id="operationalRate" value="10" min="0" max="100" step="0.1">
                 </div>
                 <div class="form-group">
-                    <label>Kira Oranı (%)</label>
+                    <label>Kira Oranı (%) <span class="info-icon" data-tooltip="İşletmeye (AVM/Plaza) ödenen kira oranı. Hasılat üzerinden hesaplanır. Örnek: %35 = Hasılatın %35'i işletmeye ödenir.">i</span></label>
                     <input type="number" id="rentRate" value="35" min="0" max="100" step="0.1">
                 </div>
+                
+                <!-- Personel Accordion -->
+                <div style="margin-top: 30px;">
+                    <div class="accordion-header" onclick="toggleAccordion()">
+                        <div>
+                            <h3>👥 Personel Bilgileri</h3>
+                            <div class="accordion-summary">
+                                <div class="accordion-summary-item">Toplam: <strong id="accordionStaffCount">2</strong> Personel</div>
+                                <div class="accordion-summary-item">Maliyet: <strong id="accordionStaffCost">104.244,84 ₺</strong></div>
+                            </div>
+                        </div>
+                        <div class="accordion-icon" id="accordionIcon">▼</div>
+                    </div>
+                    
+                    <div class="accordion-content" id="accordionContent">
+                        <div class="accordion-inner">
+                            <!-- Asgari Ücretli -->
+                            <div class="staff-category">
+                                <h4>💼 Asgari Ücretli Personel <span class="info-icon" data-tooltip="Asgari ücretle çalışan personel. İşverene maliyet: 39.486,68₺ (SGK, vergi dahil). Katsayı ve KDV ile son maliyet: 52.122,42₺">i</span></h4>
                 <div class="form-group">
                     <label>Personel Sayısı</label>
-                    <input type="number" id="staffCount" value="2" min="0">
+                    <input type="number" id="staffMinWage" value="2" min="0" onchange="calculateTotalStaffCost()" onkeyup="calculateTotalStaffCost()">
                 </div>
                 <div class="form-group">
-                    <label>Personel Maliyeti (Aylık/Kişi) (₺)</label>
-                    <input type="number" id="staffCost" value="22378" min="0">
+                    <label>İşverene Maliyet</label>
+                    <input type="text" readonly value="39.486,68 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>Katsayılı (x1.1)</label>
+                    <input type="text" readonly value="43.435,35 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>KDV'li + Katsayılı (x1.32) ✓</label>
+                    <input type="text" readonly value="52.122,42 ₺" style="background-color: #f0fff4; cursor: not-allowed; font-weight: 700; color: #28a745; border: 2px solid #28a745;">
+                </div>
+                            </div>
+                
+                            <!-- 25k Ücretli -->
+                            <div class="staff-category">
+                                <h4>💰 25.000₺ Ücretli Personel <span class="info-icon" data-tooltip="25.000₺ maaşlı personel. İşverene maliyet: 44.082,00₺ (SGK, vergi dahil). Katsayı ve KDV ile son maliyet: 58.188,24₺">i</span></h4>
+                <div class="form-group" style="margin-top: 25px;">
+                    <label>Personel Sayısı</label>
+                    <input type="number" id="staff25k" value="0" min="0" onchange="calculateTotalStaffCost()" onkeyup="calculateTotalStaffCost()">
+                </div>
+                <div class="form-group">
+                    <label>İşverene Maliyet</label>
+                    <input type="text" readonly value="44.082,00 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>Katsayılı (x1.1)</label>
+                    <input type="text" readonly value="48.490,20 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>KDV'li + Katsayılı (x1.32) ✓</label>
+                    <input type="text" readonly value="58.188,24 ₺" style="background-color: #f0fff4; cursor: not-allowed; font-weight: 700; color: #28a745; border: 2px solid #28a745;">
+                </div>
+                            </div>
+                
+                            <!-- Yönetici -->
+                            <div class="staff-category">
+                                <h4>👔 Yönetici <span class="info-icon" data-tooltip="Yönetici kadrosundaki personel. İşverene maliyet: 70.435,00₺ (SGK, vergi dahil). Katsayı ve KDV ile son maliyet: 92.974,20₺">i</span></h4>
+                <div class="form-group" style="margin-top: 25px;">
+                    <label>Personel Sayısı</label>
+                    <input type="number" id="staffManager" value="0" min="0" onchange="calculateTotalStaffCost()" onkeyup="calculateTotalStaffCost()">
+                </div>
+                <div class="form-group">
+                    <label>İşverene Maliyet</label>
+                    <input type="text" readonly value="70.435,00 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>Katsayılı (x1.1)</label>
+                    <input type="text" readonly value="77.478,50 ₺" style="background-color: #e9ecef; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>KDV'li + Katsayılı (x1.32) ✓</label>
+                    <input type="text" readonly value="92.974,20 ₺" style="background-color: #f0fff4; cursor: not-allowed; font-weight: 700; color: #28a745; border: 2px solid #28a745;">
+                </div>
+                            </div>
+                
+                            <!-- Toplam -->
+                            <div class="staff-total-display">
+                                <div class="staff-total-row">
+                                    <div class="staff-total-label">📊 Toplam Personel Sayısı:</div>
+                                    <div class="staff-total-value">
+                <div class="form-group" style="margin-top: 30px; padding-top: 25px; border-top: 3px solid #667eea;">
+                    <label style="color: #667eea; font-size: 16px;">Toplam Personel Sayısı</label>
+                    <input type="text" id="staffCountTotal" readonly value="2" 
+                           style="background-color: #f0f4ff; cursor: not-allowed; font-weight: 700; font-size: 18px; color: #1e3c72; border: 2px solid #667eea;">
+                                    </div>
+                                </div>
+                                <div class="staff-total-row">
+                                    <div class="staff-total-label">💵 Aylık Personel Maliyeti:</div>
+                                    <div class="staff-total-value final">
+                <div class="form-group">
+                    <label style="color: #28a745; font-size: 16px;">Toplam Aylık Personel Maliyeti (KDV'li + Katsayılı)</label>
+                    <input type="text" id="staffCostTotal" readonly value="104.244,84" 
+                           style="background-color: #f0fff4; cursor: not-allowed; font-weight: 700; font-size: 18px; color: #28a745; border: 2px solid #28a745;">
+                                    </div>
+                                </div>
+                                <div style="font-size: 12px; color: #6c757d; margin-top: 10px; text-align: center;">
+                                    * KDV'li + Katsayılı hesaplanan toplam maliyet
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Abonelikler -->
+            <div class="section">
+                <h2>👥 ABONELİKLER</h2>
+                
+                <div class="form-group">
+                    <label>Personel Abone Sayısı</label>
+                    <input type="number" id="personelSubs" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Personel Abone Fiyatı (Aylık) (₺)</label>
+                    <input type="number" id="personelPrice" value="0" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>Dış Abonelik Sayısı</label>
+                    <input type="number" id="externalSubs" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Dış Abonelik Fiyatı (Aylık) (₺)</label>
+                    <input type="number" id="externalPrice" value="0" min="0">
                 </div>
             </div>
 
             <!-- Hafta İçi Tarifeleri -->
             <div class="section">
                 <h2>📅 HAFTAİÇİ TARİFELERİ</h2>
-                
-                <h3 style="color: #495057; font-size: 16px; margin: 20px 0 15px 0; font-weight: 600;">Abonelikler</h3>
-                
-                <div class="form-group">
-                    <label>Personel Abone Sayısı</label>
-                    <input type="number" id="weekdayPersonelSubs" value="0" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Personel Abone Fiyatı (₺)</label>
-                    <input type="number" id="weekdayPersonelPrice" value="0" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label>Abone Sayısı</label>
-                    <input type="number" id="weekdaySubscribers" value="1670" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Abone Fiyatı (₺)</label>
-                    <input type="number" id="weekdaySubPrice" value="0" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label>Dış Abonelik Sayısı</label>
-                    <input type="number" id="weekdayExternalSubs" value="0" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Dış Abonelik Fiyatı (₺)</label>
-                    <input type="number" id="weekdayExternalPrice" value="0" min="0">
-                </div>
-
-                <h3 style="color: #495057; font-size: 16px; margin: 30px 0 15px 0; font-weight: 600;">Saat Dilimleri</h3>
 
                 <div class="time-slot">
                     <label>Saat Dilimi</label>
@@ -509,37 +927,6 @@
                     <label>Çalışılan Gün (Aylık)</label>
                     <input type="number" id="weekendDays" value="8" min="0" max="31">
                 </div>
-
-                <h3 style="color: #495057; font-size: 16px; margin: 20px 0 15px 0; font-weight: 600;">Abonelikler</h3>
-                
-                <div class="form-group">
-                    <label>Personel Abone Sayısı</label>
-                    <input type="number" id="weekendPersonelSubs" value="0" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Personel Abone Fiyatı (₺)</label>
-                    <input type="number" id="weekendPersonelPrice" value="0" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label>Abone Sayısı</label>
-                    <input type="number" id="weekendSubscribers" value="0" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Abone Fiyatı (₺)</label>
-                    <input type="number" id="weekendSubPrice" value="0" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label>Dış Abonelik Sayısı</label>
-                    <input type="number" id="weekendExternalSubs" value="0" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Dış Abonelik Fiyatı (₺)</label>
-                    <input type="number" id="weekendExternalPrice" value="0" min="0">
-                </div>
-
-                <h3 style="color: #495057; font-size: 16px; margin: 30px 0 15px 0; font-weight: 600;">Saat Dilimleri</h3>
 
                 <div class="time-slot">
                     <label>Saat Dilimi</label>
@@ -598,15 +985,72 @@
                 </button>
             </div>
 
+            <!-- Yönetici Raporu Butonu -->
+            <button class="manager-report-btn" id="managerReportBtn" onclick="generateManagerReport()">
+                📊 Yönetici Özet Raporu Oluştur
+            </button>
+
             <!-- Sonuçlar -->
             <div class="results" id="results" style="display: none;">
                 <h2>📈 FİZİBİLİTE SONUÇLARI</h2>
                 <div class="result-grid" id="resultGrid"></div>
             </div>
+
+            <!-- Yönetici Raporu -->
+            <div class="manager-report" id="managerReport">
+                <h2>📊 YÖNETİCİ ÖZET RAPORU</h2>
+                <div id="managerReportContent"></div>
+            </div>
         </div>
     </div>
 
     <script>
+        // Binlik ayraç formatı
+        function formatNumberInput(input) {
+            let value = input.value.replace(/\./g, '').replace(/,/g, '');
+            if (value && !isNaN(value)) {
+                input.value = parseInt(value).toLocaleString('tr-TR');
+            }
+        }
+
+        // Personel accordion toggle
+        function toggleAccordion() {
+            const content = document.getElementById('accordionContent');
+            const icon = document.getElementById('accordionIcon');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.classList.remove('active');
+            } else {
+                content.classList.add('active');
+                icon.classList.add('active');
+            }
+        }
+
+        // Personel maliyeti otomatik hesaplama (kategori bazlı)
+        function calculateTotalStaffCost() {
+            const minWageCount = parseFloat(document.getElementById('staffMinWage').value) || 0;
+            const minWageCostFinal = 52122.42; // KDV'li + Katsayılı
+            
+            const staff25kCount = parseFloat(document.getElementById('staff25k').value) || 0;
+            const staff25kCostFinal = 58188.24; // KDV'li + Katsayılı
+            
+            const managerCount = parseFloat(document.getElementById('staffManager').value) || 0;
+            const managerCostFinal = 92974.20; // KDV'li + Katsayılı
+            
+            const totalCount = minWageCount + staff25kCount + managerCount;
+            const totalCost = (minWageCount * minWageCostFinal) + (staff25kCount * staff25kCostFinal) + (managerCount * managerCostFinal);
+            
+            const totalCostFormatted = totalCost.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            
+            document.getElementById('staffCountTotal').value = totalCount;
+            document.getElementById('staffCostTotal').value = totalCostFormatted;
+            
+            // Accordion başlığını güncelle
+            document.getElementById('accordionStaffCount').textContent = totalCount;
+            document.getElementById('accordionStaffCost').textContent = totalCostFormatted + ' ₺';
+        }
+
         // Logo yükleme
         document.getElementById('logoUpload').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -631,6 +1075,9 @@
                 logoImg.src = savedLogo;
                 logoImg.style.display = 'block';
             }
+            
+            // Personel maliyeti hesaplamasını başlat
+            calculateTotalStaffCost();
         });
 
         function printReport() {
@@ -664,22 +1111,25 @@
             const workingDays = parseFloat(document.getElementById('workingDays').value) || 22;
             const workingMonths = parseFloat(document.getElementById('workingMonths').value) || 12;
 
-            // Maliyetler
-            const investmentCost = parseFloat(document.getElementById('investmentCost').value) || 0;
+            // Maliyetler - Yatırım maliyetini formatlanmış halinden parse et
+            const investmentCostValue = document.getElementById('investmentCost').value.replace(/\./g, '').replace(/,/g, '.');
+            const investmentCost = parseFloat(investmentCostValue) || 0;
+            
             const operationalRate = parseFloat(document.getElementById('operationalRate').value) || 10;
             const rentRate = parseFloat(document.getElementById('rentRate').value) || 35;
-            const staffCount = parseFloat(document.getElementById('staffCount').value) || 0;
-            const staffCost = parseFloat(document.getElementById('staffCost').value) || 0;
+            
+            // Personel maliyeti - Toplam değerleri kullan
+            const staffCount = parseFloat(document.getElementById('staffCountTotal').value) || 0;
+            const staffCostTotalValue = document.getElementById('staffCostTotal').value.replace(/\./g, '').replace(/,/g, '.');
+            const monthlyStaffCost = parseFloat(staffCostTotalValue) || 0;
 
-            // Hafta İçi Abonelik Hesaplamaları
-            const wdPersonelSubs = parseFloat(document.getElementById('weekdayPersonelSubs').value) || 0;
-            const wdPersonelPrice = parseFloat(document.getElementById('weekdayPersonelPrice').value) || 0;
-            const wdSubs = parseFloat(document.getElementById('weekdaySubscribers').value) || 0;
-            const wdSubPrice = parseFloat(document.getElementById('weekdaySubPrice').value) || 0;
-            const wdExternalSubs = parseFloat(document.getElementById('weekdayExternalSubs').value) || 0;
-            const wdExternalPrice = parseFloat(document.getElementById('weekdayExternalPrice').value) || 0;
+            // Abonelik Hesaplamaları (Sadece Personel ve Dış)
+            const personelSubs = parseFloat(document.getElementById('personelSubs').value) || 0;
+            const personelPrice = parseFloat(document.getElementById('personelPrice').value) || 0;
+            const externalSubs = parseFloat(document.getElementById('externalSubs').value) || 0;
+            const externalPrice = parseFloat(document.getElementById('externalPrice').value) || 0;
 
-            const weekdaySubRevenue = (wdPersonelSubs * wdPersonelPrice) + (wdSubs * wdSubPrice) + (wdExternalSubs * wdExternalPrice);
+            const monthlySubRevenue = (personelSubs * personelPrice) + (externalSubs * externalPrice);
 
             // Hafta İçi Saat Dilimi Hesaplamaları
             let weekdayDailyRevenue = 0;
@@ -689,16 +1139,8 @@
                 weekdayDailyRevenue += tariff * parking;
             }
 
-            // Hafta Sonu Abonelik Hesaplamaları
+            // Hafta Sonu Hesaplamaları
             const weekendDays = parseFloat(document.getElementById('weekendDays').value) || 8;
-            const wePersonelSubs = parseFloat(document.getElementById('weekendPersonelSubs').value) || 0;
-            const wePersonelPrice = parseFloat(document.getElementById('weekendPersonelPrice').value) || 0;
-            const weSubs = parseFloat(document.getElementById('weekendSubscribers').value) || 0;
-            const weSubPrice = parseFloat(document.getElementById('weekendSubPrice').value) || 0;
-            const weExternalSubs = parseFloat(document.getElementById('weekendExternalSubs').value) || 0;
-            const weExternalPrice = parseFloat(document.getElementById('weekendExternalPrice').value) || 0;
-
-            const weekendSubRevenue = (wePersonelSubs * wePersonelPrice) + (weSubs * weSubPrice) + (weExternalSubs * weExternalPrice);
 
             // Hafta Sonu Saat Dilimi Hesaplamaları
             let weekendDailyRevenue = 0;
@@ -708,19 +1150,27 @@
                 weekendDailyRevenue += tariff * parking;
             }
 
-            // Toplam Hasılat Hesaplamaları
-            const weekdayMonthlyRevenue = (weekdayDailyRevenue * workingDays) + weekdaySubRevenue;
+            // Günlük ve Aylık Toplam Hesaplamaları
+            const dailyTotalRevenue = weekdayDailyRevenue + weekendDailyRevenue;
+            
+            const weekdayMonthlyRevenue = (weekdayDailyRevenue * workingDays);
             const weekdayYearlyRevenue = weekdayMonthlyRevenue * workingMonths;
 
-            const weekendMonthlyRevenue = (weekendDailyRevenue * weekendDays) + weekendSubRevenue;
+            const weekendMonthlyRevenue = (weekendDailyRevenue * weekendDays);
             const weekendYearlyRevenue = weekendMonthlyRevenue * workingMonths;
 
-            const totalMonthlyRevenue = weekdayMonthlyRevenue + weekendMonthlyRevenue;
-            const totalYearlyRevenue = weekdayYearlyRevenue + weekendYearlyRevenue;
+            const totalMonthlyRevenue = weekdayMonthlyRevenue + weekendMonthlyRevenue + monthlySubRevenue;
+            const totalYearlyRevenue = totalMonthlyRevenue * workingMonths;
+
+            // Amortisman hesaplaması
+            const amortizationMonths = parseFloat(document.getElementById('amortizationMonths').value) || 36;
+            const monthlyAmortization = investmentCost / amortizationMonths;
+            const amortizationPercentage = totalMonthlyRevenue > 0 ? (monthlyAmortization / totalMonthlyRevenue) * 100 : 0;
 
             // Gider Hesaplamaları
-            const monthlyStaffCost = staffCount * staffCost;
+            // monthlyStaffCost zaten toplam maliyet (kategorilerin toplamı)
             const yearlyStaffCost = monthlyStaffCost * 12;
+            const staffCostPercentage = (monthlyStaffCost / totalMonthlyRevenue) * 100;
 
             const monthlyOperationalCost = (totalMonthlyRevenue * operationalRate) / 100;
             const yearlyOperationalCost = monthlyOperationalCost * 12;
@@ -730,10 +1180,12 @@
 
             const totalMonthlyExpenses = monthlyStaffCost + monthlyOperationalCost + monthlyRent;
             const totalYearlyExpenses = yearlyStaffCost + yearlyOperationalCost + yearlyRent;
+            const totalExpensesPercentage = (totalMonthlyExpenses / totalMonthlyRevenue) * 100;
 
             // Net Kar/Zarar
             const monthlyNetProfit = totalMonthlyRevenue - totalMonthlyExpenses;
             const yearlyNetProfit = totalYearlyRevenue - totalYearlyExpenses;
+            const netProfitPercentage = (monthlyNetProfit / totalMonthlyRevenue) * 100;
 
             // Yatırım Geri Dönüş Süresi (Ay)
             const paybackPeriod = monthlyNetProfit > 0 ? investmentCost / monthlyNetProfit : 0;
@@ -751,22 +1203,22 @@
                 <div class="result-card">
                     <h3>Hafta İçi Günlük Hasılat</h3>
                     <div class="value">${formatCurrency(weekdayDailyRevenue)}</div>
-                    <div class="small-text">Aylık: ${formatCurrency(weekdayMonthlyRevenue)}</div>
-                </div>
-                <div class="result-card">
-                    <h3>Hafta İçi Abonelik Hasılatı</h3>
-                    <div class="value">${formatCurrency(weekdaySubRevenue)}</div>
-                    <div class="small-text">Aylık Toplam</div>
+                    <div class="small-text">Hafta İçi Aylık: ${formatCurrency(weekdayMonthlyRevenue)}</div>
                 </div>
                 <div class="result-card">
                     <h3>Hafta Sonu Günlük Hasılat</h3>
                     <div class="value">${formatCurrency(weekendDailyRevenue)}</div>
-                    <div class="small-text">Aylık: ${formatCurrency(weekendMonthlyRevenue)}</div>
+                    <div class="small-text">Hafta Sonu Aylık: ${formatCurrency(weekendMonthlyRevenue)}</div>
+                </div>
+                <div class="result-card warning">
+                    <h3>Günlük Toplam Hasılat</h3>
+                    <div class="value">${formatCurrency(dailyTotalRevenue)}</div>
+                    <div class="small-text">Aylık Toplam: ${formatCurrency(weekdayMonthlyRevenue + weekendMonthlyRevenue)}</div>
                 </div>
                 <div class="result-card">
-                    <h3>Hafta Sonu Abonelik Hasılatı</h3>
-                    <div class="value">${formatCurrency(weekendSubRevenue)}</div>
-                    <div class="small-text">Aylık Toplam</div>
+                    <h3>Abonelik Hasılatı</h3>
+                    <div class="value">${formatCurrency(monthlySubRevenue)}</div>
+                    <div class="small-text">Personel + Dış Abonelik</div>
                 </div>
                 <div class="result-card warning">
                     <h3>Aylık Toplam Hasılat</h3>
@@ -776,7 +1228,7 @@
                 <div class="result-card">
                     <h3>Aylık Personel Maliyeti</h3>
                     <div class="value">${formatCurrency(monthlyStaffCost)}</div>
-                    <div class="small-text">${staffCount} Personel</div>
+                    <div class="small-text">${staffCount} Personel (İşverene Toplam) • %${staffCostPercentage.toFixed(1)} Oran</div>
                 </div>
                 <div class="result-card">
                     <h3>Aylık Operasyonel Gider</h3>
@@ -784,24 +1236,9 @@
                     <div class="small-text">%${operationalRate} Oranında</div>
                 </div>
                 <div class="result-card">
-                    <h3>Aylık Kira</h3>
-                    <div class="value">${formatCurrency(monthlyRent)}</div>
-                    <div class="small-text">%${rentRate} Oranında</div>
-                </div>
-                <div class="result-card">
                     <h3>Aylık Toplam Gider</h3>
                     <div class="value">${formatCurrency(totalMonthlyExpenses)}</div>
-                    <div class="small-text">Yıllık: ${formatCurrency(totalYearlyExpenses)}</div>
-                </div>
-                <div class="result-card ${profitClass}">
-                    <h3>Aylık Net Kar/Zarar</h3>
-                    <div class="value">${formatCurrency(monthlyNetProfit)}</div>
-                    <div class="small-text">${monthlyNetProfit > 0 ? '✅ Karlı' : '❌ Zararlı'}</div>
-                </div>
-                <div class="result-card ${yearlyProfitClass}">
-                    <h3>Yıllık Net Kar/Zarar</h3>
-                    <div class="value">${formatCurrency(yearlyNetProfit)}</div>
-                    <div class="small-text">${yearlyNetProfit > 0 ? '✅ Karlı' : '❌ Zararlı'}</div>
+                    <div class="small-text">%${totalExpensesPercentage.toFixed(1)} Oran • Yıllık: ${formatCurrency(totalYearlyExpenses)}</div>
                 </div>
                 <div class="result-card ${paybackPeriod < 24 ? 'positive' : paybackPeriod < 48 ? 'warning' : 'negative'}">
                     <h3>Yatırım Geri Dönüş</h3>
@@ -813,6 +1250,11 @@
                     <div class="value">${formatCurrency(investmentCost)}</div>
                     <div class="small-text">KDV Dahil</div>
                 </div>
+                <div class="result-card">
+                    <h3>Aylık Amortisman Payı</h3>
+                    <div class="value">${formatCurrency(monthlyAmortization)}</div>
+                    <div class="small-text">${amortizationMonths} Ay • %${amortizationPercentage.toFixed(1)} Oran</div>
+                </div>
                 <div class="result-card warning">
                     <h3>Kapasite</h3>
                     <div class="value">${capacity}</div>
@@ -823,7 +1265,28 @@
                     <div class="value">${devinim.toFixed(2)}</div>
                     <div class="small-text">Park Dönüş Oranı</div>
                 </div>
+                <div class="result-card">
+                    <h3>Toplam Abone</h3>
+                    <div class="value">${personelSubs + externalSubs}</div>
+                    <div class="small-text">Personel + Dış Abonelik</div>
+                </div>
+                
+                <div class="comparison-section">
+                    <div class="result-card-large rent-card">
+                        <h3>🏢 İşletmeye Ödenen Kira</h3>
+                        <div class="value">${formatCurrency(monthlyRent)}</div>
+                        <div class="small-text">%${rentRate} Oranı • Yıllık: ${formatCurrency(yearlyRent)}</div>
+                    </div>
+                    <div class="result-card-large profit-card ${profitClass}">
+                        <h3>💼 Bize Kalan Net Kar</h3>
+                        <div class="value">${formatCurrency(monthlyNetProfit)}</div>
+                        <div class="small-text">${monthlyNetProfit > 0 ? '✅ Karlı' : '❌ Zararlı'} • %${Math.abs(netProfitPercentage).toFixed(1)} Oran • Yıllık: ${formatCurrency(yearlyNetProfit)}</div>
+                    </div>
+                </div>
             `;
+
+            // Yönetici raporu butonunu göster
+            document.getElementById('managerReportBtn').style.display = 'block';
 
             // Scroll to results
             resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -836,6 +1299,123 @@
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             }).format(value);
+        }
+
+        function generateManagerReport() {
+            // Tüm değerleri tekrar al
+            const locationName = document.getElementById('locationName').value || 'Lokasyon';
+            const capacity = parseFloat(document.getElementById('capacity').value) || 0;
+            const workingDays = parseFloat(document.getElementById('workingDays').value) || 22;
+            
+            // Maliyetler
+            const investmentCostValue = document.getElementById('investmentCost').value.replace(/\./g, '').replace(/,/g, '.');
+            const investmentCost = parseFloat(investmentCostValue) || 0;
+            const amortizationMonths = parseFloat(document.getElementById('amortizationMonths').value) || 36;
+            const rentRate = parseFloat(document.getElementById('rentRate').value) || 35;
+            
+            // Personel
+            const staffCount = parseFloat(document.getElementById('staffCountTotal').value) || 0;
+            const staffCostTotalValue = document.getElementById('staffCostTotal').value.replace(/\./g, '').replace(/,/g, '.');
+            const monthlyStaffCost = parseFloat(staffCostTotalValue) || 0;
+            
+            // Hesaplamaları yeniden yap
+            const personelSubs = parseFloat(document.getElementById('personelSubs').value) || 0;
+            const personelPrice = parseFloat(document.getElementById('personelPrice').value) || 0;
+            const externalSubs = parseFloat(document.getElementById('externalSubs').value) || 0;
+            const externalPrice = parseFloat(document.getElementById('externalPrice').value) || 0;
+            const monthlySubRevenue = (personelSubs * personelPrice) + (externalSubs * externalPrice);
+            
+            let weekdayDailyRevenue = 0;
+            for (let i = 1; i <= 6; i++) {
+                const tariff = parseFloat(document.getElementById(`wd_slot${i}_tariff`).value) || 0;
+                const parking = parseFloat(document.getElementById(`wd_slot${i}_parking`).value) || 0;
+                weekdayDailyRevenue += tariff * parking;
+            }
+            
+            const weekendDays = parseFloat(document.getElementById('weekendDays').value) || 8;
+            let weekendDailyRevenue = 0;
+            for (let i = 1; i <= 6; i++) {
+                const tariff = parseFloat(document.getElementById(`we_slot${i}_tariff`).value) || 0;
+                const parking = parseFloat(document.getElementById(`we_slot${i}_parking`).value) || 0;
+                weekendDailyRevenue += tariff * parking;
+            }
+            
+            const weekdayMonthlyRevenue = weekdayDailyRevenue * workingDays;
+            const weekendMonthlyRevenue = weekendDailyRevenue * weekendDays;
+            const totalMonthlyRevenue = weekdayMonthlyRevenue + weekendMonthlyRevenue + monthlySubRevenue;
+            const totalYearlyRevenue = totalMonthlyRevenue * 12;
+            
+            const operationalRate = parseFloat(document.getElementById('operationalRate').value) || 10;
+            const monthlyOperationalCost = (totalMonthlyRevenue * operationalRate) / 100;
+            const monthlyRent = (totalMonthlyRevenue * rentRate) / 100;
+            const totalMonthlyExpenses = monthlyStaffCost + monthlyOperationalCost + monthlyRent;
+            const monthlyNetProfit = totalMonthlyRevenue - totalMonthlyExpenses;
+            const yearlyNetProfit = monthlyNetProfit * 12;
+            const netProfitPercentage = totalMonthlyRevenue > 0 ? (monthlyNetProfit / totalMonthlyRevenue) * 100 : 0;
+            const paybackPeriod = monthlyNetProfit > 0 ? investmentCost / monthlyNetProfit : 0;
+            
+            // Rapor içeriğini oluştur
+            const profitStatus = monthlyNetProfit > 0 ? '✅ KARLI' : '❌ ZARARLI';
+            const profitColor = monthlyNetProfit > 0 ? '#28a745' : '#dc3545';
+            
+            const reportContent = `
+                <div class="manager-summary">
+                    <h3>🎯 GENEL DEĞERLENDİRME</h3>
+                    <p><strong>${locationName}</strong> lokasyonu için yapılan fizibilite çalışması sonucunda:</p>
+                    <p>▪ Aylık Net Kar: <span class="highlight" style="color: ${profitColor}; font-size: 20px;">${formatCurrency(monthlyNetProfit)} (${profitStatus})</span></p>
+                    <p>▪ Yıllık Net Kar: <span class="highlight" style="color: ${profitColor}; font-size: 20px;">${formatCurrency(yearlyNetProfit)}</span></p>
+                    <p>▪ Kar Marjı: <span class="highlight">${Math.abs(netProfitPercentage).toFixed(1)}%</span></p>
+                    <p>▪ Yatırım Geri Dönüş: <span class="highlight">${paybackPeriod > 0 ? paybackPeriod.toFixed(1) + ' ay (' + (paybackPeriod/12).toFixed(1) + ' yıl)' : 'Belirsiz'}</span></p>
+                </div>
+                
+                <div class="manager-summary">
+                    <h3>💰 HASILAT ANALİZİ</h3>
+                    <p>▪ Hafta İçi Günlük: ${formatCurrency(weekdayDailyRevenue)} → Aylık: ${formatCurrency(weekdayMonthlyRevenue)}</p>
+                    <p>▪ Hafta Sonu Günlük: ${formatCurrency(weekendDailyRevenue)} → Aylık: ${formatCurrency(weekendMonthlyRevenue)}</p>
+                    <p>▪ Abonelik Geliri: ${formatCurrency(monthlySubRevenue)}</p>
+                    <p>▪ <strong>Toplam Aylık Hasılat: <span class="highlight">${formatCurrency(totalMonthlyRevenue)}</span></strong></p>
+                    <p>▪ <strong>Toplam Yıllık Hasılat: <span class="highlight">${formatCurrency(totalYearlyRevenue)}</span></strong></p>
+                </div>
+                
+                <div class="manager-summary">
+                    <h3>💸 GİDER ANALİZİ</h3>
+                    <p>▪ Personel Maliyeti: ${formatCurrency(monthlyStaffCost)} (${staffCount} Personel - KDV'li + Katsayılı)</p>
+                    <p>▪ Operasyonel Gider: ${formatCurrency(monthlyOperationalCost)} (%${operationalRate})</p>
+                    <p>▪ İşletmeye Kira: ${formatCurrency(monthlyRent)} (%${rentRate})</p>
+                    <p>▪ <strong>Toplam Aylık Gider: <span class="highlight">${formatCurrency(totalMonthlyExpenses)}</span></strong></p>
+                </div>
+                
+                <div class="manager-report-grid">
+                    <div class="manager-report-card">
+                        <h4>Kapasite</h4>
+                        <div class="value">${capacity}</div>
+                    </div>
+                    <div class="manager-report-card">
+                        <h4>Personel</h4>
+                        <div class="value">${staffCount}</div>
+                    </div>
+                    <div class="manager-report-card">
+                        <h4>Aylık Hasılat</h4>
+                        <div class="value">${formatCurrency(totalMonthlyRevenue)}</div>
+                    </div>
+                    <div class="manager-report-card">
+                        <h4>Aylık Gider</h4>
+                        <div class="value">${formatCurrency(totalMonthlyExpenses)}</div>
+                    </div>
+                    <div class="manager-report-card">
+                        <h4>Net Kar (Aylık)</h4>
+                        <div class="value" style="color: ${profitColor};">${formatCurrency(monthlyNetProfit)}</div>
+                    </div>
+                    <div class="manager-report-card">
+                        <h4>Geri Dönüş</h4>
+                        <div class="value">${paybackPeriod > 0 ? paybackPeriod.toFixed(1) + ' ay' : '-'}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('managerReportContent').innerHTML = reportContent;
+            document.getElementById('managerReport').style.display = 'block';
+            document.getElementById('managerReport').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         // Enter tuşu ile hesaplama
