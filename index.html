@@ -667,6 +667,100 @@
             margin-top: 5px;
         }
 
+        /* Share Buttons */
+        .share-section {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .share-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .share-btn.email {
+            background: #EA4335;
+            color: white;
+        }
+
+        .share-btn.copy {
+            background: #667eea;
+            color: white;
+        }
+
+        .share-btn.telegram {
+            background: #0088cc;
+            color: white;
+        }
+
+        /* Template System */
+        .template-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .template-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .template-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .template-title {
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+
+        .template-desc {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
         /* Chart Styles */
         .charts-section {
             grid-column: 1 / -1;
@@ -1471,6 +1565,48 @@
         </div>
 
         <div class="content">
+            <!-- Template Seçimi -->
+            <div class="section" style="grid-column: 1 / -1;">
+                <div class="template-section">
+                    <h2 style="text-align: center; color: white; margin: 0 0 10px 0;">💼 HIZLI ŞABLON SEÇİMİ</h2>
+                    <p style="text-align: center; color: rgba(255,255,255,0.8); margin: 0 0 20px 0; font-size: 14px;">
+                        <span data-i18n="templateDesc">Sektörünüze uygun hazır şablonları kullanarak hızlıca başlayın</span>
+                    </p>
+                    <div class="template-grid">
+                        <div class="template-card" onclick="applyTemplate('avm')">
+                            <div class="template-icon">🏬</div>
+                            <div class="template-title">AVM</div>
+                            <div class="template-desc">Alışveriş Merkezi<br>Yoğun Trafik</div>
+                        </div>
+                        <div class="template-card" onclick="applyTemplate('plaza')">
+                            <div class="template-icon">🏢</div>
+                            <div class="template-title">Plaza / Ofis</div>
+                            <div class="template-desc">İş Merkezi<br>Hafta İçi Yoğun</div>
+                        </div>
+                        <div class="template-card" onclick="applyTemplate('hastane')">
+                            <div class="template-icon">🏥</div>
+                            <div class="template-title">Hastane</div>
+                            <div class="template-desc">Sağlık Tesisi<br>7/24 Aktif</div>
+                        </div>
+                        <div class="template-card" onclick="applyTemplate('otel')">
+                            <div class="template-icon">🏨</div>
+                            <div class="template-title">Otel</div>
+                            <div class="template-desc">Konaklama<br>Turist Ağırlıklı</div>
+                        </div>
+                        <div class="template-card" onclick="applyTemplate('stadyum')">
+                            <div class="template-icon">🏟️</div>
+                            <div class="template-title">Stadyum / Salon</div>
+                            <div class="template-desc">Etkinlik Alanı<br>Yüksek Kapasite</div>
+                        </div>
+                        <div class="template-card" onclick="applyTemplate('custom')">
+                            <div class="template-icon">⚙️</div>
+                            <div class="template-title">Özel</div>
+                            <div class="template-desc">Manuel Giriş<br>Sıfırdan Başla</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Genel Bilgiler -->
             <div class="section">
                 <h2>📊 Genel Bilgiler</h2>
@@ -1770,12 +1906,28 @@
             </button>
 
             <!-- Export Butonları -->
-            <div id="exportButtons" style="display: none; margin-top: 15px; display: flex; gap: 15px; justify-content: center;">
+            <div id="exportButtons" style="display: none; margin-top: 15px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                 <button class="export-btn excel-btn" onclick="exportToExcel()">
-                    📊 Excel'e Aktar
+                    📊 <span data-i18n="exportExcel">Excel'e Aktar</span>
                 </button>
                 <button class="export-btn pdf-btn" onclick="exportToPDF()">
-                    📄 PDF İndir (Grafiklerle)
+                    📄 <span data-i18n="exportPDFCharts">PDF İndir (Grafiklerle)</span>
+                </button>
+            </div>
+
+            <!-- Paylaşım Butonları -->
+            <div id="shareButtons" class="share-section" style="display: none;">
+                <button class="share-btn whatsapp" onclick="shareViaWhatsApp()">
+                    📱 WhatsApp
+                </button>
+                <button class="share-btn email" onclick="shareViaEmail()">
+                    📧 Email
+                </button>
+                <button class="share-btn telegram" onclick="shareViaTelegram()">
+                    ✈️ Telegram
+                </button>
+                <button class="share-btn copy" onclick="copyReportLink()">
+                    📋 Linki Kopyala
                 </button>
             </div>
 
@@ -2320,6 +2472,9 @@
             
             // Export butonlarını göster
             document.getElementById('exportButtons').style.display = 'flex';
+            
+            // Paylaşım butonlarını göster
+            document.getElementById('shareButtons').style.display = 'flex';
             
             // Grafikleri göster ve oluştur
             document.getElementById('chartsSection').style.display = 'block';
@@ -3335,6 +3490,284 @@
                 console.error('PDF oluşturma hatası:', error);
                 alert('❌ PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
             }
+        }
+
+        // TEMPLATE SİSTEMİ
+        const templates = {
+            avm: {
+                name: 'AVM - Alışveriş Merkezi',
+                locationName: 'Olivium AVM Otopark',
+                weekdayCapacity: 2000,
+                devinim: 2.5,
+                workingDays: 22,
+                weekendDays: 8,
+                staffMinWage: 4,
+                staff25k: 2,
+                staffManager: 1,
+                investmentCost: 5000000,
+                amortizationMonths: 60,
+                operationalRate: 12,
+                rentRate: 35,
+                personelSubs: 150,
+                personelPrice: 800,
+                externalSubs: 50,
+                externalPrice: 1200,
+                weekdaySlots: [
+                    { hours: '08:00-12:00', tariff: 40, usage: 85, parking: Math.round(2000 * 0.85) },
+                    { hours: '12:00-18:00', tariff: 50, usage: 95, parking: Math.round(2000 * 0.95) },
+                    { hours: '18:00-22:00', tariff: 45, usage: 90, parking: Math.round(2000 * 0.90) },
+                    { hours: '22:00-08:00', tariff: 30, usage: 20, parking: Math.round(2000 * 0.20) }
+                ]
+            },
+            plaza: {
+                name: 'Plaza / Ofis Binası',
+                locationName: 'Zorlu Plaza Otopark',
+                weekdayCapacity: 800,
+                devinim: 1.8,
+                workingDays: 22,
+                weekendDays: 8,
+                staffMinWage: 2,
+                staff25k: 1,
+                staffManager: 1,
+                investmentCost: 2000000,
+                amortizationMonths: 48,
+                operationalRate: 10,
+                rentRate: 30,
+                personelSubs: 300,
+                personelPrice: 600,
+                externalSubs: 20,
+                externalPrice: 1000,
+                weekdaySlots: [
+                    { hours: '08:00-12:00', tariff: 35, usage: 95, parking: Math.round(800 * 0.95) },
+                    { hours: '12:00-18:00', tariff: 40, usage: 90, parking: Math.round(800 * 0.90) },
+                    { hours: '18:00-22:00', tariff: 30, usage: 40, parking: Math.round(800 * 0.40) },
+                    { hours: '22:00-08:00', tariff: 20, usage: 10, parking: Math.round(800 * 0.10) }
+                ]
+            },
+            hastane: {
+                name: 'Hastane',
+                locationName: 'Acıbadem Hastanesi Otopark',
+                weekdayCapacity: 1200,
+                devinim: 3.0,
+                workingDays: 30,
+                weekendDays: 0,
+                staffMinWage: 6,
+                staff25k: 2,
+                staffManager: 1,
+                investmentCost: 3000000,
+                amortizationMonths: 60,
+                operationalRate: 15,
+                rentRate: 25,
+                personelSubs: 200,
+                personelPrice: 500,
+                externalSubs: 0,
+                externalPrice: 0,
+                weekdaySlots: [
+                    { hours: '08:00-12:00', tariff: 50, usage: 90, parking: Math.round(1200 * 0.90) },
+                    { hours: '12:00-18:00', tariff: 55, usage: 85, parking: Math.round(1200 * 0.85) },
+                    { hours: '18:00-22:00', tariff: 45, usage: 70, parking: Math.round(1200 * 0.70) },
+                    { hours: '22:00-08:00', tariff: 35, usage: 40, parking: Math.round(1200 * 0.40) }
+                ]
+            },
+            otel: {
+                name: 'Otel',
+                locationName: 'Hilton Otel Otopark',
+                weekdayCapacity: 500,
+                devinim: 1.2,
+                workingDays: 30,
+                weekendDays: 0,
+                staffMinWage: 2,
+                staff25k: 1,
+                staffManager: 1,
+                investmentCost: 1500000,
+                amortizationMonths: 48,
+                operationalRate: 12,
+                rentRate: 20,
+                personelSubs: 50,
+                personelPrice: 0,
+                externalSubs: 100,
+                externalPrice: 1500,
+                weekdaySlots: [
+                    { hours: '08:00-12:00', tariff: 60, usage: 60, parking: Math.round(500 * 0.60) },
+                    { hours: '12:00-18:00', tariff: 70, usage: 75, parking: Math.round(500 * 0.75) },
+                    { hours: '18:00-22:00', tariff: 80, usage: 85, parking: Math.round(500 * 0.85) },
+                    { hours: '22:00-08:00', tariff: 100, usage: 90, parking: Math.round(500 * 0.90) }
+                ]
+            },
+            stadyum: {
+                name: 'Stadyum / Etkinlik Alanı',
+                locationName: 'Ülker Stadyumu Otopark',
+                weekdayCapacity: 3000,
+                devinim: 1.5,
+                workingDays: 10,
+                weekendDays: 8,
+                staffMinWage: 10,
+                staff25k: 3,
+                staffManager: 2,
+                investmentCost: 8000000,
+                amortizationMonths: 72,
+                operationalRate: 15,
+                rentRate: 40,
+                personelSubs: 50,
+                personelPrice: 1000,
+                externalSubs: 200,
+                externalPrice: 2000,
+                weekdaySlots: [
+                    { hours: '08:00-12:00', tariff: 30, usage: 20, parking: Math.round(3000 * 0.20) },
+                    { hours: '12:00-18:00', tariff: 100, usage: 95, parking: Math.round(3000 * 0.95) },
+                    { hours: '18:00-22:00', tariff: 150, usage: 100, parking: Math.round(3000 * 1.00) },
+                    { hours: '22:00-08:00', tariff: 50, usage: 80, parking: Math.round(3000 * 0.80) }
+                ]
+            }
+        };
+
+        function applyTemplate(templateKey) {
+            if (templateKey === 'custom') {
+                // Sıfırla
+                document.getElementById('locationName').value = '';
+                document.getElementById('weekdayCapacity').value = '1670';
+                document.getElementById('devinim').value = '1.5';
+                document.getElementById('workingDays').value = '22';
+                document.getElementById('weekendDays').value = '8';
+                document.getElementById('staffMinWage').value = '0';
+                document.getElementById('staff25k').value = '0';
+                document.getElementById('staffManager').value = '0';
+                calculateTotalStaffCost();
+                calculateWeekendCapacity();
+                alert('✅ Form sıfırlandı. Kendi değerlerinizi girebilirsiniz.');
+                return;
+            }
+
+            const template = templates[templateKey];
+            if (!template) return;
+
+            // Form alanlarını doldur
+            document.getElementById('locationName').value = template.locationName;
+            document.getElementById('weekdayCapacity').value = template.weekdayCapacity;
+            document.getElementById('devinim').value = template.devinim;
+            document.getElementById('workingDays').value = template.workingDays;
+            document.getElementById('weekendDays').value = template.weekendDays;
+            
+            // Personel
+            document.getElementById('staffMinWage').value = template.staffMinWage;
+            document.getElementById('staff25k').value = template.staff25k;
+            document.getElementById('staffManager').value = template.staffManager;
+            
+            // Maliyetler
+            document.getElementById('investmentCost').value = template.investmentCost;
+            document.getElementById('amortizationMonths').value = template.amortizationMonths;
+            document.getElementById('operationalRate').value = template.operationalRate;
+            document.getElementById('rentRate').value = template.rentRate;
+            
+            // Abonelikler
+            document.getElementById('personelSubs').value = template.personelSubs;
+            document.getElementById('personelPrice').value = template.personelPrice;
+            document.getElementById('externalSubs').value = template.externalSubs;
+            document.getElementById('externalPrice').value = template.externalPrice;
+            
+            // Hafta içi tarifeler
+            template.weekdaySlots.forEach((slot, index) => {
+                document.getElementById(`weekdayTariff${index + 1}`).value = slot.tariff;
+                document.getElementById(`weekdayUsage${index + 1}`).value = slot.usage;
+            });
+            
+            // Hesaplamaları tetikle
+            calculateTotalStaffCost();
+            calculateWeekendCapacity();
+            
+            alert(`✅ ${template.name} şablonu yüklendi!\n\nVerileri inceleyip ihtiyacınıza göre düzenleyebilirsiniz.`);
+            
+            // Scroll to form
+            document.querySelector('.section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // PAYLAŞIM FONKSİYONLARI
+        function generateReportSummary() {
+            const locationName = document.getElementById('locationName').value || 'Lokasyon';
+            const resultsDiv = document.getElementById('results');
+            
+            if (resultsDiv.style.display === 'none') {
+                return null;
+            }
+            
+            // Sonuçları çek
+            const resultCards = document.querySelectorAll('.result-card');
+            let summary = `🅿️ PARKEXPERT FİZİBİLİTE RAPORU\n`;
+            summary += `📍 Lokasyon: ${locationName}\n`;
+            summary += `📅 Tarih: ${new Date().toLocaleDateString('tr-TR')}\n\n`;
+            summary += `📊 SONUÇLAR:\n`;
+            
+            resultCards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent || '';
+                const value = card.querySelector('.value')?.textContent || '';
+                if (title && value) {
+                    summary += `• ${title}: ${value}\n`;
+                }
+            });
+            
+            return summary;
+        }
+
+        function shareViaWhatsApp() {
+            const summary = generateReportSummary();
+            if (!summary) {
+                alert('⚠️ Önce hesaplama yapmalısınız!');
+                return;
+            }
+            
+            const text = encodeURIComponent(summary + '\n\n🔗 Detaylı rapor için: ' + window.location.href);
+            const url = `https://wa.me/?text=${text}`;
+            window.open(url, '_blank');
+        }
+
+        function shareViaEmail() {
+            const summary = generateReportSummary();
+            if (!summary) {
+                alert('⚠️ Önce hesaplama yapmalısınız!');
+                return;
+            }
+            
+            const locationName = document.getElementById('locationName').value || 'Lokasyon';
+            const subject = encodeURIComponent(`Parkexpert Fizibilite Raporu - ${locationName}`);
+            const body = encodeURIComponent(summary + '\n\n🔗 Detaylı rapor için: ' + window.location.href);
+            
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        }
+
+        function shareViaTelegram() {
+            const summary = generateReportSummary();
+            if (!summary) {
+                alert('⚠️ Önce hesaplama yapmalısınız!');
+                return;
+            }
+            
+            const text = encodeURIComponent(summary + '\n\n🔗 Detaylı rapor için: ' + window.location.href);
+            const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
+            window.open(url, '_blank');
+        }
+
+        function copyReportLink() {
+            const summary = generateReportSummary();
+            if (!summary) {
+                alert('⚠️ Önce hesaplama yapmalısınız!');
+                return;
+            }
+            
+            // Özet metni panoya kopyala
+            navigator.clipboard.writeText(summary + '\n\n🔗 Detaylı rapor için: ' + window.location.href)
+                .then(() => {
+                    alert('✅ Rapor özeti panoya kopyalandı!');
+                })
+                .catch(() => {
+                    // Fallback
+                    const textArea = document.createElement('textarea');
+                    textArea.value = summary;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    alert('✅ Rapor özeti panoya kopyalandı!');
+                });
         }
 
         // Modal dışına tıklayınca kapat
