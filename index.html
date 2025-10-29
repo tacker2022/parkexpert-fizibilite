@@ -761,6 +761,409 @@
             color: #6c757d;
         }
 
+        /* Notes System */
+        .notes-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 2px solid #667eea;
+        }
+
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .notes-textarea:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        /* Currency Selector */
+        .currency-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .currency-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+        }
+
+        .currency-menu {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 998;
+        }
+
+        .currency-menu.active {
+            display: block;
+        }
+
+        .currency-option-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .currency-option-btn:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .currency-option-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .animate-in {
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Gamification */
+        .achievement-popup {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            z-index: 9999;
+            animation: slideInUp 0.5s ease-out;
+            max-width: 300px;
+        }
+
+        .achievement-icon {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .achievement-desc {
+            font-size: 14px;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .achievements-badge {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .achievements-badge:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .achievements-panel {
+            display: none;
+            position: fixed;
+            bottom: 160px;
+            right: 20px;
+            width: 350px;
+            max-height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            z-index: 998;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .achievements-panel.active {
+            display: block;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .achievement-item.unlocked {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 2px solid #28a745;
+        }
+
+        .achievement-item.locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        /* Chatbot */
+        .chatbot-button {
+            position: fixed;
+            bottom: 160px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .chatbot-window {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 998;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbot-window.active {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 12px;
+            max-width: 80%;
+            animation: slideInUp 0.3s ease-out;
+        }
+
+        .chat-message.bot {
+            background: white;
+            border: 2px solid #667eea;
+            margin-right: auto;
+        }
+
+        .chat-message.user {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .chat-quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px 15px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .quick-reply-btn {
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .quick-reply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Screenshot & Tools */
+        .tools-menu {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 10px 0 0 10px;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+            padding: 10px;
+            z-index: 997;
+        }
+
+        .tool-btn {
+            display: block;
+            width: 50px;
+            height: 50px;
+            margin: 10px 0;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .tool-btn:hover {
+            transform: scale(1.1);
+            background: #764ba2;
+        }
+
+        /* Financing Modal */
+        .financing-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            z-index: 10000;
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .financing-modal.active {
+            display: block;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+        }
+
+        .modal-overlay.active {
+            display: block;
+        }
+
         /* Chart Styles */
         .charts-section {
             grid-column: 1 / -1;
@@ -1940,6 +2343,22 @@
                 <div id="comparisonContent"></div>
             </div>
 
+            <!-- Notlar & Varsayımlar -->
+            <div class="section" style="grid-column: 1 / -1;">
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <h3 style="margin: 0; color: #1e3c72;">📝 Notlar & Varsayımlar</h3>
+                        <button onclick="saveNotes()" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            💾 Notu Kaydet
+                        </button>
+                    </div>
+                    <textarea id="calculationNotes" class="notes-textarea" placeholder="Hesaplama hakkında notlarınızı, varsayımlarınızı veya özel açıklamalarınızı buraya yazabilirsiniz..."></textarea>
+                    <div style="margin-top: 10px; font-size: 12px; color: #6c757d;">
+                        💡 Bu notlar hesaplama ile birlikte kaydedilir ve raporlara eklenir.
+                    </div>
+                </div>
+            </div>
+
             <!-- Sonuçlar -->
             <div class="results" id="results" style="display: none;">
                 <h2>📈 FİZİBİLİTE SONUÇLARI</h2>
@@ -2142,6 +2561,9 @@
             document.title = lang === 'tr' ? 
                 'Parkexpert - Otopark Fizibilite Hesaplama' : 
                 'Parkexpert - Parking Feasibility Calculator';
+            
+            // Başarım
+            unlockAchievement('multilingual');
         }
 
         function setTheme(theme) {
@@ -2151,6 +2573,9 @@
             // Buton durumlarını güncelle
             document.getElementById('lightThemeBtn').classList.toggle('active', theme === 'light');
             document.getElementById('darkThemeBtn').classList.toggle('active', theme === 'dark');
+            
+            // Başarım
+            unlockAchievement('theme_changer');
         }
 
         function setColor(primary, secondary) {
@@ -2252,6 +2677,20 @@
             
             // Hafta sonu kapasitesini hesapla
             calculateWeekendCapacity();
+            
+            // Başarımları yükle
+            loadAchievements();
+            
+            // Currency'yi yükle
+            const savedCurrency = localStorage.getItem('parkexpert-currency');
+            if (savedCurrency && savedCurrency !== 'TRY') {
+                const symbols = { USD: '$', EUR: '€', GBP: '£' };
+                changeCurrency(savedCurrency, symbols[savedCurrency]);
+            }
+            
+            // Hatırlatıcıları kontrol et
+            checkReminders();
+            setInterval(checkReminders, 60000); // Her dakika kontrol et
             
             console.log('✅ Parkexpert Fizibilite Aracı hazır!');
         });
@@ -2501,6 +2940,9 @@
 
             // Scroll to results
             resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Başarımları kontrol et
+            checkAchievements(monthlyNetProfit, profitabilityScore);
         }
 
         // AKILLI ÖNERİLER FONKSİYONU
@@ -2675,6 +3117,16 @@
         let scenarioB = null;
         let scenarioAResults = null;
         let scenarioBResults = null;
+
+        // Para Birimi Yönetimi
+        let currentCurrency = 'TRY';
+        let currentCurrencySymbol = '₺';
+        const exchangeRates = {
+            TRY: 1,
+            USD: 35.5,
+            EUR: 38.2,
+            GBP: 45.1
+        };
 
         function createCharts(weekdayDaily, weekdayMonthly, weekendDaily, weekendMonthly, subRevenue, 
                              totalRevenue, staffCost, opCost, rent, totalExpenses, netProfit) {
@@ -3182,6 +3634,11 @@
             
             closeSaveModal();
             alert('✅ Hesaplama başarıyla kaydedildi!');
+            
+            // Başarımları kontrol et
+            if (savedCalculations.length >= 5) {
+                unlockAchievement('saver');
+            }
         }
 
         function showLoadModal() {
@@ -3358,6 +3815,9 @@
             XLSX.writeFile(wb, fileName);
             
             alert('✅ Excel dosyası başarıyla indirildi!');
+            
+            // Başarım
+            unlockAchievement('exporter');
         }
 
         async function exportToPDF() {
@@ -3677,8 +4137,510 @@
             
             alert(`✅ ${template.name} şablonu yüklendi!\n\nVerileri inceleyip ihtiyacınıza göre düzenleyebilirsiniz.`);
             
+            // Başarım
+            unlockAchievement('template_user');
+            
             // Scroll to form
             document.querySelector('.section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // PARA BİRİMİ YÖNETİMİ
+        function toggleCurrencyMenu() {
+            const menu = document.getElementById('currencyMenu');
+            menu.classList.toggle('active');
+        }
+
+        function changeCurrency(code, symbol) {
+            currentCurrency = code;
+            currentCurrencySymbol = symbol;
+            
+            // UI'ı güncelle
+            document.getElementById('currentCurrencyCode').textContent = code;
+            document.getElementById('currentCurrencySymbol').textContent = symbol;
+            
+            // Aktif butonu işaretle
+            document.querySelectorAll('.currency-option-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes(code)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Menüyü kapat
+            document.getElementById('currencyMenu').classList.remove('active');
+            
+            // Eğer sonuçlar varsa yeniden formatla
+            if (document.getElementById('results').style.display !== 'none') {
+                updateCurrencyDisplay();
+            }
+            
+            // LocalStorage'a kaydet
+            localStorage.setItem('parkexpert-currency', code);
+            
+            // Animasyon
+            const badge = document.getElementById('currencyBadge');
+            badge.style.animation = 'pulse 0.5s ease-out';
+            setTimeout(() => {
+                badge.style.animation = '';
+            }, 500);
+        }
+
+        function updateCurrencyDisplay() {
+            const rate = exchangeRates[currentCurrency];
+            
+            // Tüm sonuç kartlarını güncelle
+            document.querySelectorAll('.result-card .value').forEach(el => {
+                const originalText = el.textContent;
+                const numbers = originalText.match(/[\d.,]+/g);
+                
+                if (numbers) {
+                    numbers.forEach(num => {
+                        const value = parseFloat(num.replace(/\./g, '').replace(',', '.'));
+                        if (!isNaN(value)) {
+                            const converted = value / rate;
+                            const formatted = new Intl.NumberFormat('tr-TR', {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(converted);
+                            el.textContent = originalText.replace(num, formatted).replace('₺', currentCurrencySymbol);
+                        }
+                    });
+                }
+            });
+        }
+
+        // NOTLAR YÖNETİMİ
+        function saveNotes() {
+            const notes = document.getElementById('calculationNotes').value;
+            const locationName = document.getElementById('locationName').value || 'Genel';
+            
+            // LocalStorage'a kaydet
+            const notesData = JSON.parse(localStorage.getItem('parkexpert-notes') || '{}');
+            notesData[locationName] = {
+                notes: notes,
+                date: new Date().toISOString(),
+                timestamp: Date.now()
+            };
+            localStorage.setItem('parkexpert-notes', JSON.stringify(notesData));
+            
+            // Başarı mesajı
+            showToast('✅ Notlar kaydedildi!', 'success');
+        }
+
+        function loadNotes(locationName) {
+            const notesData = JSON.parse(localStorage.getItem('parkexpert-notes') || '{}');
+            if (notesData[locationName]) {
+                document.getElementById('calculationNotes').value = notesData[locationName].notes;
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                z-index: 9999;
+                animation: slideInUp 0.3s ease-out;
+                font-weight: 600;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInUp 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // GAMİFİCATION SİSTEMİ
+        const achievements = [
+            { id: 'first_calc', icon: '🎯', title: 'İlk Hesaplama', desc: 'İlk fizibilite hesaplamanı yaptın!', unlocked: false },
+            { id: 'profitable', icon: '💰', title: 'Karlı İşletme', desc: 'Pozitif karlılık elde ettin!', unlocked: false },
+            { id: 'scenario_master', icon: '⚖️', title: 'Senaryo Ustası', desc: '2 senaryoyu karşılaştırdın!', unlocked: false },
+            { id: 'saver', icon: '💾', title: 'Kayıtçı', desc: '5 hesaplama kaydettin!', unlocked: false },
+            { id: 'template_user', icon: '💼', title: 'Şablon Kullanıcısı', desc: 'Hazır şablon kullandın!', unlocked: false },
+            { id: 'exporter', icon: '📊', title: 'Veri Ustası', desc: 'Excel veya PDF export yaptın!', unlocked: false },
+            { id: 'theme_changer', icon: '🎨', title: 'Stil Sahibi', desc: 'Temayı değiştirdin!', unlocked: false },
+            { id: 'multilingual', icon: '🌍', title: 'Poliglot', desc: 'Dil değiştirdin!', unlocked: false },
+            { id: 'power_user', icon: '⚡', title: 'Pro Kullanıcı', desc: '10 hesaplama yaptın!', unlocked: false },
+            { id: 'perfect_score', icon: '🏆', title: 'Mükemmellik', desc: '90+ karlılık skoru aldın!', unlocked: false }
+        ];
+
+        function loadAchievements() {
+            const saved = localStorage.getItem('parkexpert-achievements');
+            if (saved) {
+                const unlocked = JSON.parse(saved);
+                achievements.forEach(ach => {
+                    if (unlocked.includes(ach.id)) {
+                        ach.unlocked = true;
+                    }
+                });
+            }
+            updateAchievementsList();
+        }
+
+        function unlockAchievement(achievementId) {
+            const achievement = achievements.find(a => a.id === achievementId);
+            if (achievement && !achievement.unlocked) {
+                achievement.unlocked = true;
+                
+                // LocalStorage'a kaydet
+                const unlocked = achievements.filter(a => a.unlocked).map(a => a.id);
+                localStorage.setItem('parkexpert-achievements', JSON.stringify(unlocked));
+                
+                // Popup göster
+                showAchievementPopup(achievement);
+                
+                // Konfeti efekti
+                createConfetti();
+                
+                // Listeyi güncelle
+                updateAchievementsList();
+            }
+        }
+
+        function showAchievementPopup(achievement) {
+            const popup = document.createElement('div');
+            popup.className = 'achievement-popup';
+            popup.innerHTML = `
+                <div class="achievement-icon">${achievement.icon}</div>
+                <div class="achievement-title">${achievement.title}</div>
+                <div class="achievement-desc">${achievement.desc}</div>
+            `;
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                popup.style.animation = 'slideInUp 0.5s ease-out reverse';
+                setTimeout(() => popup.remove(), 500);
+            }, 4000);
+        }
+
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#FFD700', '#FFA500', '#FF6B6B'];
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `
+                    position: fixed;
+                    width: 10px;
+                    height: 10px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    top: ${Math.random() * 100}%;
+                    left: ${Math.random() * 100}%;
+                    animation: confetti ${1 + Math.random()}s ease-out forwards;
+                    z-index: 10000;
+                    border-radius: 50%;
+                `;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 2000);
+            }
+        }
+
+        function toggleAchievements() {
+            document.getElementById('achievementsPanel').classList.toggle('active');
+        }
+
+        function updateAchievementsList() {
+            const list = document.getElementById('achievementsList');
+            list.innerHTML = achievements.map(ach => `
+                <div class="achievement-item ${ach.unlocked ? 'unlocked' : 'locked'}">
+                    <div style="font-size: 32px;">${ach.icon}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 700; color: #1e3c72;">${ach.title}</div>
+                        <div style="font-size: 12px; color: #6c757d;">${ach.desc}</div>
+                    </div>
+                    ${ach.unlocked ? '<div style="color: #28a745; font-size: 24px;">✓</div>' : '<div style="color: #6c757d; font-size: 24px;">🔒</div>'}
+                </div>
+            `).join('');
+        }
+
+        // CHATBOT SİSTEMİ
+        function toggleChatbot() {
+            document.getElementById('chatbotWindow').classList.toggle('active');
+        }
+
+        function askChatbot(question) {
+            const messagesDiv = document.getElementById('chatbotMessages');
+            
+            // Kullanıcı mesajını ekle
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.textContent = getQuestionText(question);
+            messagesDiv.appendChild(userMsg);
+            
+            // Bot cevabını ekle
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'chat-message bot';
+                botMsg.innerHTML = getBotResponse(question);
+                messagesDiv.appendChild(botMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 500);
+            
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function getQuestionText(type) {
+            const questions = {
+                'nasıl': 'Aracı nasıl kullanırım?',
+                'öneri': 'Bana öneri verir misin?',
+                'şablon': 'Hangi şablonu kullanmalıyım?',
+                'karlılık': 'Karlılığı nasıl artırırım?'
+            };
+            return questions[type] || type;
+        }
+
+        function getBotResponse(question) {
+            const responses = {
+                'nasıl': `
+                    <strong>Kullanım Adımları:</strong><br>
+                    1️⃣ Yukarıdan bir şablon seç (AVM, Plaza, vb.)<br>
+                    2️⃣ Veya manuel olarak bilgileri gir<br>
+                    3️⃣ "Fizibilite Hesapla" butonuna tıkla<br>
+                    4️⃣ Sonuçları incele ve export et!<br><br>
+                    💡 İpucu: Senaryo karşılaştırması için 2 farklı hesaplama yap!
+                `,
+                'öneri': `
+                    <strong>Akıllı Öneriler:</strong><br>
+                    📊 Hesaplama yaptıktan sonra "Akıllı Öneriler" bölümünde:<br>
+                    • Personel optimizasyonu<br>
+                    • Kira önerileri<br>
+                    • Kapasite kullanımı<br>
+                    • Karlılık artırma stratejileri bulabilirsin!
+                `,
+                'şablon': `
+                    <strong>Şablon Seçimi:</strong><br>
+                    🏬 <strong>AVM:</strong> Yüksek trafik, hafta sonu yoğun<br>
+                    🏢 <strong>Plaza:</strong> Hafta içi yoğun, abonelik odaklı<br>
+                    🏥 <strong>Hastane:</strong> 7/24 aktif, yüksek devir<br>
+                    🏨 <strong>Otel:</strong> Gece saatleri yoğun<br>
+                    🏟️ <strong>Stadyum:</strong> Etkinlik bazlı, yüksek kapasite<br><br>
+                    💡 İhtiyacına en yakın olanı seç!
+                `,
+                'karlılık': `
+                    <strong>Karlılık Artırma İpuçları:</strong><br>
+                    💰 Devrinim oranını artır (günlük park başına daha fazla araç)<br>
+                    👥 Personel sayısını optimize et<br>
+                    📈 Yoğun saatlerde tarife artır<br>
+                    🔄 Abonelik sistemini genişlet<br>
+                    ⚙️ Operasyonel giderleri azalt<br>
+                    🏢 Kira oranını %35'in altında tut<br><br>
+                    📊 Akıllı önerilere bak!
+                `
+            };
+            return responses[question] || 'Size nasıl yardımcı olabilirim? Yukarıdaki hızlı yanıt butonlarından birini seçebilirsiniz.';
+        }
+
+        function checkAchievements(netProfit, profitabilityScore) {
+            // İlk hesaplama
+            const calcCount = parseInt(localStorage.getItem('parkexpert-calc-count') || '0') + 1;
+            localStorage.setItem('parkexpert-calc-count', calcCount);
+            
+            if (calcCount === 1) {
+                unlockAchievement('first_calc');
+            }
+            
+            if (calcCount >= 10) {
+                unlockAchievement('power_user');
+            }
+            
+            // Karlı işletme
+            if (netProfit > 0) {
+                unlockAchievement('profitable');
+            }
+            
+            // Mükemmel skor
+            if (profitabilityScore >= 90) {
+                unlockAchievement('perfect_score');
+            }
+        }
+
+        // SCREENSHOT FONKSİYONU
+        async function takeScreenshot() {
+            try {
+                showToast('📸 Screenshot alınıyor...', 'success');
+                
+                const element = document.querySelector('.container');
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                });
+                
+                // PNG olarak indir
+                canvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Parkexpert_Screenshot_${new Date().toISOString().split('T')[0]}.png`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+                
+                showToast('✅ Screenshot indirildi!', 'success');
+                unlockAchievement('exporter');
+            } catch (error) {
+                showToast('❌ Screenshot alınamadı', 'error');
+            }
+        }
+
+        // FİNANSMAN HESAPLAYICI
+        function openFinancing() {
+            document.getElementById('financingModal').classList.add('active');
+            document.getElementById('modalOverlay').classList.add('active');
+            
+            // Yatırım tutarını doldur
+            const investCost = document.getElementById('investmentCost').value;
+            if (investCost) {
+                document.getElementById('loanAmount').value = investCost;
+            }
+        }
+
+        function calculateLoan() {
+            const principal = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const annualRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const termMonths = parseInt(document.getElementById('loanTerm').value) || 0;
+            
+            if (principal === 0 || termMonths === 0) {
+                alert('⚠️ Lütfen tüm alanları doldurun!');
+                return;
+            }
+            
+            // Aylık faiz oranı
+            const monthlyRate = (annualRate / 100) / 12;
+            
+            // Aylık taksit hesaplama (eşit taksit formülü)
+            const monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / 
+                                   (Math.pow(1 + monthlyRate, termMonths) - 1);
+            
+            const totalPayment = monthlyPayment * termMonths;
+            const totalInterest = totalPayment - principal;
+            
+            // Sonuçları göster
+            const resultsDiv = document.getElementById('loanResults');
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 14px; color: #6c757d; margin-bottom: 5px;">Aylık Taksit</div>
+                    <div style="font-size: 32px; font-weight: 700; color: #667eea;">${formatCurrency(monthlyPayment)}</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 12px; color: #6c757d;">Toplam Ödeme</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #1e3c72;">${formatCurrency(totalPayment)}</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 12px; color: #6c757d;">Toplam Faiz</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #dc3545;">${formatCurrency(totalInterest)}</div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <strong>💡 Finansman Önerisi:</strong><br>
+                    ${monthlyPayment > 0 && totalPayment > 0 ? `
+                        • Aylık ödemeniz hasılatınızın <strong>%${((monthlyPayment / (document.getElementById('results').style.display !== 'none' ? parseFloat(document.querySelector('.result-card-large .value')?.textContent.replace(/[^\d]/g, '') || 1000000) : 1000000)) * 100).toFixed(1)}</strong>'ini oluşturuyor.<br>
+                        • ${monthlyPayment < 100000 ? '✅ Makul bir ödeme planı.' : '⚠️ Yüksek ödeme - vadeyi uzatmayı düşünün.'}<br>
+                        • Faiz oranı: <strong>%${annualRate}</strong> ${annualRate < 3 ? '(İyi)' : annualRate < 5 ? '(Orta)' : '(Yüksek)'}
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // HEDEF BELIRLEME
+        function openGoalSetting() {
+            const currentProfit = document.getElementById('results').style.display !== 'none' 
+                ? parseFloat(document.querySelector('.result-card-large .value')?.textContent.replace(/[^\d,-]/g, '').replace(',', '.') || 0)
+                : 0;
+            
+            const goal = prompt(`🎯 Aylık Kar Hedefiniz?\n\n${currentProfit > 0 ? `Şu anki karınız: ${formatCurrency(currentProfit)}` : 'Önce hesaplama yapmalısınız!'}\n\nHedef tutarı girin (₺):`);
+            
+            if (goal) {
+                const targetProfit = parseFloat(goal);
+                if (currentProfit > 0) {
+                    const difference = targetProfit - currentProfit;
+                    const percentChange = ((difference / currentProfit) * 100).toFixed(1);
+                    
+                    let message = `🎯 **HEDEF BELİRLENDİ**\n\n`;
+                    message += `📊 Mevcut Kar: ${formatCurrency(currentProfit)}\n`;
+                    message += `🎯 Hedef Kar: ${formatCurrency(targetProfit)}\n`;
+                    message += `📈 Fark: ${formatCurrency(Math.abs(difference))} (${percentChange}%)\n\n`;
+                    
+                    if (difference > 0) {
+                        message += `💡 **Hedefe Ulaşmak İçin:**\n`;
+                        message += `• Devrinimi ${(1.5 * (1 + difference / currentProfit / 2)).toFixed(1)}'e çıkar\n`;
+                        message += `• Veya tarifeleri %${(difference / currentProfit * 50).toFixed(0)} artır\n`;
+                        message += `• Veya giderleri %${(difference / currentProfit * 30).toFixed(0)} azalt`;
+                    } else {
+                        message += `✅ Hedefinizi şu an aşıyorsunuz! Tebrikler! 🎉`;
+                    }
+                    
+                    alert(message);
+                    
+                    // LocalStorage'a kaydet
+                    localStorage.setItem('parkexpert-goal', JSON.stringify({
+                        target: targetProfit,
+                        current: currentProfit,
+                        date: new Date().toISOString()
+                    }));
+                } else {
+                    alert('⚠️ Önce bir hesaplama yapmalısınız!');
+                }
+            }
+        }
+
+        // HATIRLATICI SİSTEMİ
+        function setReminder() {
+            const message = prompt('🔔 Hatırlatıcı Mesajı:\n\nÖrnek: "Aylık raporu kontrol et"');
+            
+            if (message) {
+                const days = prompt('📅 Kaç gün sonra hatırlatsın?\n\n(Örn: 7 = 1 hafta sonra)');
+                
+                if (days) {
+                    const reminderDate = new Date();
+                    reminderDate.setDate(reminderDate.getDate() + parseInt(days));
+                    
+                    const reminder = {
+                        message: message,
+                        date: reminderDate.toISOString(),
+                        created: new Date().toISOString()
+                    };
+                    
+                    // LocalStorage'a kaydet
+                    const reminders = JSON.parse(localStorage.getItem('parkexpert-reminders') || '[]');
+                    reminders.push(reminder);
+                    localStorage.setItem('parkexpert-reminders', JSON.stringify(reminders));
+                    
+                    alert(`✅ Hatırlatıcı ayarlandı!\n\n📅 ${reminderDate.toLocaleDateString('tr-TR')}\n💬 ${message}`);
+                }
+            }
+        }
+
+        function checkReminders() {
+            const reminders = JSON.parse(localStorage.getItem('parkexpert-reminders') || '[]');
+            const now = new Date();
+            
+            reminders.forEach((reminder, index) => {
+                const reminderDate = new Date(reminder.date);
+                if (reminderDate <= now) {
+                    showToast(`🔔 Hatırlatma: ${reminder.message}`, 'success');
+                    
+                    // Gösterilen hatırlatıcıyı sil
+                    reminders.splice(index, 1);
+                    localStorage.setItem('parkexpert-reminders', JSON.stringify(reminders));
+                }
+            });
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.modal, .financing-modal').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            document.getElementById('modalOverlay').classList.remove('active');
         }
 
         // PAYLAŞIM FONKSİYONLARI
@@ -3908,6 +4870,9 @@
             // Karşılaştırma sonuçlarına scroll
             document.getElementById('comparisonResults').style.display = 'block';
             document.getElementById('comparisonResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Başarım
+            unlockAchievement('scenario_master');
         }
 
         function createComparisonTable() {
@@ -4053,6 +5018,102 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Para Birimi Seçici -->
+    <div class="currency-badge" onclick="toggleCurrencyMenu()" id="currencyBadge">
+        <span id="currentCurrencySymbol">₺</span>
+        <span id="currentCurrencyCode" style="font-weight: 600;">TRY</span>
+    </div>
+    
+    <div class="currency-menu" id="currencyMenu">
+        <div style="font-weight: 600; margin-bottom: 10px; color: #1e3c72;">💱 Para Birimi Seç:</div>
+        <button class="currency-option-btn active" onclick="changeCurrency('TRY', '₺')">
+            🇹🇷 Türk Lirası (₺)
+        </button>
+        <button class="currency-option-btn" onclick="changeCurrency('USD', '$')">
+            🇺🇸 US Dollar ($)
+        </button>
+        <button class="currency-option-btn" onclick="changeCurrency('EUR', '€')">
+            🇪🇺 Euro (€)
+        </button>
+        <button class="currency-option-btn" onclick="changeCurrency('GBP', '£')">
+            🇬🇧 British Pound (£)
+        </button>
+    </div>
+
+    <!-- Achievements Badge -->
+    <div class="achievements-badge" onclick="toggleAchievements()" title="Başarımlar">
+        🏆
+    </div>
+
+    <div class="achievements-panel" id="achievementsPanel">
+        <h3 style="margin: 0 0 20px 0; color: #1e3c72; text-align: center;">🏆 BAŞARIMLAR</h3>
+        <div id="achievementsList"></div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-button" onclick="toggleChatbot()" title="AI Asistan">
+        🤖
+    </div>
+
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div>
+                <div style="font-weight: 700;">🤖 Parkexpert Asistan</div>
+                <div style="font-size: 12px; opacity: 0.9;">Size nasıl yardımcı olabilirim?</div>
+            </div>
+            <button onclick="toggleChatbot()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">×</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chat-message bot">
+                Merhaba! 👋 Ben Parkexpert AI asistanınızım. Size nasıl yardımcı olabilirim?
+            </div>
+        </div>
+        <div class="chat-quick-replies">
+            <button class="quick-reply-btn" onclick="askChatbot('nasıl')">Nasıl kullanırım?</button>
+            <button class="quick-reply-btn" onclick="askChatbot('öneri')">Öneri al</button>
+            <button class="quick-reply-btn" onclick="askChatbot('şablon')">Şablon öner</button>
+            <button class="quick-reply-btn" onclick="askChatbot('karlılık')">Karlılık arttır</button>
+        </div>
+    </div>
+
+    <!-- Tools Menu -->
+    <div class="tools-menu">
+        <button class="tool-btn" onclick="takeScreenshot()" title="📸 Screenshot">📸</button>
+        <button class="tool-btn" onclick="window.print()" title="🖨️ Print">🖨️</button>
+        <button class="tool-btn" onclick="openFinancing()" title="💳 Finansman">💳</button>
+        <button class="tool-btn" onclick="openGoalSetting()" title="🎯 Hedef">🎯</button>
+        <button class="tool-btn" onclick="setReminder()" title="🔔 Hatırlatıcı">🔔</button>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeAllModals()"></div>
+
+    <!-- Financing Modal -->
+    <div class="financing-modal" id="financingModal">
+        <h2 style="color: #1e3c72; margin: 0 0 20px 0;">💳 FİNANSMAN HESAPLAYfour</h2>
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: 600; display: block; margin-bottom: 5px;">Kredi Tutarı (₺)</label>
+            <input type="number" id="loanAmount" style="width: 100%; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px;" placeholder="Örn: 5000000">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: 600; display: block; margin-bottom: 5px;">Faiz Oranı (Yıllık %)</label>
+            <input type="number" id="interestRate" value="2.5" style="width: 100%; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: 600; display: block; margin-bottom: 5px;">Vade (Ay)</label>
+            <input type="number" id="loanTerm" value="60" style="width: 100%; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px;">
+        </div>
+        <button onclick="calculateLoan()" style="width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 15px;">
+            💰 Hesapla
+        </button>
+        <div id="loanResults" style="display: none; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+            <!-- Results will be shown here -->
+        </div>
+        <button onclick="closeAllModals()" style="width: 100%; padding: 10px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px;">
+            Kapat
+        </button>
     </div>
 
 </body>
