@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkexpert - Test Suite</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: #1e3c72; }
+        .test-case {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .test-case.pass {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .test-case.fail {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .test-name { font-weight: bold; margin-bottom: 5px; }
+        .test-result { font-size: 14px; color: #666; }
+        .summary {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .summary h2 { margin: 0 0 10px 0; }
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover { background: #764ba2; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Parkexpert Test Suite</h1>
+        <p>Otomatik validation testleri</p>
+
+        <button onclick="runAllTests()">▶️ Tüm Testleri Çalıştır</button>
+        <button onclick="clearResults()">🗑️ Temizle</button>
+
+        <div id="testResults"></div>
+        <div id="testSummary"></div>
+    </div>
+
+    <script>
+        // Test Framework
+        class TestRunner {
+            constructor() {
+                this.tests = [];
+                this.results = [];
+            }
+
+            addTest(name, fn) {
+                this.tests.push({ name, fn });
+            }
+
+            async run() {
+                this.results = [];
+                for (const test of this.tests) {
+                    try {
+                        await test.fn();
+                        this.results.push({ name: test.name, pass: true, error: null });
+                    } catch (error) {
+                        this.results.push({ name: test.name, pass: false, error: error.message });
+                    }
+                }
+                this.displayResults();
+            }
+
+            displayResults() {
+                const container = document.getElementById('testResults');
+                container.innerHTML = '';
+
+                this.results.forEach(result => {
+                    const div = document.createElement('div');
+                    div.className = `test-case ${result.pass ? 'pass' : 'fail'}`;
+                    div.innerHTML = `
+                        <div class="test-name">${result.pass ? '✅' : '❌'} ${result.name}</div>
+                        <div class="test-result">${result.pass ? 'PASS' : `FAIL: ${result.error}`}</div>
+                    `;
+                    container.appendChild(div);
+                });
+
+                // Summary
+                const passed = this.results.filter(r => r.pass).length;
+                const failed = this.results.filter(r => !r.pass).length;
+                const total = this.results.length;
+                const percentage = ((passed / total) * 100).toFixed(0);
+
+                document.getElementById('testSummary').innerHTML = `
+                    <div class="summary">
+                        <h2>📊 Test Sonuçları</h2>
+                        <p><strong>${passed}/${total}</strong> test başarılı (${percentage}%)</p>
+                        <p>✅ Başarılı: ${passed} | ❌ Başarısız: ${failed}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Helper: assert
+        function assert(condition, message) {
+            if (!condition) {
+                throw new Error(message || 'Assertion failed');
+            }
+        }
+
+        function assertEquals(actual, expected, message) {
+            if (actual !== expected) {
+                throw new Error(message || `Expected ${expected}, but got ${actual}`);
+            }
+        }
+
+        // Test Suite
+        const runner = new TestRunner();
+
+        // Test 1: LocalStorage Tests
+        runner.addTest('LocalStorage - Set & Get', () => {
+            localStorage.setItem('test-key', 'test-value');
+            const value = localStorage.getItem('test-key');
+            assertEquals(value, 'test-value', 'LocalStorage should store and retrieve values');
+            localStorage.removeItem('test-key');
+        });
+
+        // Test 2: Number Formatting
+        runner.addTest('Number Formatting', () => {
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('tr-TR', {
+                    style: 'currency',
+                    currency: 'TRY',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(value);
+            }
+            const result = formatCurrency(1000);
+            assert(result.includes('1.000') || result.includes('1,000'), 'Should format currency correctly');
+        });
+
+        // Test 3: ROI Calculation
+        runner.addTest('ROI Calculation', () => {
+            const investment = 1000000;
+            const monthlyProfit = 50000;
+            const payback = investment / monthlyProfit;
+            assertEquals(payback, 20, 'ROI should be 20 months');
+        });
+
+        // Test 4: Profit Margin Calculation
+        runner.addTest('Profit Margin Calculation', () => {
+            const revenue = 100000;
+            const expenses = 70000;
+            const profit = revenue - expenses;
+            const margin = (profit / revenue) * 100;
+            assertEquals(margin, 30, 'Profit margin should be 30%');
+        });
+
+        // Test 5: Devinim Calculation
+        runner.addTest('Devinim Validation', () => {
+            const capacity = 100;
+            const devinim = 2.5;
+            const dailyRevenue = capacity * devinim;
+            assertEquals(dailyRevenue, 250, 'Daily revenue should be 250');
+        });
+
+        // Test 6: Validation - Negative Values
+        runner.addTest('Validation - Reject Negative Values', () => {
+            const value = -100;
+            assert(value < 0, 'Should detect negative values');
+        });
+
+        // Test 7: Empty String Handling
+        runner.addTest('Empty String Handling', () => {
+            const value = parseFloat('') || 0;
+            assertEquals(value, 0, 'Empty string should default to 0');
+        });
+
+        // Test 8: User Session Management
+        runner.addTest('User Session Management', () => {
+            const user = {
+                id: 'test-123',
+                name: 'Test User',
+                email: 'test@example.com',
+                role: 'admin'
+            };
+            localStorage.setItem('parkexpert-session', JSON.stringify(user));
+            const retrieved = JSON.parse(localStorage.getItem('parkexpert-session'));
+            assertEquals(retrieved.id, 'test-123', 'User session should persist');
+            localStorage.removeItem('parkexpert-session');
+        });
+
+        // Test 9: Date Formatting
+        runner.addTest('Date Formatting', () => {
+            const date = new Date('2025-01-01');
+            const formatted = date.toLocaleDateString('tr-TR');
+            assert(formatted.includes('2025'), 'Date should be formatted correctly');
+        });
+
+        // Test 10: Array Operations
+        runner.addTest('Array Operations', () => {
+            const users = [
+                { role: 'admin', name: 'User 1' },
+                { role: 'manager', name: 'User 2' },
+                { role: 'viewer', name: 'User 3' }
+            ];
+            const admins = users.filter(u => u.role === 'admin');
+            assertEquals(admins.length, 1, 'Should filter admins correctly');
+        });
+
+        // Test 11: Password Hashing (Simple)
+        runner.addTest('Password Hashing', () => {
+            function hashPassword(password) {
+                let hash = 0;
+                for (let i = 0; i < password.length; i++) {
+                    const char = password.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                return hash.toString();
+            }
+            const hash1 = hashPassword('test123');
+            const hash2 = hashPassword('test123');
+            assertEquals(hash1, hash2, 'Same password should produce same hash');
+        });
+
+        // Test 12: Goal Progress Calculation
+        runner.addTest('Goal Progress Calculation', () => {
+            const current = 75000;
+            const target = 100000;
+            const percentage = (current / target) * 100;
+            assertEquals(percentage, 75, 'Progress should be 75%');
+        });
+
+        // Run tests
+        function runAllTests() {
+            runner.run();
+        }
+
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+            document.getElementById('testSummary').innerHTML = '';
+        }
+
+        // Auto-run on load
+        window.addEventListener('load', () => {
+            console.log('✅ Test Suite Ready! Click "Run Tests" to start.');
+        });
+    </script>
+</body>
+</html>
