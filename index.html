@@ -1164,6 +1164,332 @@
             display: block;
         }
 
+        /* Multi-User System */
+        .user-menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            min-width: 250px;
+            padding: 15px;
+            z-index: 999;
+        }
+
+        .user-dropdown.active {
+            display: block;
+            animation: slideInUp 0.3s ease-out;
+        }
+
+        .user-info {
+            padding: 15px;
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 15px;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: #1e3c72;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .user-role {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .user-role.admin {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        }
+
+        .user-role.manager {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .user-role.viewer {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        }
+
+        .user-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #1e3c72;
+            margin: 5px 0;
+        }
+
+        .user-menu-item:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .login-modal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-modal.hidden {
+            display: none;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        .login-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6c757d;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .login-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .login-form {
+            display: none;
+        }
+
+        .login-form.active {
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .guest-btn {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .guest-btn:hover {
+            background: #f8f9fa;
+        }
+
+        /* Live Dashboard */
+        .dashboard-container {
+            display: none;
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .dashboard-container.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+        }
+
+        .dashboard-kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .kpi-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .kpi-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 5px;
+            animation: countUp 1s ease-out;
+        }
+
+        .kpi-label {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .kpi-trend {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .kpi-trend.up {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .kpi-trend.down {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 1s ease-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
         /* Chart Styles */
         .charts-section {
             grid-column: 1 / -1;
@@ -1890,6 +2216,31 @@
 <body>
     <div class="container">
         <div class="header">
+            <!-- User Menu -->
+            <div class="user-menu">
+                <div class="user-avatar" onclick="toggleUserDropdown()" id="userAvatar">
+                    <span id="userInitials">?</span>
+                </div>
+                <div class="user-dropdown" id="userDropdown">
+                    <div class="user-info">
+                        <div class="user-name" id="currentUserName">Misafir</div>
+                        <span class="user-role viewer" id="currentUserRole">Viewer</span>
+                    </div>
+                    <div class="user-menu-item" onclick="showUserProfile()">
+                        👤 Profil
+                    </div>
+                    <div class="user-menu-item" onclick="showTeamMembers()">
+                        👥 Ekip Üyeleri
+                    </div>
+                    <div class="user-menu-item" onclick="showSettings()">
+                        ⚙️ Ayarlar
+                    </div>
+                    <div class="user-menu-item" onclick="logout()" style="color: #dc3545;">
+                        🚪 Çıkış Yap
+                    </div>
+                </div>
+            </div>
+
             <!-- Tema Kontrolleri -->
             <div class="theme-controls">
                 <button class="theme-btn active" id="lightThemeBtn" onclick="setTheme('light')" title="Aydınlık Tema">
@@ -2359,6 +2710,17 @@
                 </div>
             </div>
 
+            <!-- Live Dashboard -->
+            <div class="dashboard-container" id="liveDashboard">
+                <div class="dashboard-header">
+                    <h2>📊 CANLI DASHBOARD</h2>
+                    <p style="margin: 0; opacity: 0.9;">Gerçek Zamanlı Performans Göstergeleri</p>
+                </div>
+                <div class="dashboard-kpis" id="dashboardKPIs">
+                    <!-- KPI'lar buraya gelecek -->
+                </div>
+            </div>
+
             <!-- Sonuçlar -->
             <div class="results" id="results" style="display: none;">
                 <h2>📈 FİZİBİLİTE SONUÇLARI</h2>
@@ -2692,6 +3054,9 @@
             checkReminders();
             setInterval(checkReminders, 60000); // Her dakika kontrol et
             
+            // Multi-user sistem başlat
+            initUserSystem();
+            
             console.log('✅ Parkexpert Fizibilite Aracı hazır!');
         });
 
@@ -2941,8 +3306,56 @@
             // Scroll to results
             resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
             
+            // Dashboard'u güncelle
+            updateLiveDashboard({
+                totalRevenue: totalMonthlyRevenue,
+                netProfit: monthlyNetProfit,
+                profitMargin: (monthlyNetProfit / totalMonthlyRevenue) * 100,
+                capacity: weekdayCapacity,
+                devinim: devinim,
+                staffCount: staffCount
+            });
+            
             // Başarımları kontrol et
             checkAchievements(monthlyNetProfit, profitabilityScore);
+        }
+
+        // CANLI DASHBOARD
+        function updateLiveDashboard(data) {
+            document.getElementById('liveDashboard').classList.add('active');
+            
+            const kpisHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-icon">💰</div>
+                    <div class="kpi-value">${formatCurrency(data.netProfit)}</div>
+                    <div class="kpi-label">Net Kar</div>
+                    <div class="kpi-trend ${data.netProfit > 0 ? 'up' : 'down'}">
+                        ${data.netProfit > 0 ? '↗️' : '↘️'} ${data.profitMargin.toFixed(1)}%
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">📈</div>
+                    <div class="kpi-value">${formatCurrency(data.totalRevenue)}</div>
+                    <div class="kpi-label">Toplam Gelir</div>
+                    <div class="kpi-trend up">↗️ Aylık</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">🅿️</div>
+                    <div class="kpi-value">${data.capacity}</div>
+                    <div class="kpi-label">Kapasite</div>
+                    <div class="kpi-trend up">🔄 x${data.devinim}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">👥</div>
+                    <div class="kpi-value">${data.staffCount}</div>
+                    <div class="kpi-label">Personel</div>
+                    <div class="kpi-trend ${data.staffCount < 5 ? 'up' : 'down'}">
+                        ${data.staffCount < 5 ? '✅ Optimal' : '⚠️ Yüksek'}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('dashboardKPIs').innerHTML = kpisHTML;
         }
 
         // AKILLI ÖNERİLER FONKSİYONU
@@ -4258,6 +4671,259 @@
             }, 3000);
         }
 
+        // MULTI-USER SYSTEM
+        let currentUser = null;
+
+        function initUserSystem() {
+            // Kullanıcıları yükle veya default oluştur
+            const users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
+            
+            // Eğer hiç kullanıcı yoksa, demo admin ekle
+            if (users.length === 0) {
+                const demoAdmin = {
+                    id: 'admin-' + Date.now(),
+                    name: 'Demo Admin',
+                    email: 'admin@parkexpert.com',
+                    password: hashPassword('admin123'),
+                    role: 'admin',
+                    company: 'Parkexpert Demo',
+                    createdAt: new Date().toISOString()
+                };
+                users.push(demoAdmin);
+                localStorage.setItem('parkexpert-users', JSON.stringify(users));
+            }
+            
+            // Session'ı kontrol et
+            const sessionUser = localStorage.getItem('parkexpert-session');
+            if (sessionUser) {
+                currentUser = JSON.parse(sessionUser);
+                updateUserUI();
+                document.getElementById('loginModal').classList.add('hidden');
+            } else {
+                // Login modal'ı göster
+                document.getElementById('loginModal').classList.remove('hidden');
+            }
+        }
+
+        function hashPassword(password) {
+            // Basit hash (production'da bcrypt kullanılmalı)
+            let hash = 0;
+            for (let i = 0; i < password.length; i++) {
+                const char = password.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString();
+        }
+
+        function switchLoginTab(tab) {
+            document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+            document.getElementById('registerTab').classList.toggle('active', tab === 'register');
+            document.getElementById('loginForm').classList.toggle('active', tab === 'login');
+            document.getElementById('registerForm').classList.toggle('active', tab === 'register');
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showToast('⚠️ Email ve şifre gerekli!', 'error');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
+            const user = users.find(u => u.email === email && u.password === hashPassword(password));
+            
+            if (user) {
+                currentUser = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    company: user.company
+                };
+                
+                localStorage.setItem('parkexpert-session', JSON.stringify(currentUser));
+                document.getElementById('loginModal').classList.add('hidden');
+                updateUserUI();
+                showToast(`✅ Hoşgeldin ${user.name}!`, 'success');
+                
+                // Başarım
+                unlockAchievement('first_calc');
+            } else {
+                showToast('❌ Email veya şifre hatalı!', 'error');
+            }
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const company = document.getElementById('registerCompany').value.trim();
+            const role = document.getElementById('registerRole').value;
+            
+            if (!name || !email || !password) {
+                showToast('⚠️ Tüm alanları doldurun!', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showToast('⚠️ Şifre en az 6 karakter olmalı!', 'error');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
+            
+            // Email kontrolü
+            if (users.some(u => u.email === email)) {
+                showToast('⚠️ Bu email zaten kayıtlı!', 'error');
+                return;
+            }
+            
+            const newUser = {
+                id: 'user-' + Date.now(),
+                name: name,
+                email: email,
+                password: hashPassword(password),
+                role: role,
+                company: company || 'Parkexpert',
+                createdAt: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('parkexpert-users', JSON.stringify(users));
+            
+            // Otomatik login
+            currentUser = {
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email,
+                role: newUser.role,
+                company: newUser.company
+            };
+            
+            localStorage.setItem('parkexpert-session', JSON.stringify(currentUser));
+            document.getElementById('loginModal').classList.add('hidden');
+            updateUserUI();
+            showToast(`✅ Hesap oluşturuldu! Hoşgeldin ${name}!`, 'success');
+        }
+
+        function continueAsGuest() {
+            currentUser = {
+                id: 'guest-' + Date.now(),
+                name: 'Misafir',
+                email: 'guest@parkexpert.com',
+                role: 'viewer',
+                company: 'Misafir'
+            };
+            
+            localStorage.setItem('parkexpert-session', JSON.stringify(currentUser));
+            document.getElementById('loginModal').classList.add('hidden');
+            updateUserUI();
+            showToast('👤 Misafir olarak devam ediyorsunuz', 'success');
+        }
+
+        function updateUserUI() {
+            if (!currentUser) return;
+            
+            // Avatar initials
+            const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById('userInitials').textContent = initials;
+            
+            // User info
+            document.getElementById('currentUserName').textContent = currentUser.name;
+            
+            // Role badge
+            const roleBadge = document.getElementById('currentUserRole');
+            roleBadge.className = `user-role ${currentUser.role}`;
+            roleBadge.textContent = {
+                'admin': '👑 Admin',
+                'manager': '👨‍💼 Manager',
+                'viewer': '👁️ Viewer'
+            }[currentUser.role];
+            
+            // Role-based UI restrictions
+            applyRoleRestrictions();
+        }
+
+        function applyRoleRestrictions() {
+            if (!currentUser) return;
+            
+            const isViewer = currentUser.role === 'viewer';
+            const isGuest = currentUser.id.startsWith('guest-');
+            
+            if (isViewer || isGuest) {
+                // Viewer'lar için kısıtlamalar
+                // Kaydetme butonu gizle
+                const saveButtons = document.querySelectorAll('.save-load-btn, .scenario-btn.save');
+                saveButtons.forEach(btn => {
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                    btn.onclick = () => showToast('⚠️ Düzenleme yetkiniz yok!', 'error');
+                });
+            }
+        }
+
+        function toggleUserDropdown() {
+            document.getElementById('userDropdown').classList.toggle('active');
+        }
+
+        function showUserProfile() {
+            const profile = `
+👤 PROFİL BİLGİLERİ
+
+📛 Ad: ${currentUser.name}
+📧 Email: ${currentUser.email}
+👔 Rol: ${currentUser.role}
+🏢 Şirket: ${currentUser.company}
+🆔 ID: ${currentUser.id}
+            `.trim();
+            
+            alert(profile);
+            toggleUserDropdown();
+        }
+
+        function showTeamMembers() {
+            const users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
+            
+            if (currentUser.role !== 'admin') {
+                showToast('⚠️ Sadece admin görebilir!', 'error');
+                return;
+            }
+            
+            let message = '👥 EKIP ÜYELERİ\n\n';
+            users.forEach((user, index) => {
+                message += `${index + 1}. ${user.name}\n`;
+                message += `   📧 ${user.email}\n`;
+                message += `   👔 ${user.role}\n`;
+                message += `   🏢 ${user.company}\n\n`;
+            });
+            
+            alert(message);
+            toggleUserDropdown();
+        }
+
+        function showSettings() {
+            alert('⚙️ AYARLAR\n\nYakında eklenecek...');
+            toggleUserDropdown();
+        }
+
+        function logout() {
+            if (confirm('🚪 Çıkış yapmak istediğinizden emin misiniz?')) {
+                localStorage.removeItem('parkexpert-session');
+                currentUser = null;
+                location.reload();
+            }
+        }
+
+        // Sayfa dışına tıklayınca dropdown'ları kapat
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-menu')) {
+                document.getElementById('userDropdown').classList.remove('active');
+            }
+        });
+
         // GAMİFİCATION SİSTEMİ
         const achievements = [
             { id: 'first_calc', icon: '🎯', title: 'İlk Hesaplama', desc: 'İlk fizibilite hesaplamanı yaptın!', unlocked: false },
@@ -5075,6 +5741,56 @@
             <button class="quick-reply-btn" onclick="askChatbot('öneri')">Öneri al</button>
             <button class="quick-reply-btn" onclick="askChatbot('şablon')">Şablon öner</button>
             <button class="quick-reply-btn" onclick="askChatbot('karlılık')">Karlılık arttır</button>
+        </div>
+    </div>
+
+    <!-- Login/Register Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-box">
+            <h2 style="text-align: center; color: #1e3c72; margin: 0 0 10px 0;">🅿️ Parkexpert</h2>
+            <p style="text-align: center; color: #6c757d; margin: 0 0 30px 0; font-size: 14px;">
+                Hesabınızla devam edin veya yeni hesap oluşturun
+            </p>
+            
+            <div class="login-tabs">
+                <div class="login-tab active" onclick="switchLoginTab('login')" id="loginTab">
+                    Giriş Yap
+                </div>
+                <div class="login-tab" onclick="switchLoginTab('register')" id="registerTab">
+                    Kayıt Ol
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <div class="login-form active" id="loginForm">
+                <input type="email" class="form-input" id="loginEmail" placeholder="📧 Email" autocomplete="email">
+                <input type="password" class="form-input" id="loginPassword" placeholder="🔒 Şifre" autocomplete="current-password">
+                <button class="login-btn" onclick="handleLogin()">
+                    🔓 Giriş Yap
+                </button>
+                <button class="guest-btn" onclick="continueAsGuest()">
+                    👤 Misafir Olarak Devam Et
+                </button>
+            </div>
+
+            <!-- Register Form -->
+            <div class="login-form" id="registerForm">
+                <input type="text" class="form-input" id="registerName" placeholder="👤 Ad Soyad">
+                <input type="email" class="form-input" id="registerEmail" placeholder="📧 Email" autocomplete="email">
+                <input type="password" class="form-input" id="registerPassword" placeholder="🔒 Şifre (min 6 karakter)" autocomplete="new-password">
+                <input type="text" class="form-input" id="registerCompany" placeholder="🏢 Şirket Adı (Opsiyonel)">
+                <select class="form-select" id="registerRole">
+                    <option value="viewer">👁️ Viewer - Sadece Görüntüleme</option>
+                    <option value="manager">👨‍💼 Manager - Düzenleme İzni</option>
+                    <option value="admin">👑 Admin - Tam Yetki</option>
+                </select>
+                <button class="login-btn" onclick="handleRegister()">
+                    ✨ Hesap Oluştur
+                </button>
+                <button class="guest-btn" onclick="continueAsGuest()">
+                    👤 Misafir Olarak Devam Et
+                </button>
+            </div>
         </div>
     </div>
 
