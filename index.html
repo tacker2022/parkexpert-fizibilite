@@ -2229,6 +2229,9 @@
                     <div class="user-menu-item" onclick="showUserProfile()">
                         👤 Profil
                     </div>
+                    <div class="user-menu-item" id="adminPanelBtn" style="display: none;" onclick="openAdminPanel()">
+                        👑 Admin Paneli
+                    </div>
                     <div class="user-menu-item" onclick="showTeamMembers()">
                         👥 Ekip Üyeleri
                     </div>
@@ -4717,10 +4720,7 @@
         }
 
         function switchLoginTab(tab) {
-            document.getElementById('loginTab').classList.toggle('active', tab === 'login');
-            document.getElementById('registerTab').classList.toggle('active', tab === 'register');
-            document.getElementById('loginForm').classList.toggle('active', tab === 'login');
-            document.getElementById('registerForm').classList.toggle('active', tab === 'register');
+            return; // Artık sadece login
         }
 
         function handleLogin() {
@@ -4749,64 +4749,141 @@
                 updateUserUI();
                 showToast(`✅ Hoşgeldin ${user.name}!`, 'success');
                 
-                // Başarım
-                unlockAchievement('first_calc');
+                if (user.role === 'admin') {
+                    document.getElementById('adminPanelBtn').style.display = 'flex';
+                }
             } else {
                 showToast('❌ Email veya şifre hatalı!', 'error');
             }
         }
 
-        function handleRegister() {
-            const name = document.getElementById('registerName').value.trim();
-            const email = document.getElementById('registerEmail').value.trim();
-            const password = document.getElementById('registerPassword').value;
-            const company = document.getElementById('registerCompany').value.trim();
-            const role = document.getElementById('registerRole').value;
-            
-            if (!name || !email || !password) {
-                showToast('⚠️ Tüm alanları doldurun!', 'error');
+        // ADMIN PANEL
+        function openAdminPanel() {
+            if (currentUser.role !== 'admin') {
+                showToast('⚠️ Sadece admin!', 'error');
                 return;
             }
+            document.getElementById('adminPanel').classList.add('active');
+            document.getElementById('adminPanelOverlay').classList.add('active');
+            toggleUserDropdown();
+            loadUsersList();
+            updateAdminStats();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('active');
+            document.getElementById('adminPanelOverlay').classList.remove('active');
+        }
+
+        function switchAdminTab(tab) {
+            document.getElementById('adminUsersTab').classList.toggle('active', tab === 'users');
+            document.getElementById('adminAddTab').classList.toggle('active', tab === 'add');
+            document.getElementById('adminSettingsTab').classList.toggle('active', tab === 'settings');
+            document.getElementById('adminUsersSection').style.display = tab === 'users' ? 'block' : 'none';
+            document.getElementById('adminAddSection').style.display = tab === 'add' ? 'block' : 'none';
+            document.getElementById('adminSettingsSection').style.display = tab === 'settings' ? 'block' : 'none';
+        }
+
+        function loadUsersList() {
+            const users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
+            const listHTML = users.map(user => `
+                <div style="padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <div style="font-weight: 700;">${user.role === 'admin' ? '👑' : user.role === 'manager' ? '👨‍💼' : '👁️'} ${user.name}</div>
+                            <div style="font-size: 12px; color: #6c757d;">📧 ${user.email} | 🏢 ${user.company}</div>
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            <button onclick="editUser('${user.id}')" style="padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">✏️</button>
+                            ${user.id !== currentUser.id ? `<button onclick="deleteUser('${user.id}')" style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer;">🗑️</button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('usersList').innerHTML = listHTML;
+        }
+
+        function generatePassword() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*';
+            let pwd = '';
+            for (let i = 0; i < 12; i++) pwd += chars.charAt(Math.floor(Math.random() * chars.length));
+            document.getElementById('newUserPassword').value = pwd;
+            showToast('🎲 Şifre: ' + pwd, 'success');
+        }
+
+        function createUser() {
+            const name = document.getElementById('newUserName').value.trim();
+            const email = document.getElementById('newUserEmail').value.trim();
+            const password = document.getElementById('newUserPassword').value;
+            const company = document.getElementById('newUserCompany').value.trim() || 'Parkexpert';
+            const role = document.getElementById('newUserRole').value;
             
-            if (password.length < 6) {
-                showToast('⚠️ Şifre en az 6 karakter olmalı!', 'error');
+            if (!name || !email || !password) {
+                showToast('⚠️ Tüm alanlar gerekli!', 'error');
                 return;
             }
             
             const users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
-            
-            // Email kontrolü
             if (users.some(u => u.email === email)) {
-                showToast('⚠️ Bu email zaten kayıtlı!', 'error');
+                showToast('⚠️ Email kayıtlı!', 'error');
                 return;
             }
             
-            const newUser = {
+            users.push({
                 id: 'user-' + Date.now(),
-                name: name,
-                email: email,
+                name, email,
                 password: hashPassword(password),
-                role: role,
-                company: company || 'Parkexpert',
+                role, company,
                 createdAt: new Date().toISOString()
-            };
-            
-            users.push(newUser);
+            });
             localStorage.setItem('parkexpert-users', JSON.stringify(users));
             
-            // Otomatik login
-            currentUser = {
-                id: newUser.id,
-                name: newUser.name,
-                email: newUser.email,
-                role: newUser.role,
-                company: newUser.company
-            };
+            alert(`✅ KULLANICI OLUŞTURULDU!\n\n👤 ${name}\n📧 ${email}\n🔒 ${password}\n👔 ${role}\n\nBu bilgileri kullanıcıya ilet!`);
             
-            localStorage.setItem('parkexpert-session', JSON.stringify(currentUser));
-            document.getElementById('loginModal').classList.add('hidden');
-            updateUserUI();
-            showToast(`✅ Hesap oluşturuldu! Hoşgeldin ${name}!`, 'success');
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserEmail').value = '';
+            document.getElementById('newUserPassword').value = '';
+            switchAdminTab('users');
+            loadUsersList();
+        }
+
+        function editUser(userId) {
+            const users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
+            const user = users.find(u => u.id === userId);
+            const newRole = prompt(`Yeni rol? (viewer/manager/admin)\nŞu an: ${user.role}`, user.role);
+            if (newRole && ['viewer', 'manager', 'admin'].includes(newRole)) {
+                user.role = newRole;
+                localStorage.setItem('parkexpert-users', JSON.stringify(users));
+                loadUsersList();
+                showToast('✅ Rol güncellendi!', 'success');
+            }
+        }
+
+        function deleteUser(userId) {
+            if (!confirm('Silmek emin misin?')) return;
+            let users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
+            users = users.filter(u => u.id !== userId);
+            localStorage.setItem('parkexpert-users', JSON.stringify(users));
+            loadUsersList();
+            showToast('✅ Silindi!', 'success');
+        }
+
+        function toggleGuestMode() {
+            localStorage.setItem('parkexpert-guest-mode', document.getElementById('allowGuestMode').checked);
+        }
+
+        function toggleApproval() {
+            localStorage.setItem('parkexpert-require-approval', document.getElementById('requireApproval').checked);
+        }
+
+        function updateAdminStats() {
+            const users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
+            const calcs = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+            document.getElementById('adminStats').innerHTML = `
+                Kullanıcı: ${users.length} (Admin: ${users.filter(u => u.role === 'admin').length}, Manager: ${users.filter(u => u.role === 'manager').length}, Viewer: ${users.filter(u => u.role === 'viewer').length})<br>
+                Hesaplama: ${calcs.length}<br>
+                Son Giriş: ${new Date().toLocaleString('tr-TR')}
+            `;
         }
 
         function continueAsGuest() {
@@ -5744,25 +5821,16 @@
         </div>
     </div>
 
-    <!-- Login/Register Modal -->
+    <!-- Login Modal -->
     <div class="login-modal" id="loginModal">
         <div class="login-box">
             <h2 style="text-align: center; color: #1e3c72; margin: 0 0 10px 0;">🅿️ Parkexpert</h2>
             <p style="text-align: center; color: #6c757d; margin: 0 0 30px 0; font-size: 14px;">
-                Hesabınızla devam edin veya yeni hesap oluşturun
+                Hesabınızla giriş yapın
             </p>
             
-            <div class="login-tabs">
-                <div class="login-tab active" onclick="switchLoginTab('login')" id="loginTab">
-                    Giriş Yap
-                </div>
-                <div class="login-tab" onclick="switchLoginTab('register')" id="registerTab">
-                    Kayıt Ol
-                </div>
-            </div>
-
-            <!-- Login Form -->
-            <div class="login-form active" id="loginForm">
+            <!-- Login Form Only -->
+            <div class="login-form active">
                 <input type="email" class="form-input" id="loginEmail" placeholder="📧 Email" autocomplete="email">
                 <input type="password" class="form-input" id="loginPassword" placeholder="🔒 Şifre" autocomplete="current-password">
                 <button class="login-btn" onclick="handleLogin()">
@@ -5771,27 +5839,108 @@
                 <button class="guest-btn" onclick="continueAsGuest()">
                     👤 Misafir Olarak Devam Et
                 </button>
-            </div>
-
-            <!-- Register Form -->
-            <div class="login-form" id="registerForm">
-                <input type="text" class="form-input" id="registerName" placeholder="👤 Ad Soyad">
-                <input type="email" class="form-input" id="registerEmail" placeholder="📧 Email" autocomplete="email">
-                <input type="password" class="form-input" id="registerPassword" placeholder="🔒 Şifre (min 6 karakter)" autocomplete="new-password">
-                <input type="text" class="form-input" id="registerCompany" placeholder="🏢 Şirket Adı (Opsiyonel)">
-                <select class="form-select" id="registerRole">
-                    <option value="viewer">👁️ Viewer - Sadece Görüntüleme</option>
-                    <option value="manager">👨‍💼 Manager - Düzenleme İzni</option>
-                    <option value="admin">👑 Admin - Tam Yetki</option>
-                </select>
-                <button class="login-btn" onclick="handleRegister()">
-                    ✨ Hesap Oluştur
-                </button>
-                <button class="guest-btn" onclick="continueAsGuest()">
-                    👤 Misafir Olarak Devam Et
-                </button>
+                <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e9ecef;">
+                    <small style="color: #6c757d;">
+                        💡 Hesap oluşturmak için admin ile iletişime geçin<br>
+                        <strong>Demo:</strong> admin@parkexpert.com / admin123
+                    </small>
+                </div>
             </div>
         </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div class="modal-overlay" id="adminPanelOverlay" onclick="closeAdminPanel()"></div>
+    <div class="financing-modal" id="adminPanel">
+        <h2 style="color: #1e3c72; margin: 0 0 20px 0;">👑 ADMİN PANELİ</h2>
+        
+        <div style="margin-bottom: 20px; padding: 15px; background: #e7f3ff; border-radius: 10px; border-left: 4px solid #667eea;">
+            <strong>🎯 Hoşgeldin Admin!</strong><br>
+            <small style="color: #6c757d;">Kullanıcıları buradan yönetebilirsin</small>
+        </div>
+
+        <!-- Tabs -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e9ecef;">
+            <button class="login-tab active" onclick="switchAdminTab('users')" id="adminUsersTab">
+                👥 Kullanıcılar
+            </button>
+            <button class="login-tab" onclick="switchAdminTab('add')" id="adminAddTab">
+                ➕ Yeni Kullanıcı
+            </button>
+            <button class="login-tab" onclick="switchAdminTab('settings')" id="adminSettingsTab">
+                ⚙️ Ayarlar
+            </button>
+        </div>
+
+        <!-- Users List -->
+        <div id="adminUsersSection" class="admin-section active">
+            <div id="usersList" style="max-height: 400px; overflow-y: auto;">
+                <!-- Kullanıcı listesi buraya gelecek -->
+            </div>
+        </div>
+
+        <!-- Add User -->
+        <div id="adminAddSection" class="admin-section" style="display: none;">
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">👤 Ad Soyad</label>
+                <input type="text" id="newUserName" class="form-input" placeholder="Örn: Ahmet Yılmaz">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">📧 Email</label>
+                <input type="email" id="newUserEmail" class="form-input" placeholder="ahmet@parkexpert.com">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">🔒 Şifre</label>
+                <input type="text" id="newUserPassword" class="form-input" placeholder="Güçlü şifre belirleyin">
+                <button onclick="generatePassword()" style="margin-top: 5px; padding: 8px 12px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                    🎲 Rastgele Şifre Oluştur
+                </button>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">🏢 Şirket</label>
+                <input type="text" id="newUserCompany" class="form-input" placeholder="Parkexpert">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">👔 Yetki Seviyesi</label>
+                <select id="newUserRole" class="form-select">
+                    <option value="viewer">👁️ Viewer - Sadece Görüntüleme</option>
+                    <option value="manager">👨‍💼 Manager - Düzenleme İzni</option>
+                    <option value="admin">👑 Admin - Tam Yetki (DİKKAT!)</option>
+                </select>
+            </div>
+            <button onclick="createUser()" class="login-btn">
+                ✨ Kullanıcı Oluştur
+            </button>
+        </div>
+
+        <!-- Settings -->
+        <div id="adminSettingsSection" class="admin-section" style="display: none;">
+            <div style="padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <h3 style="margin: 0 0 15px 0; color: #1e3c72;">⚙️ Sistem Ayarları</h3>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="allowGuestMode" checked onchange="toggleGuestMode()">
+                        <span>Misafir girişine izin ver</span>
+                    </label>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="requireApproval" onchange="toggleApproval()">
+                        <span>Yeni kullanıcılar onay beklesin</span>
+                    </label>
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px;">
+                    <strong>📊 İstatistikler:</strong><br>
+                    <div id="adminStats" style="margin-top: 10px; color: #6c757d;">
+                        <!-- Stats buraya gelecek -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="closeAdminPanel()" style="width: 100%; padding: 12px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px;">
+            Kapat
+        </button>
     </div>
 
     <!-- Tools Menu -->
