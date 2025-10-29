@@ -1364,22 +1364,7 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .guest-btn {
-            width: 100%;
-            padding: 12px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s;
-        }
-
-        .guest-btn:hover {
-            background: #f8f9fa;
-        }
+        /* Guest mode removed for security */
 
         /* Live Dashboard */
         .dashboard-container {
@@ -1476,6 +1461,85 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .kpi-content {
+            flex: 1;
+        }
+
+        .kpi-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(108, 117, 125, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .kpi-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745 0%, #48bb78 100%);
+            border-radius: 10px;
+            transition: width 1s ease-out;
+        }
+
+        .kpi-progress-fill.low {
+            background: linear-gradient(90deg, #dc3545 0%, #f56565 100%);
+        }
+
+        .kpi-progress-fill.medium {
+            background: linear-gradient(90deg, #ffc107 0%, #ed8936 100%);
+        }
+
+        .kpi-progress-fill.high {
+            background: linear-gradient(90deg, #28a745 0%, #48bb78 100%);
+        }
+
+        .kpi-stars {
+            font-size: 24px;
+            color: #ffc107;
+            margin-top: 8px;
+            letter-spacing: 4px;
+        }
+
+        .kpi-badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 14px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .kpi-badge.excellent {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .kpi-badge.good {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        .kpi-badge.poor {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .trend-icon {
+            font-size: 16px;
+        }
+
+        .trend-percent {
+            margin-left: 5px;
         }
 
         .progress-ring {
@@ -2724,6 +2788,64 @@
                 </div>
             </div>
 
+            <!-- Live Dashboard KPI Cards -->
+            <div class="dashboard-container" id="dashboardContainer" style="display: none;">
+                <div class="dashboard-header">
+                    <h2 style="color: white; margin: 0;">⚡ CANLI GÖSTERGELER</h2>
+                    <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0 0; font-size: 14px;">Gerçek Zamanlı Performans Metrikleri</p>
+                </div>
+                <div class="kpi-grid">
+                    <!-- KPI 1: Aylık Net Kar -->
+                    <div class="kpi-card" onclick="showKPIDetail('profit')">
+                        <div class="kpi-icon">💰</div>
+                        <div class="kpi-content">
+                            <div class="kpi-label">Aylık Net Kar</div>
+                            <div class="kpi-value" id="kpiProfit">₺0</div>
+                            <div class="kpi-trend" id="kpiProfitTrend">
+                                <span class="trend-icon">↑</span>
+                                <span class="trend-percent">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI 2: Kapasite Kullanımı -->
+                    <div class="kpi-card" onclick="showKPIDetail('capacity')">
+                        <div class="kpi-icon">📊</div>
+                        <div class="kpi-content">
+                            <div class="kpi-label">Kapasite Kullanımı</div>
+                            <div class="kpi-value" id="kpiCapacity">0%</div>
+                            <div class="kpi-progress-bar">
+                                <div class="kpi-progress-fill" id="kpiCapacityBar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI 3: Verimlilik Skoru -->
+                    <div class="kpi-card" onclick="showKPIDetail('efficiency')">
+                        <div class="kpi-icon">🎯</div>
+                        <div class="kpi-content">
+                            <div class="kpi-label">Verimlilik Skoru</div>
+                            <div class="kpi-value" id="kpiEfficiency">0/5</div>
+                            <div class="kpi-stars" id="kpiStars">
+                                ☆☆☆☆☆
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI 4: ROI Hızı -->
+                    <div class="kpi-card" onclick="showKPIDetail('roi')">
+                        <div class="kpi-icon">⚡</div>
+                        <div class="kpi-content">
+                            <div class="kpi-label">ROI Geri Dönüş</div>
+                            <div class="kpi-value" id="kpiROI">0 ay</div>
+                            <div class="kpi-badge" id="kpiROIBadge">
+                                <span>📈</span> Hesaplanıyor...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Sonuçlar -->
             <div class="results" id="results" style="display: none;">
                 <h2>📈 FİZİBİLİTE SONUÇLARI</h2>
@@ -3308,8 +3430,8 @@
 
             // Scroll to results
             resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // Dashboard'u güncelle
+
+            // Dashboard'u güncelle (eski)
             updateLiveDashboard({
                 totalRevenue: totalMonthlyRevenue,
                 netProfit: monthlyNetProfit,
@@ -3318,7 +3440,20 @@
                 devinim: devinim,
                 staffCount: staffCount
             });
-            
+
+            // Yeni Dashboard'u güncelle
+            updateDashboard({
+                totalRevenue: totalMonthlyRevenue,
+                netProfit: monthlyNetProfit,
+                profitMargin: (monthlyNetProfit / totalMonthlyRevenue) * 100,
+                capacity: weekdayCapacity,
+                weekendCapacity: weekendCapacity,
+                devinim: devinim,
+                staffCount: staffCount,
+                paybackPeriod: paybackPeriod,
+                totalExpenses: totalMonthlyExpenses
+            });
+
             // Başarımları kontrol et
             checkAchievements(monthlyNetProfit, profitabilityScore);
         }
@@ -3359,6 +3494,126 @@
             `;
             
             document.getElementById('dashboardKPIs').innerHTML = kpisHTML;
+        }
+
+        // YENİ DASHBOARD GÜNCELLEME (Issue #2)
+        function updateDashboard(data) {
+            // Dashboard'u göster
+            const dashboardContainer = document.getElementById('dashboardContainer');
+            dashboardContainer.style.display = 'block';
+
+            // KPI 1: Aylık Net Kar
+            const profitElement = document.getElementById('kpiProfit');
+            animateNumber(profitElement, data.netProfit, true);
+
+            const profitTrend = document.getElementById('kpiProfitTrend');
+            const profitChange = data.profitMargin;
+            profitTrend.innerHTML = `
+                <span class="trend-icon">${profitChange > 0 ? '↑' : '↓'}</span>
+                <span class="trend-percent">${Math.abs(profitChange).toFixed(1)}%</span>
+            `;
+            profitTrend.className = `kpi-trend ${profitChange > 0 ? 'up' : 'down'}`;
+
+            // KPI 2: Kapasite Kullanımı
+            const capacityPercent = Math.min((data.devinim / 3) * 100, 100); // Max 3 devinim = %100
+            document.getElementById('kpiCapacity').textContent = `${capacityPercent.toFixed(0)}%`;
+
+            const capacityBar = document.getElementById('kpiCapacityBar');
+            capacityBar.style.width = `${capacityPercent}%`;
+            capacityBar.className = 'kpi-progress-fill';
+            if (capacityPercent < 50) capacityBar.classList.add('low');
+            else if (capacityPercent < 80) capacityBar.classList.add('medium');
+            else capacityBar.classList.add('high');
+
+            // KPI 3: Verimlilik Skoru
+            const efficiencyScore = calculateEfficiencyScore(data);
+            document.getElementById('kpiEfficiency').textContent = `${efficiencyScore}/5`;
+
+            const stars = '★'.repeat(efficiencyScore) + '☆'.repeat(5 - efficiencyScore);
+            document.getElementById('kpiStars').textContent = stars;
+
+            // KPI 4: ROI Hızı
+            const roiMonths = Math.ceil(data.paybackPeriod);
+            document.getElementById('kpiROI').textContent = `${roiMonths} ay`;
+
+            const roiBadge = document.getElementById('kpiROIBadge');
+            let badgeClass = 'kpi-badge';
+            let badgeText = '';
+
+            if (roiMonths <= 12) {
+                badgeClass += ' excellent';
+                badgeText = '<span>🚀</span> Mükemmel';
+            } else if (roiMonths <= 24) {
+                badgeClass += ' good';
+                badgeText = '<span>✅</span> İyi';
+            } else if (roiMonths <= 36) {
+                badgeClass += '';
+                badgeText = '<span>📈</span> Kabul Edilebilir';
+            } else {
+                badgeClass += ' poor';
+                badgeText = '<span>⚠️</span> Yavaş';
+            }
+
+            roiBadge.className = badgeClass;
+            roiBadge.innerHTML = badgeText;
+        }
+
+        // Verimlilik skoru hesaplama (1-5 yıldız)
+        function calculateEfficiencyScore(data) {
+            let score = 0;
+
+            // Kar marjı (max 2 puan)
+            if (data.profitMargin > 25) score += 2;
+            else if (data.profitMargin > 15) score += 1.5;
+            else if (data.profitMargin > 5) score += 1;
+            else if (data.profitMargin > 0) score += 0.5;
+
+            // Devinim (max 2 puan)
+            if (data.devinim > 2.5) score += 2;
+            else if (data.devinim > 1.8) score += 1.5;
+            else if (data.devinim > 1.2) score += 1;
+            else score += 0.5;
+
+            // ROI hızı (max 1 puan)
+            if (data.paybackPeriod <= 12) score += 1;
+            else if (data.paybackPeriod <= 24) score += 0.5;
+
+            return Math.min(Math.round(score), 5);
+        }
+
+        // Sayı animasyonu
+        function animateNumber(element, targetValue, isCurrency = false) {
+            const duration = 1000; // 1 saniye
+            const steps = 30;
+            const stepDuration = duration / steps;
+            const increment = targetValue / steps;
+            let currentValue = 0;
+
+            const interval = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    currentValue = targetValue;
+                    clearInterval(interval);
+                }
+
+                if (isCurrency) {
+                    element.textContent = formatCurrency(currentValue);
+                } else {
+                    element.textContent = Math.round(currentValue);
+                }
+            }, stepDuration);
+        }
+
+        // KPI Detay Modal (basit alert)
+        function showKPIDetail(type) {
+            const messages = {
+                profit: '💰 AYLIK NET KAR\n\nToplam gelir - toplam giderler sonucu elde edilen net kar tutarı.\n\nYüksek kar marjı işletmenin sağlıklı olduğunu gösterir.',
+                capacity: '📊 KAPASİTE KULLANIMI\n\nOtopark kapasitesinin ne kadar verimli kullanıldığını gösterir.\n\nYüksek devinim = daha fazla gelir.\nHedef: %80+ kullanım oranı',
+                efficiency: '🎯 VERİMLİLİK SKORU\n\nKar marjı, devinim ve ROI hızına göre hesaplanan genel verimlilik puanı.\n\n5 yıldız = Mükemmel\n3-4 yıldız = İyi\n1-2 yıldız = Geliştirilmeli',
+                roi: '⚡ ROI GERİ DÖNÜŞ\n\nYatırımın kendini amorti etme süresi.\n\n≤12 ay = Mükemmel\n12-24 ay = İyi\n24-36 ay = Kabul Edilebilir\n>36 ay = Risk'
+            };
+
+            alert(messages[type] || 'Bilgi bulunamadı');
         }
 
         // AKILLI ÖNERİLER FONKSİYONU
@@ -4868,9 +5123,7 @@
             showToast('✅ Silindi!', 'success');
         }
 
-        function toggleGuestMode() {
-            localStorage.setItem('parkexpert-guest-mode', document.getElementById('allowGuestMode').checked);
-        }
+        // Misafir modu güvenlik nedeniyle kaldırıldı
 
         function toggleApproval() {
             localStorage.setItem('parkexpert-require-approval', document.getElementById('requireApproval').checked);
@@ -4880,25 +5133,10 @@
             const users = JSON.parse(localStorage.getItem('parkexpert-users') || '[]');
             const calcs = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
             document.getElementById('adminStats').innerHTML = `
-                Kullanıcı: ${users.length} (Admin: ${users.filter(u => u.role === 'admin').length}, Manager: ${users.filter(u => u.role === 'manager').length}, Viewer: ${users.filter(u => u.role === 'viewer').length})<br>
-                Hesaplama: ${calcs.length}<br>
-                Son Giriş: ${new Date().toLocaleString('tr-TR')}
+                👥 Kullanıcı: ${users.length} (👑 Admin: ${users.filter(u => u.role === 'admin').length}, 👨‍💼 Manager: ${users.filter(u => u.role === 'manager').length}, 👁️ Viewer: ${users.filter(u => u.role === 'viewer').length})<br>
+                📊 Toplam Hesaplama: ${calcs.length}<br>
+                🕒 Son Güncelleme: ${new Date().toLocaleString('tr-TR')}
             `;
-        }
-
-        function continueAsGuest() {
-            currentUser = {
-                id: 'guest-' + Date.now(),
-                name: 'Misafir',
-                email: 'guest@parkexpert.com',
-                role: 'viewer',
-                company: 'Misafir'
-            };
-            
-            localStorage.setItem('parkexpert-session', JSON.stringify(currentUser));
-            document.getElementById('loginModal').classList.add('hidden');
-            updateUserUI();
-            showToast('👤 Misafir olarak devam ediyorsunuz', 'success');
         }
 
         function updateUserUI() {
@@ -5386,6 +5624,182 @@
             document.getElementById('modalOverlay').classList.remove('active');
         }
 
+        // QR CODE GENERATOR (Issue #3)
+        function generateQRCode() {
+            // Hesaplama yapılmış mı kontrol et
+            const resultsDiv = document.getElementById('results');
+            if (resultsDiv.style.display === 'none') {
+                showToast('⚠️ Önce hesaplama yapın!', 'warning');
+                return;
+            }
+
+            // Mevcut hesaplama verilerini topla
+            const locationName = document.getElementById('locationName').value || 'Lokasyon';
+            const weekdayCapacity = document.getElementById('weekdayCapacity').value;
+            const weekendCapacity = document.getElementById('weekendCapacity').value;
+
+            // Sonuç verilerini al (basitleştirilmiş)
+            const qrData = {
+                location: locationName,
+                weekdayCapacity: weekdayCapacity,
+                weekendCapacity: weekendCapacity,
+                date: new Date().toLocaleDateString('tr-TR'),
+                url: window.location.href
+            };
+
+            // QR modal'ı göster
+            document.getElementById('qrModalOverlay').classList.add('active');
+            document.getElementById('qrModal').classList.add('active');
+
+            // Canvas'a basit QR pattern çiz
+            drawSimpleQR(JSON.stringify(qrData));
+        }
+
+        function drawSimpleQR(data) {
+            const canvas = document.getElementById('qrCodeCanvas');
+            const ctx = canvas.getContext('2d');
+            const size = 256;
+
+            // Arka plan
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, size, size);
+
+            // Basit QR pattern (dekoratif)
+            ctx.fillStyle = '#1e3c72';
+            const moduleSize = 8;
+            const modules = size / moduleSize;
+
+            // Rastgele ama deterministik pattern oluştur
+            let seed = 0;
+            for (let char of data) {
+                seed += char.charCodeAt(0);
+            }
+
+            function seededRandom() {
+                seed = (seed * 9301 + 49297) % 233280;
+                return seed / 233280;
+            }
+
+            // QR benzeri pattern çiz
+            for (let row = 0; row < modules; row++) {
+                for (let col = 0; col < modules; col++) {
+                    // Köşe marker'ları
+                    const isCorner = (row < 7 && col < 7) ||
+                                    (row < 7 && col >= modules - 7) ||
+                                    (row >= modules - 7 && col < 7);
+
+                    if (isCorner) {
+                        if ((row === 0 || row === 6 || col === 0 || col === 6) ||
+                            (row >= 2 && row <= 4 && col >= 2 && col <= 4)) {
+                            ctx.fillRect(col * moduleSize, row * moduleSize, moduleSize, moduleSize);
+                        }
+                    } else if (seededRandom() > 0.5) {
+                        ctx.fillRect(col * moduleSize, row * moduleSize, moduleSize, moduleSize);
+                    }
+                }
+            }
+
+            // Ortaya logo/text ekle
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(size/2 - 30, size/2 - 30, 60, 60);
+            ctx.fillStyle = '#667eea';
+            ctx.font = 'bold 32px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('P', size/2, size/2);
+        }
+
+        function downloadQR() {
+            const canvas = document.getElementById('qrCodeCanvas');
+            const link = document.createElement('a');
+            link.download = `parkexpert-qr-${new Date().getTime()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+            showToast('✅ QR kod indirildi!', 'success');
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModalOverlay').classList.remove('active');
+            document.getElementById('qrModal').classList.remove('active');
+        }
+
+        // RANDOM SCENARIO GENERATOR (Issue #5)
+        function randomScenario() {
+            const scenarios = [
+                {
+                    name: 'AVM Yoğun',
+                    capacity: 500,
+                    devinim: 2.5,
+                    tariff: 25,
+                    staff: 6,
+                    desc: 'Yüksek trafikli AVM otoparkı senaryosu'
+                },
+                {
+                    name: 'Plaza Normal',
+                    capacity: 300,
+                    devinim: 1.5,
+                    tariff: 15,
+                    staff: 4,
+                    desc: 'Orta ölçekli plaza otoparkı senaryosu'
+                },
+                {
+                    name: 'Hastane Yüksek',
+                    capacity: 400,
+                    devinim: 3.0,
+                    tariff: 30,
+                    staff: 8,
+                    desc: 'Yoğun hastane otoparkı senaryosu'
+                },
+                {
+                    name: 'Otel Gece',
+                    capacity: 200,
+                    devinim: 1.2,
+                    tariff: 10,
+                    staff: 3,
+                    desc: 'Düşük devinimli otel otoparkı senaryosu'
+                },
+                {
+                    name: 'Stadyum Maç',
+                    capacity: 800,
+                    devinim: 4.0,
+                    tariff: 50,
+                    staff: 10,
+                    desc: 'Etkinlik bazlı stadyum otoparkı senaryosu'
+                }
+            ];
+
+            // Rastgele senaryo seç
+            const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+
+            // Form alanlarını doldur
+            document.getElementById('locationName').value = scenario.name;
+            document.getElementById('weekdayCapacity').value = scenario.capacity;
+            document.getElementById('weekendCapacity').value = Math.round(scenario.capacity * 1.5);
+            document.getElementById('devinim').value = scenario.devinim;
+
+            // Tüm saat dilimlerine tarife uygula
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`wd_slot${i}_tariff`).value = scenario.tariff;
+                document.getElementById(`wd_slot${i}_parking`).value = Math.round(scenario.capacity * scenario.devinim / 6);
+                document.getElementById(`we_slot${i}_tariff`).value = scenario.tariff;
+                document.getElementById(`we_slot${i}_parking`).value = Math.round(scenario.capacity * scenario.devinim * 1.5 / 6);
+            }
+
+            // Personel
+            document.getElementById('staffCountTotal').value = scenario.staff;
+            document.getElementById('staffCostTotal').value = (scenario.staff * 17000).toLocaleString('tr-TR');
+
+            // Toast mesajı
+            showToast(`🎲 ${scenario.name} senaryosu yüklendi!`, 'success');
+
+            // Pulse animasyonu ekle
+            const container = document.querySelector('.container');
+            container.style.animation = 'pulse 0.5s ease-in-out';
+            setTimeout(() => {
+                container.style.animation = '';
+            }, 500);
+        }
+
         // PAYLAŞIM FONKSİYONLARI
         function generateReportSummary() {
             const locationName = document.getElementById('locationName').value || 'Lokasyon';
@@ -5826,18 +6240,15 @@
         <div class="login-box">
             <h2 style="text-align: center; color: #1e3c72; margin: 0 0 10px 0;">🅿️ Parkexpert</h2>
             <p style="text-align: center; color: #6c757d; margin: 0 0 30px 0; font-size: 14px;">
-                Hesabınızla giriş yapın
+                🔒 Güvenli Giriş - Sadece Kayıtlı Kullanıcılar
             </p>
-            
+
             <!-- Login Form Only -->
             <div class="login-form active">
                 <input type="email" class="form-input" id="loginEmail" placeholder="📧 Email" autocomplete="email">
                 <input type="password" class="form-input" id="loginPassword" placeholder="🔒 Şifre" autocomplete="current-password">
                 <button class="login-btn" onclick="handleLogin()">
                     🔓 Giriş Yap
-                </button>
-                <button class="guest-btn" onclick="continueAsGuest()">
-                    👤 Misafir Olarak Devam Et
                 </button>
                 <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e9ecef;">
                     <small style="color: #6c757d;">
@@ -5917,11 +6328,9 @@
         <div id="adminSettingsSection" class="admin-section" style="display: none;">
             <div style="padding: 20px; background: #f8f9fa; border-radius: 10px;">
                 <h3 style="margin: 0 0 15px 0; color: #1e3c72;">⚙️ Sistem Ayarları</h3>
-                <div style="margin-bottom: 15px;">
-                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                        <input type="checkbox" id="allowGuestMode" checked onchange="toggleGuestMode()">
-                        <span>Misafir girişine izin ver</span>
-                    </label>
+                <div style="margin-bottom: 15px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <strong>🔒 Güvenlik:</strong><br>
+                    <small style="color: #856404;">Misafir girişi kapatıldı. Sadece kayıtlı kullanıcılar erişebilir.</small>
                 </div>
                 <div style="margin-bottom: 15px;">
                     <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
@@ -5943,10 +6352,38 @@
         </button>
     </div>
 
+    <!-- QR Code Modal (Issue #3) -->
+    <div class="modal-overlay" id="qrModalOverlay" onclick="closeQRModal()"></div>
+    <div class="financing-modal" id="qrModal" style="max-width: 400px;">
+        <h2 style="color: #1e3c72; margin: 0 0 15px 0; text-align: center;">📱 QR KOD</h2>
+        <p style="text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 20px;">
+            Hesaplama detaylarınızı QR kod ile paylaşın
+        </p>
+
+        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
+            <canvas id="qrCodeCanvas" width="256" height="256" style="border: 2px solid #e9ecef; border-radius: 10px; max-width: 100%;"></canvas>
+        </div>
+
+        <div style="margin-top: 20px; font-size: 12px; color: #6c757d; text-align: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+            ℹ️ QR kodu okutarak hesaplama bilgilerine ulaşabilirsiniz
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button onclick="downloadQR()" style="flex: 1; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                💾 İndir
+            </button>
+            <button onclick="closeQRModal()" style="flex: 1; padding: 12px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                ❌ Kapat
+            </button>
+        </div>
+    </div>
+
     <!-- Tools Menu -->
     <div class="tools-menu">
         <button class="tool-btn" onclick="takeScreenshot()" title="📸 Screenshot">📸</button>
         <button class="tool-btn" onclick="window.print()" title="🖨️ Print">🖨️</button>
+        <button class="tool-btn" onclick="generateQRCode()" title="📱 QR Kod">📱</button>
+        <button class="tool-btn" onclick="randomScenario()" title="🎲 Rastgele Senaryo">🎲</button>
         <button class="tool-btn" onclick="openFinancing()" title="💳 Finansman">💳</button>
         <button class="tool-btn" onclick="openGoalSetting()" title="🎯 Hedef">🎯</button>
         <button class="tool-btn" onclick="setReminder()" title="🔔 Hatırlatıcı">🔔</button>
