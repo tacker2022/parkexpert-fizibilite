@@ -1127,6 +1127,43 @@
             background: #764ba2;
         }
 
+        /* Branding Controls (Issue #4) */
+        .branding-controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 998;
+            min-width: 250px;
+        }
+
+        .color-picker-group {
+            margin-bottom: 15px;
+        }
+
+        .color-picker-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+
+        .color-picker-group input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .color-picker-group input[type="color"]:hover {
+            border-color: #667eea;
+        }
+
         /* Financing Modal */
         .financing-modal {
             display: none;
@@ -1540,6 +1577,115 @@
 
         .trend-percent {
             margin-left: 5px;
+        }
+
+        /* Executive Summary (Issue #6) */
+        .executive-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .summary-section {
+            margin-bottom: 20px;
+        }
+
+        .summary-section.tldr {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ffc107;
+        }
+
+        .summary-section.tldr h3 {
+            color: white;
+            margin: 0 0 10px 0;
+        }
+
+        .summary-section.tldr p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .summary-section h3 {
+            color: #1e3c72;
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .summary-section ul li {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid #667eea;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .summary-section ul li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Goal Tracking Widget (Issue #7) */
+        .goal-widget {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .goal-progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .goal-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            border-radius: 10px;
+            transition: width 1s ease-out;
+            position: relative;
+        }
+
+        .goal-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .progress-ring {
@@ -2846,6 +2992,70 @@
                 </div>
             </div>
 
+            <!-- Goal Tracking Widget (Issue #7) -->
+            <div class="goal-widget" id="goalWidget" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="color: white; margin: 0;">🎯 HEDEF TAKİBİ</h3>
+                    <button onclick="openGoalSetting()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                        ⚙️ Hedef Ayarla
+                    </button>
+                </div>
+                <div id="goalContent">
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="color: white; font-size: 14px;">Mevcut:</span>
+                            <span style="color: white; font-weight: 700;" id="goalCurrent">₺0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                            <span style="color: white; font-size: 14px;">Hedef:</span>
+                            <span style="color: white; font-weight: 700;" id="goalTarget">₺0</span>
+                        </div>
+                        <div class="goal-progress-bar">
+                            <div class="goal-progress-fill" id="goalProgressFill" style="width: 0%;"></div>
+                        </div>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <span style="color: white; font-size: 20px; font-weight: 700;" id="goalPercent">0%</span>
+                        </div>
+                        <div id="goalMessage" style="text-align: center; margin-top: 10px; color: white; font-size: 14px; opacity: 0.9;">
+                            -
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Executive Summary (Issue #6) -->
+            <div class="executive-summary" id="executiveSummary" style="display: none;">
+                <h2 style="color: #1e3c72; margin: 0 0 20px 0;">📋 YÖNETİCİ ÖZETİ</h2>
+
+                <div class="summary-section tldr">
+                    <h3>💡 TL;DR (Kısa Özet)</h3>
+                    <p id="tldrText">-</p>
+                </div>
+
+                <div class="summary-grid">
+                    <div class="summary-section">
+                        <h3>💰 Finansal Göstergeler</h3>
+                        <ul id="financialMetrics">
+                            <li>-</li>
+                        </ul>
+                    </div>
+
+                    <div class="summary-section">
+                        <h3>✅ Öneriler</h3>
+                        <ul id="recommendations">
+                            <li>-</li>
+                        </ul>
+                    </div>
+
+                    <div class="summary-section">
+                        <h3>⚠️ Risk Faktörleri</h3>
+                        <ul id="riskFactors">
+                            <li>-</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Sonuçlar -->
             <div class="results" id="results" style="display: none;">
                 <h2>📈 FİZİBİLİTE SONUÇLARI</h2>
@@ -3178,10 +3388,13 @@
             // Hatırlatıcıları kontrol et
             checkReminders();
             setInterval(checkReminders, 60000); // Her dakika kontrol et
-            
+
             // Multi-user sistem başlat
             initUserSystem();
-            
+
+            // Branding yükle
+            loadBranding();
+
             console.log('✅ Parkexpert Fizibilite Aracı hazır!');
         });
 
@@ -3454,6 +3667,21 @@
                 totalExpenses: totalMonthlyExpenses
             });
 
+            // Executive Summary göster
+            generateExecutiveSummary({
+                netProfit: monthlyNetProfit,
+                totalRevenue: totalMonthlyRevenue,
+                totalExpenses: totalMonthlyExpenses,
+                profitMargin: (monthlyNetProfit / totalMonthlyRevenue) * 100,
+                paybackPeriod: paybackPeriod,
+                devinim: devinim,
+                rentRate: rentRate,
+                staffCost: monthlyStaffCost
+            });
+
+            // Goal Tracking Widget güncelle
+            updateGoalWidget(monthlyNetProfit);
+
             // Başarımları kontrol et
             checkAchievements(monthlyNetProfit, profitabilityScore);
         }
@@ -3614,6 +3842,110 @@
             };
 
             alert(messages[type] || 'Bilgi bulunamadı');
+        }
+
+        // EXECUTIVE SUMMARY (Issue #6)
+        function generateExecutiveSummary(data) {
+            const summaryDiv = document.getElementById('executiveSummary');
+            summaryDiv.style.display = 'block';
+
+            // TL;DR
+            let tldr = '';
+            if (data.netProfit > 0) {
+                if (data.profitMargin > 20) {
+                    tldr = `🚀 YÜKSEK KARLI: Aylık ${formatCurrency(data.netProfit)} net kar ile çok karlı bir işletme. ROI ${Math.ceil(data.paybackPeriod)} ay.`;
+                } else if (data.profitMargin > 10) {
+                    tldr = `✅ KARLI: Aylık ${formatCurrency(data.netProfit)} net kar. Sağlıklı bir işletme. ROI ${Math.ceil(data.paybackPeriod)} ay.`;
+                } else {
+                    tldr = `⚠️ DÜŞÜK KARLI: Aylık ${formatCurrency(data.netProfit)} net kar. Kar marjı düşük, optimizasyon gerekli.`;
+                }
+            } else {
+                tldr = `❌ ZARARLI: Aylık ${formatCurrency(Math.abs(data.netProfit))} zarar. Acil önlem gerekli! İşletme sürdürülebilir değil.`;
+            }
+            document.getElementById('tldrText').textContent = tldr;
+
+            // Finansal Göstergeler
+            const metrics = [
+                `💰 Net Kar Marjı: %${data.profitMargin.toFixed(1)}`,
+                `📊 Toplam Gelir: ${formatCurrency(data.totalRevenue)}`,
+                `💸 Toplam Gider: ${formatCurrency(data.totalExpenses)}`,
+                `⚡ ROI Süresi: ${Math.ceil(data.paybackPeriod)} ay (${(data.paybackPeriod/12).toFixed(1)} yıl)`
+            ];
+            document.getElementById('financialMetrics').innerHTML = metrics.map(m => `<li>${m}</li>`).join('');
+
+            // Öneriler
+            const recommendations = [];
+            if (data.devinim < 1.5) {
+                recommendations.push('Devinim oranını artırın: Pazarlama ve fiyatlandırma stratejileri geliştirin');
+            }
+            if (data.profitMargin < 15) {
+                recommendations.push('Giderleri optimize edin: Personel ve operasyonel maliyetleri gözden geçirin');
+            }
+            if (data.rentRate > 35) {
+                recommendations.push('Kira oranını düşürün: Mülk sahibi ile yeniden müzakere edin');
+            }
+            if (recommendations.length === 0) {
+                recommendations.push('Mevcut performansı koruyun ve büyüme fırsatları arayın');
+                recommendations.push('Kapasite artırımı değerlendirin');
+                recommendations.push('Ek hizmetler (abonelik, valet) ekleyin');
+            }
+            document.getElementById('recommendations').innerHTML = recommendations.map(r => `<li>${r}</li>`).join('');
+
+            // Risk Faktörleri
+            const risks = [];
+            if (data.netProfit < 0) {
+                risks.push('🔴 Zarar durumu: İşletme sürdürülebilir değil');
+            }
+            if (data.paybackPeriod > 36) {
+                risks.push('🟡 Uzun ROI süresi: Yatırım geri dönüşü yavaş');
+            }
+            if (data.profitMargin < 5) {
+                risks.push('🟡 Düşük kar marjı: Ani maliyetlere karşı savunmasız');
+            }
+            if (data.staffCost / data.totalRevenue > 0.3) {
+                risks.push('🟡 Yüksek personel maliyeti: Toplam gelirin %30\'undan fazla');
+            }
+            if (risks.length === 0) {
+                risks.push('🟢 Önemli risk tespit edilmedi');
+                risks.push('🟢 Finansal göstergeler sağlıklı');
+                risks.push('🟢 İşletme sürdürülebilir görünüyor');
+            }
+            document.getElementById('riskFactors').innerHTML = risks.map(r => `<li>${r}</li>`).join('');
+        }
+
+        // GOAL TRACKING WIDGET (Issue #7)
+        function updateGoalWidget(currentProfit) {
+            const goalData = JSON.parse(localStorage.getItem('parkexpert-goal') || '{}');
+
+            if (!goalData.target) {
+                document.getElementById('goalWidget').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('goalWidget').style.display = 'block';
+            document.getElementById('goalCurrent').textContent = formatCurrency(currentProfit);
+            document.getElementById('goalTarget').textContent = formatCurrency(goalData.target);
+
+            const percentage = Math.min((currentProfit / goalData.target) * 100, 100);
+            document.getElementById('goalPercent').textContent = `${percentage.toFixed(0)}%`;
+            document.getElementById('goalProgressFill').style.width = `${percentage}%`;
+
+            // Mesaj
+            let message = '';
+            if (percentage >= 100) {
+                message = '🎉 Tebrikler! Hedefinize ulaştınız!';
+                // Konfeti efekti (basit)
+                showToast('🎉 Hedef tamamlandı!', 'success');
+            } else if (percentage >= 75) {
+                message = '🔥 Harika gidiyorsunuz! Hedefe yakınsınız!';
+            } else if (percentage >= 50) {
+                message = '💪 İyi ilerleme! Yarı yoldasınız!';
+            } else if (percentage >= 25) {
+                message = '📈 İlerleme var, devam edin!';
+            } else {
+                message = '🎯 Hedefe ulaşmak için daha fazla çalışın!';
+            }
+            document.getElementById('goalMessage').textContent = message;
         }
 
         // AKILLI ÖNERİLER FONKSİYONU
@@ -5800,6 +6132,75 @@
             }, 500);
         }
 
+        // CUSTOM BRANDING SYSTEM (Issue #4)
+        function toggleBranding() {
+            const panel = document.getElementById('brandingControls');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        function updateBranding() {
+            const primary = document.getElementById('primaryColor').value;
+            const secondary = document.getElementById('secondaryColor').value;
+            const header = document.getElementById('headerColor').value;
+
+            // CSS değişkenlerini güncelle
+            document.documentElement.style.setProperty('--primary-color', primary);
+            document.documentElement.style.setProperty('--secondary-color', secondary);
+            document.documentElement.style.setProperty('--text-color', header);
+
+            // Gradient'leri güncelle
+            const headerBg = `linear-gradient(135deg, ${header} 0%, ${primary} 100%)`;
+            document.documentElement.style.setProperty('--header-bg', headerBg);
+
+            // LocalStorage'a kaydet
+            localStorage.setItem('parkexpert-branding', JSON.stringify({
+                primary: primary,
+                secondary: secondary,
+                header: header
+            }));
+
+            showToast('🎨 Branding güncellendi!', 'success');
+        }
+
+        function resetBranding() {
+            // Varsayılan değerler
+            document.getElementById('primaryColor').value = '#667eea';
+            document.getElementById('secondaryColor').value = '#764ba2';
+            document.getElementById('headerColor').value = '#1e3c72';
+
+            // CSS'i sıfırla
+            document.documentElement.style.setProperty('--primary-color', '#667eea');
+            document.documentElement.style.setProperty('--secondary-color', '#764ba2');
+            document.documentElement.style.setProperty('--text-color', '#1e3c72');
+            document.documentElement.style.setProperty('--header-bg', 'linear-gradient(135deg, #1e3c72 0%, #667eea 100%)');
+
+            // LocalStorage'dan sil
+            localStorage.removeItem('parkexpert-branding');
+
+            showToast('🔄 Branding sıfırlandı!', 'success');
+        }
+
+        function loadBranding() {
+            const saved = localStorage.getItem('parkexpert-branding');
+            if (saved) {
+                const branding = JSON.parse(saved);
+                document.getElementById('primaryColor').value = branding.primary;
+                document.getElementById('secondaryColor').value = branding.secondary;
+                document.getElementById('headerColor').value = branding.header;
+
+                // CSS'i uygula
+                document.documentElement.style.setProperty('--primary-color', branding.primary);
+                document.documentElement.style.setProperty('--secondary-color', branding.secondary);
+                document.documentElement.style.setProperty('--text-color', branding.header);
+                const headerBg = `linear-gradient(135deg, ${branding.header} 0%, ${branding.primary} 100%)`;
+                document.documentElement.style.setProperty('--header-bg', headerBg);
+            }
+        }
+
         // PAYLAŞIM FONKSİYONLARI
         function generateReportSummary() {
             const locationName = document.getElementById('locationName').value || 'Lokasyon';
@@ -6378,12 +6779,40 @@
         </div>
     </div>
 
+    <!-- Branding Controls (Issue #4) -->
+    <div class="branding-controls" id="brandingControls" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="margin: 0; color: #1e3c72; font-size: 16px;">🎨 Branding</h3>
+            <button onclick="toggleBranding()" style="background: none; border: none; font-size: 20px; cursor: pointer;">✕</button>
+        </div>
+
+        <div class="color-picker-group">
+            <label>Ana Renk</label>
+            <input type="color" id="primaryColor" value="#667eea" onchange="updateBranding()">
+        </div>
+
+        <div class="color-picker-group">
+            <label>İkinci Renk</label>
+            <input type="color" id="secondaryColor" value="#764ba2" onchange="updateBranding()">
+        </div>
+
+        <div class="color-picker-group">
+            <label>Başlık Rengi</label>
+            <input type="color" id="headerColor" value="#1e3c72" onchange="updateBranding()">
+        </div>
+
+        <button onclick="resetBranding()" style="width: 100%; padding: 8px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; margin-top: 10px;">
+            🔄 Varsayılana Dön
+        </button>
+    </div>
+
     <!-- Tools Menu -->
     <div class="tools-menu">
         <button class="tool-btn" onclick="takeScreenshot()" title="📸 Screenshot">📸</button>
         <button class="tool-btn" onclick="window.print()" title="🖨️ Print">🖨️</button>
         <button class="tool-btn" onclick="generateQRCode()" title="📱 QR Kod">📱</button>
         <button class="tool-btn" onclick="randomScenario()" title="🎲 Rastgele Senaryo">🎲</button>
+        <button class="tool-btn" onclick="toggleBranding()" title="🎨 Branding">🎨</button>
         <button class="tool-btn" onclick="openFinancing()" title="💳 Finansman">💳</button>
         <button class="tool-btn" onclick="openGoalSetting()" title="🎯 Hedef">🎯</button>
         <button class="tool-btn" onclick="setReminder()" title="🔔 Hatırlatıcı">🔔</button>
