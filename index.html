@@ -2019,7 +2019,7 @@
 
         .time-slot {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
             gap: 10px;
             margin-bottom: 15px;
             align-items: center;
@@ -2035,6 +2035,24 @@
             border: 2px solid #dee2e6;
             border-radius: 6px;
             font-size: 13px;
+        }
+
+        .time-slot .revenue-display {
+            background: #e7f3ff;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #1e3c72;
+            font-weight: 600;
+        }
+
+        .time-slot .revenue-display small {
+            display: block;
+            font-size: 10px;
+            color: #6c757d;
+            font-weight: 500;
         }
 
         .calculate-btn {
@@ -3102,7 +3120,7 @@
                 </div>
                 <div class="form-group">
                     <label>Çalışılan Ay (Yıllık) <span class="info-icon" data-tooltip="Yıl içinde kaç ay otopark çalışacak. Genellikle 12 ay (tüm yıl) seçilir. Mevsimlik otoparklar için daha az olabilir.">i</span></label>
-                    <input type="number" id="workingMonths" value="12" min="1" max="12">
+                    <input type="number" id="workingMonths" value="12" min="1" max="12" onchange="recalculateAllRevenues()" onkeyup="recalculateAllRevenues()">
                 </div>
             </div>
 
@@ -3264,7 +3282,7 @@
                 </div>
                 <div class="form-group">
                     <label>Çalışılan Gün (Aylık) <span class="info-icon" data-tooltip="Bir ayda kaç gün hafta içi çalışıldığı. Genelde 22-23 gün kullanılır (Pzt-Cum toplam).">i</span></label>
-                    <input type="number" id="workingDays" value="22" min="1" max="31">
+                    <input type="number" id="workingDays" value="22" min="1" max="31" onchange="recalculateAllRevenues()" onkeyup="recalculateAllRevenues()">
                 </div>
 
                 <div class="time-slot">
@@ -3272,42 +3290,67 @@
                     <label>Tarife (₺)</label>
                     <label>Kullanım %</label>
                     <label>Parklanma Sayısı</label>
+                    <label>Hasılat (₺)</label>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot1_hours" value="0-3" placeholder="0-3">
-                    <input type="number" id="wd_slot1_tariff" value="0" min="0">
+                    <input type="number" id="wd_slot1_tariff" value="0" min="0" onchange="calculateParkingCount('wd', 1)" onkeyup="calculateParkingCount('wd', 1)">
                     <input type="number" id="wd_slot1_usage" value="90" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 1)" onkeyup="calculateParkingCount('wd', 1)">
                     <input type="number" id="wd_slot1_parking" value="1503" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="wd_slot1_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot2_hours" value="3-4" placeholder="3-4">
-                    <input type="number" id="wd_slot2_tariff" value="150" min="0">
+                    <input type="number" id="wd_slot2_tariff" value="150" min="0" onchange="calculateParkingCount('wd', 2)" onkeyup="calculateParkingCount('wd', 2)">
                     <input type="number" id="wd_slot2_usage" value="7" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 2)" onkeyup="calculateParkingCount('wd', 2)">
                     <input type="number" id="wd_slot2_parking" value="117" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="wd_slot2_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot3_hours" value="4-5" placeholder="4-5">
-                    <input type="number" id="wd_slot3_tariff" value="175" min="0">
+                    <input type="number" id="wd_slot3_tariff" value="175" min="0" onchange="calculateParkingCount('wd', 3)" onkeyup="calculateParkingCount('wd', 3)">
                     <input type="number" id="wd_slot3_usage" value="2.19" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 3)" onkeyup="calculateParkingCount('wd', 3)">
                     <input type="number" id="wd_slot3_parking" value="37" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="wd_slot3_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot4_hours" value="5-6" placeholder="5-6">
-                    <input type="number" id="wd_slot4_tariff" value="200" min="0">
+                    <input type="number" id="wd_slot4_tariff" value="200" min="0" onchange="calculateParkingCount('wd', 4)" onkeyup="calculateParkingCount('wd', 4)">
                     <input type="number" id="wd_slot4_usage" value="0.77" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 4)" onkeyup="calculateParkingCount('wd', 4)">
                     <input type="number" id="wd_slot4_parking" value="13" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="wd_slot4_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot5_hours" value="6-12" placeholder="6-12">
-                    <input type="number" id="wd_slot5_tariff" value="250" min="0">
+                    <input type="number" id="wd_slot5_tariff" value="250" min="0" onchange="calculateParkingCount('wd', 5)" onkeyup="calculateParkingCount('wd', 5)">
                     <input type="number" id="wd_slot5_usage" value="0.02" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 5)" onkeyup="calculateParkingCount('wd', 5)">
                     <input type="number" id="wd_slot5_parking" value="0" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="wd_slot5_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot6_hours" value="12-24" placeholder="12-24">
-                    <input type="number" id="wd_slot6_tariff" value="500" min="0">
+                    <input type="number" id="wd_slot6_tariff" value="500" min="0" onchange="calculateParkingCount('wd', 6)" onkeyup="calculateParkingCount('wd', 6)">
                     <input type="number" id="wd_slot6_usage" value="0.02" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 6)" onkeyup="calculateParkingCount('wd', 6)">
                     <input type="number" id="wd_slot6_parking" value="0" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="wd_slot6_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 
                 <!-- Kullanım % Uyarısı (Hafta İçi) -->
@@ -3327,7 +3370,7 @@
                 </div>
                 <div class="form-group">
                     <label>Çalışılan Gün (Aylık) <span class="info-icon" data-tooltip="Bir ayda kaç gün hafta sonu çalışıldığı. Genelde 8-9 gün kullanılır (Cmt+Paz toplam).">i</span></label>
-                    <input type="number" id="weekendDays" value="8" min="0" max="31">
+                    <input type="number" id="weekendDays" value="8" min="0" max="31" onchange="recalculateAllRevenues()" onkeyup="recalculateAllRevenues()">
                 </div>
 
                 <div class="time-slot">
@@ -3335,42 +3378,67 @@
                     <label>Tarife (₺)</label>
                     <label>Kullanım %</label>
                     <label>Parklanma Sayısı</label>
+                    <label>Hasılat (₺)</label>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot1_hours" value="0-3" placeholder="0-3">
-                    <input type="number" id="we_slot1_tariff" value="0" min="0">
+                    <input type="number" id="we_slot1_tariff" value="0" min="0" onchange="calculateParkingCount('we', 1)" onkeyup="calculateParkingCount('we', 1)">
                     <input type="number" id="we_slot1_usage" value="85" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 1)" onkeyup="calculateParkingCount('we', 1)">
                     <input type="number" id="we_slot1_parking" value="1828" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="we_slot1_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot2_hours" value="3-4" placeholder="3-4">
-                    <input type="number" id="we_slot2_tariff" value="150" min="0">
+                    <input type="number" id="we_slot2_tariff" value="150" min="0" onchange="calculateParkingCount('we', 2)" onkeyup="calculateParkingCount('we', 2)">
                     <input type="number" id="we_slot2_usage" value="9" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 2)" onkeyup="calculateParkingCount('we', 2)">
                     <input type="number" id="we_slot2_parking" value="194" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="we_slot2_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot3_hours" value="4-5" placeholder="4-5">
-                    <input type="number" id="we_slot3_tariff" value="175" min="0">
+                    <input type="number" id="we_slot3_tariff" value="175" min="0" onchange="calculateParkingCount('we', 3)" onkeyup="calculateParkingCount('we', 3)">
                     <input type="number" id="we_slot3_usage" value="3" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 3)" onkeyup="calculateParkingCount('we', 3)">
                     <input type="number" id="we_slot3_parking" value="65" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="we_slot3_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot4_hours" value="5-6" placeholder="5-6">
-                    <input type="number" id="we_slot4_tariff" value="200" min="0">
+                    <input type="number" id="we_slot4_tariff" value="200" min="0" onchange="calculateParkingCount('we', 4)" onkeyup="calculateParkingCount('we', 4)">
                     <input type="number" id="we_slot4_usage" value="2" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 4)" onkeyup="calculateParkingCount('we', 4)">
                     <input type="number" id="we_slot4_parking" value="43" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="we_slot4_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot5_hours" value="6-12" placeholder="6-12">
-                    <input type="number" id="we_slot5_tariff" value="250" min="0">
+                    <input type="number" id="we_slot5_tariff" value="250" min="0" onchange="calculateParkingCount('we', 5)" onkeyup="calculateParkingCount('we', 5)">
                     <input type="number" id="we_slot5_usage" value="0.5" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 5)" onkeyup="calculateParkingCount('we', 5)">
                     <input type="number" id="we_slot5_parking" value="11" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="we_slot5_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot6_hours" value="12-24" placeholder="12-24">
-                    <input type="number" id="we_slot6_tariff" value="500" min="0">
+                    <input type="number" id="we_slot6_tariff" value="500" min="0" onchange="calculateParkingCount('we', 6)" onkeyup="calculateParkingCount('we', 6)">
                     <input type="number" id="we_slot6_usage" value="0.5" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 6)" onkeyup="calculateParkingCount('we', 6)">
                     <input type="number" id="we_slot6_parking" value="11" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <div class="revenue-display" id="we_slot6_revenue">
+                        <div>Günlük: ₺0</div>
+                        <small>Aylık: ₺0 | Yıllık: ₺0</small>
+                    </div>
                 </div>
                 
                 <!-- Kullanım % Uyarısı (Hafta Sonu) -->
@@ -3694,8 +3762,50 @@
             // Sonucu input'a yaz
             document.getElementById(`${type}_slot${slotNumber}_parking`).value = parkingCount;
             
+            // Hasılatı hesapla ve göster
+            calculateSlotRevenue(type, slotNumber);
+            
             // Kullanım % toplamını kontrol et
             validateUsagePercentage(type);
+        }
+
+        // Slot hasılatını hesapla ve göster (Günlük/Aylık/Yıllık)
+        function calculateSlotRevenue(type, slotNumber) {
+            // Tarife ve parklanma sayısını al
+            const tariff = parseFloat(document.getElementById(`${type}_slot${slotNumber}_tariff`).value) || 0;
+            const parkingCount = parseFloat(document.getElementById(`${type}_slot${slotNumber}_parking`).value) || 0;
+            
+            // Günlük hasılat: Tarife × Parklanma Sayısı
+            const dailyRevenue = tariff * parkingCount;
+            
+            // Çalışma günlerini al
+            let workingDays;
+            if (type === 'wd') {
+                workingDays = parseFloat(document.getElementById('workingDays').value) || 22;
+            } else {
+                workingDays = parseFloat(document.getElementById('weekendDays').value) || 8;
+            }
+            
+            const workingMonths = parseFloat(document.getElementById('workingMonths').value) || 12;
+            
+            // Aylık hasılat: Günlük × Çalışma Günleri
+            const monthlyRevenue = dailyRevenue * workingDays;
+            
+            // Yıllık hasılat: Aylık × Çalışma Ayları
+            const yearlyRevenue = monthlyRevenue * workingMonths;
+            
+            // Revenue display div'ini güncelle
+            const revenueDiv = document.getElementById(`${type}_slot${slotNumber}_revenue`);
+            if (revenueDiv) {
+                revenueDiv.innerHTML = `
+                    <div style="font-weight: 600; color: ${dailyRevenue > 0 ? '#28a745' : '#6c757d'};">
+                        Günlük: ${formatCurrency(dailyRevenue)}
+                    </div>
+                    <small style="color: #6c757d; font-size: 11px;">
+                        Aylık: ${formatCurrency(monthlyRevenue)} | Yıllık: ${formatCurrency(yearlyRevenue)}
+                    </small>
+                `;
+            }
         }
 
         // Kullanım % toplamını kontrol et (Toplam = 100% olmalı)
@@ -3744,6 +3854,18 @@
             // Hafta sonu 6 slot
             for (let i = 1; i <= 6; i++) {
                 calculateParkingCount('we', i);
+            }
+        }
+
+        // Tüm hasılatları yeniden hesapla (çalışma günleri değiştiğinde)
+        function recalculateAllRevenues() {
+            // Hafta içi 6 slot
+            for (let i = 1; i <= 6; i++) {
+                calculateSlotRevenue('wd', i);
+            }
+            // Hafta sonu 6 slot
+            for (let i = 1; i <= 6; i++) {
+                calculateSlotRevenue('we', i);
             }
         }
 
@@ -4042,6 +4164,12 @@
             setTimeout(() => {
                 validateUsagePercentage('wd'); // Hafta içi kontrol
                 validateUsagePercentage('we'); // Hafta sonu kontrol
+                
+                // Başlangıç hasılatlarını hesapla
+                for (let i = 1; i <= 6; i++) {
+                    calculateSlotRevenue('wd', i);
+                    calculateSlotRevenue('we', i);
+                }
             }, 100);
 
             console.log('✅ Parkexpert Fizibilite Aracı hazır!');
