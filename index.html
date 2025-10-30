@@ -2713,6 +2713,181 @@
             }
         }
 
+        /* 🎓 ONBOARDING TUTORIAL STYLES */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 99998;
+            display: none;
+        }
+
+        .tutorial-overlay.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tutorial-spotlight {
+            position: absolute;
+            border: 3px solid #667eea;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75), 0 0 20px rgba(102, 126, 234, 0.8);
+            border-radius: 8px;
+            z-index: 99999;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .tutorial-tooltip {
+            position: absolute;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 350px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 100000;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .tutorial-tooltip h3 {
+            margin: 0 0 10px 0;
+            color: #1e3c72;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tutorial-tooltip p {
+            margin: 0 0 15px 0;
+            color: #6c757d;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .tutorial-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tutorial-progress {
+            font-size: 12px;
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .tutorial-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tutorial-btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .tutorial-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .tutorial-btn-secondary {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+
+        .tutorial-btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .tutorial-welcome {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 100001;
+            text-align: center;
+            animation: scaleIn 0.4s ease;
+        }
+
+        .tutorial-welcome h2 {
+            margin: 0 0 15px 0;
+            color: #1e3c72;
+            font-size: 28px;
+        }
+
+        .tutorial-welcome p {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .tutorial-welcome-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Mobile tutorial adjustments */
+        @media (max-width: 768px) {
+            .tutorial-tooltip {
+                max-width: calc(100% - 40px);
+                left: 20px !important;
+                right: 20px !important;
+                bottom: 20px !important;
+                top: auto !important;
+            }
+
+            .tutorial-welcome {
+                padding: 30px 20px;
+            }
+
+            .tutorial-welcome h2 {
+                font-size: 22px;
+            }
+        }
+
         @media print {
             body {
                 background: white;
@@ -7140,10 +7315,433 @@
         }
 
         // Enter tuşu ile hesaplama
-        document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                calculate();
+        // ⌨️ KEYBOARD SHORTCUTS SYSTEM
+        document.addEventListener('keydown', function(e) {
+            // Ignore if typing in input/textarea
+            if (e.target.matches('input, textarea, select')) {
+                // Only Enter key works in inputs
+                if (e.key === 'Enter' && !e.target.matches('textarea')) {
+                    calculate();
+                }
+                return;
             }
+
+            // Ctrl/Cmd combinations
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key.toLowerCase()) {
+                    case 's': // Ctrl+S: Save calculation
+                        e.preventDefault();
+                        saveCalculation();
+                        showToast('💾 Hesaplama kaydedildi!', 'success');
+                        break;
+                    case 'p': // Ctrl+P: Print
+                        e.preventDefault();
+                        printReport();
+                        break;
+                    case 'k': // Ctrl+K: Open shortcuts help
+                        e.preventDefault();
+                        showKeyboardShortcuts();
+                        break;
+                    case 'l': // Ctrl+L: Load calculations
+                        e.preventDefault();
+                        openLoadModal();
+                        break;
+                    case 'e': // Ctrl+E: Export to Excel
+                        e.preventDefault();
+                        exportToExcel();
+                        break;
+                    case 'd': // Ctrl+D: Download PDF
+                        e.preventDefault();
+                        downloadPDF();
+                        break;
+                    case 'h': // Ctrl+H: Show help/tutorial
+                        e.preventDefault();
+                        startTutorial();
+                        break;
+                }
+            }
+            // Single key shortcuts
+            else {
+                switch(e.key.toLowerCase()) {
+                    case 'escape':
+                    case 'esc':
+                        // Close any open modal
+                        closeAllModals();
+                        break;
+                    case 'c': // C: Calculate
+                        calculate();
+                        break;
+                    case 'r': // R: Random scenario
+                        randomScenario();
+                        break;
+                    case '?': // ?: Show shortcuts
+                        showKeyboardShortcuts();
+                        break;
+                    case 't': // T: Toggle theme
+                        const currentTheme = localStorage.getItem('parkexpert-theme') || 'light';
+                        setTheme(currentTheme === 'light' ? 'dark' : 'light');
+                        break;
+                }
+            }
+        });
+
+        // Show keyboard shortcuts modal
+        function showKeyboardShortcuts() {
+            const shortcuts = `
+                <div style="padding: 20px;">
+                    <h2 style="margin: 0 0 20px 0; color: #1e3c72;">⌨️ Klavye Kısayolları</h2>
+                    
+                    <div style="display: grid; gap: 15px;">
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">C</kbd>
+                            <span>Fizibilite Hesapla</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">Ctrl+S</kbd>
+                            <span>Hesaplamayı Kaydet</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">Ctrl+L</kbd>
+                            <span>Kayıtlı Hesaplamaları Aç</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">Ctrl+P</kbd>
+                            <span>Yazdır</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">Ctrl+E</kbd>
+                            <span>Excel'e Aktar</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">Ctrl+D</kbd>
+                            <span>PDF İndir</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">R</kbd>
+                            <span>Rastgele Senaryo</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">T</kbd>
+                            <span>Tema Değiştir</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">Esc</kbd>
+                            <span>Modal'ları Kapat</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">?</kbd>
+                            <span>Bu Yardımı Göster</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center;">
+                            <kbd style="padding: 5px 10px; background: #f0f4ff; border: 2px solid #667eea; border-radius: 5px; font-weight: 600;">Ctrl+H</kbd>
+                            <span>Rehber Turu Başlat</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 14px; color: #6c757d;">
+                        💡 <strong>İpucu:</strong> Mac kullanıcıları Ctrl yerine ⌘ (Cmd) kullanabilir
+                    </div>
+                    
+                    <button onclick="closeAllModals()" style="width: 100%; margin-top: 20px; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        Anladım
+                    </button>
+                </div>
+            `;
+            
+            showCustomModal('Klavye Kısayolları', shortcuts);
+        }
+
+        // Custom modal for keyboard shortcuts
+        function showCustomModal(title, content) {
+            // Create modal if doesn't exist
+            let modal = document.getElementById('customModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'customModal';
+                modal.className = 'modal';
+                modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center;';
+                
+                const modalContent = document.createElement('div');
+                modalContent.className = 'modal-content';
+                modalContent.style.cssText = 'background: white; border-radius: 15px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;';
+                
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+                
+                // Click outside to close
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeAllModals();
+                    }
+                });
+            }
+            
+            const modalContent = modal.querySelector('.modal-content');
+            modalContent.innerHTML = content;
+            modal.style.display = 'flex';
+        }
+
+        // Close all modals function
+        function closeAllModals() {
+            document.querySelectorAll('.modal, .modal-overlay, .financing-modal').forEach(modal => {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            });
+            
+            // Re-enable body scroll
+            if (isMobileDevice()) {
+                document.body.style.overflow = '';
+            }
+        }
+
+        // 🎓 ONBOARDING TUTORIAL SYSTEM
+        let currentTutorialStep = 0;
+        const tutorialSteps = [
+            {
+                element: '#locationName',
+                title: '🏢 Lokasyon Bilgisi',
+                description: 'Öncelikle otopark lokasyonunun adını girin. Örn: "Olivium AVM", "Zorlu Center"',
+                position: 'bottom'
+            },
+            {
+                element: '#weekdayCapacity',
+                title: '🚗 Kapasite Belirleme',
+                description: 'Hafta içi satılabilir araç kapasitesini girin. Bu sayı, hafta sonu kapasitesini otomatik hesaplar.',
+                position: 'bottom'
+            },
+            {
+                element: '.time-slot',
+                title: '⏰ Tarife Dilimleri',
+                description: 'Saat dilimlerine göre tarife ve kullanım oranlarını girin. Kullanım % toplamı 100 olmalı!',
+                position: 'top'
+            },
+            {
+                element: '#staffCountTotal',
+                title: '👥 Personel Bilgileri',
+                description: 'Personel sayısı ve maliyet bilgilerini girin. Detaylı personel bilgileri için "Detayları Göster" butonunu kullanabilirsiniz.',
+                position: 'bottom'
+            },
+            {
+                element: '.calculate-btn',
+                title: '📊 Hesaplama',
+                description: 'Tüm bilgileri girdikten sonra bu butona tıklayarak fizibilite analizi yapabilirsiniz. Klavyeden "C" tuşuna basarak da hesaplayabilirsiniz!',
+                position: 'top'
+            },
+            {
+                element: '.theme-controls',
+                title: '🎨 Özelleştirme',
+                description: 'Tema rengini değiştirebilir, karanlık modu aktifleştirebilir ve dil seçimi yapabilirsiniz.',
+                position: 'bottom'
+            },
+            {
+                element: '.user-menu',
+                title: '👤 Kullanıcı Menüsü',
+                description: 'Profiliniz, ayarlarınız ve çıkış yapma seçenekleri burada. Admin kullanıcılar için admin paneli de erişilebilir.',
+                position: 'bottom'
+            }
+        ];
+
+        function startTutorial() {
+            // Check if tutorial was completed before
+            if (localStorage.getItem('parkexpert-tutorial-completed')) {
+                if (!confirm('Rehber turu tekrar başlatmak ister misiniz?')) {
+                    return;
+                }
+            }
+
+            // Show welcome screen
+            showTutorialWelcome();
+        }
+
+        function showTutorialWelcome() {
+            const welcome = document.createElement('div');
+            welcome.className = 'tutorial-welcome';
+            welcome.innerHTML = `
+                <h2>👋 Hoş Geldiniz!</h2>
+                <p style="font-size: 16px;">
+                    <strong>Parkexpert Fizibilite Hesaplama</strong> aracına hoş geldiniz! 
+                    Size hızlı bir tur atmak ister misiniz?
+                </p>
+                <p style="font-size: 14px; margin-top: 15px;">
+                    Rehber turunda aracın temel özelliklerini ve nasıl kullanılacağını öğreneceksiniz.
+                    Yaklaşık <strong>1-2 dakika</strong> sürecektir.
+                </p>
+                <div class="tutorial-welcome-buttons">
+                    <button class="tutorial-btn tutorial-btn-secondary" onclick="skipTutorial()">
+                        Atla
+                    </button>
+                    <button class="tutorial-btn tutorial-btn-primary" onclick="beginTutorial()">
+                        🚀 Turu Başlat
+                    </button>
+                </div>
+            `;
+
+            // Add overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'tutorial-overlay active';
+            overlay.id = 'tutorialOverlay';
+
+            document.body.appendChild(overlay);
+            document.body.appendChild(welcome);
+        }
+
+        function skipTutorial() {
+            localStorage.setItem('parkexpert-tutorial-completed', 'true');
+            closeTutorial();
+            showToast('ℹ️ Rehber turunu istediğiniz zaman Ctrl+H ile başlatabilirsiniz', 'info');
+        }
+
+        function beginTutorial() {
+            const welcome = document.querySelector('.tutorial-welcome');
+            if (welcome) welcome.remove();
+            
+            currentTutorialStep = 0;
+            showTutorialStep(currentTutorialStep);
+        }
+
+        function showTutorialStep(step) {
+            if (step >= tutorialSteps.length) {
+                completeTutorial();
+                return;
+            }
+
+            const stepData = tutorialSteps[step];
+            const element = document.querySelector(stepData.element);
+            
+            if (!element) {
+                // Element not found, skip to next
+                currentTutorialStep++;
+                showTutorialStep(currentTutorialStep);
+                return;
+            }
+
+            // Scroll element into view
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Create or update spotlight
+            setTimeout(() => {
+                createSpotlight(element);
+                createTooltip(element, stepData, step);
+            }, 300);
+        }
+
+        function createSpotlight(element) {
+            // Remove existing spotlight
+            const existingSpotlight = document.querySelector('.tutorial-spotlight');
+            if (existingSpotlight) existingSpotlight.remove();
+
+            const rect = element.getBoundingClientRect();
+            const spotlight = document.createElement('div');
+            spotlight.className = 'tutorial-spotlight';
+            spotlight.style.top = (rect.top + window.scrollY - 5) + 'px';
+            spotlight.style.left = (rect.left + window.scrollX - 5) + 'px';
+            spotlight.style.width = (rect.width + 10) + 'px';
+            spotlight.style.height = (rect.height + 10) + 'px';
+
+            document.body.appendChild(spotlight);
+        }
+
+        function createTooltip(element, stepData, step) {
+            // Remove existing tooltip
+            const existingTooltip = document.querySelector('.tutorial-tooltip');
+            if (existingTooltip) existingTooltip.remove();
+
+            const rect = element.getBoundingClientRect();
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tutorial-tooltip';
+            
+            tooltip.innerHTML = `
+                <h3>
+                    ${stepData.title}
+                </h3>
+                <p>${stepData.description}</p>
+                <div class="tutorial-buttons">
+                    <div class="tutorial-progress">${step + 1} / ${tutorialSteps.length}</div>
+                    <div style="display: flex; gap: 10px;">
+                        ${step > 0 ? '<button class="tutorial-btn tutorial-btn-secondary" onclick="previousTutorialStep()">◀ Geri</button>' : ''}
+                        ${step < tutorialSteps.length - 1 ? 
+                            '<button class="tutorial-btn tutorial-btn-primary" onclick="nextTutorialStep()">İleri ▶</button>' :
+                            '<button class="tutorial-btn tutorial-btn-primary" onclick="completeTutorial()">🎉 Tamamla</button>'
+                        }
+                    </div>
+                </div>
+            `;
+
+            // Position tooltip
+            if (stepData.position === 'bottom') {
+                tooltip.style.top = (rect.bottom + window.scrollY + 20) + 'px';
+                tooltip.style.left = (rect.left + window.scrollX) + 'px';
+            } else {
+                tooltip.style.bottom = (window.innerHeight - rect.top - window.scrollY + 20) + 'px';
+                tooltip.style.left = (rect.left + window.scrollX) + 'px';
+            }
+
+            // Ensure tooltip is within viewport
+            document.body.appendChild(tooltip);
+            const tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > window.innerWidth) {
+                tooltip.style.left = (window.innerWidth - tooltipRect.width - 20) + 'px';
+            }
+            if (tooltipRect.left < 0) {
+                tooltip.style.left = '20px';
+            }
+        }
+
+        function nextTutorialStep() {
+            currentTutorialStep++;
+            showTutorialStep(currentTutorialStep);
+        }
+
+        function previousTutorialStep() {
+            if (currentTutorialStep > 0) {
+                currentTutorialStep--;
+                showTutorialStep(currentTutorialStep);
+            }
+        }
+
+        function completeTutorial() {
+            localStorage.setItem('parkexpert-tutorial-completed', 'true');
+            closeTutorial();
+            
+            // Show completion message
+            showToast('🎉 Tebrikler! Rehber turu tamamladınız!', 'success');
+            
+            // Unlock achievement
+            unlockAchievement('tutorial_completed');
+        }
+
+        function closeTutorial() {
+            const overlay = document.getElementById('tutorialOverlay');
+            const spotlight = document.querySelector('.tutorial-spotlight');
+            const tooltip = document.querySelector('.tutorial-tooltip');
+            const welcome = document.querySelector('.tutorial-welcome');
+
+            if (overlay) overlay.remove();
+            if (spotlight) spotlight.remove();
+            if (tooltip) tooltip.remove();
+            if (welcome) welcome.remove();
+        }
+
+        // Auto-start tutorial for first-time users
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                if (!localStorage.getItem('parkexpert-tutorial-completed')) {
+                    if (!localStorage.getItem('parkexpert-session')) {
+                        // Brand new user
+                        startTutorial();
+                    }
+                }
+            }, 1000);
         });
     </script>
 
