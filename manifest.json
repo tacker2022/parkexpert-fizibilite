@@ -1,0 +1,45 @@
+{
+  "name": "Parkexpert Fizibilite Hesaplama",
+  "short_name": "Parkexpert",
+  "description": "Otopark fizibilite hesaplama ve analiz aracı",
+  "start_url": "/parkexpert-fizibilite/",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#1e3c72",
+  "orientation": "portrait-primary",
+  "scope": "/parkexpert-fizibilite/",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23667eea'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='280' fill='white' font-weight='bold'%3EP%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23667eea'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='100' fill='white' font-weight='bold'%3EP%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'%3E%3Crect width='540' height='720' fill='%23f5f7fa'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='40' fill='%231e3c72'%3EParkexpert%3C/text%3E%3C/svg%3E",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["business", "finance", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Yeni Hesaplama",
+      "url": "/parkexpert-fizibilite/",
+      "description": "Yeni fizibilite hesaplaması başlat"
+    }
+  ],
+  "features": [
+    "offline",
+    "multi-user",
+    "analytics"
+  ]
+}
