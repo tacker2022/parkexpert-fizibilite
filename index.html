@@ -2769,43 +2769,43 @@
                     <label>Saat Dilimi</label>
                     <label>Tarife (₺)</label>
                     <label>Kullanım %</label>
-                    <label>Park/Gün</label>
+                    <label>Parklanma Sayısı</label>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot1_hours" value="0-3" placeholder="0-3">
                     <input type="number" id="wd_slot1_tariff" value="0" min="0">
-                    <input type="number" id="wd_slot1_usage" value="90" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_slot1_parking" value="1503" min="0">
+                    <input type="number" id="wd_slot1_usage" value="90" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 1)" onkeyup="calculateParkingCount('wd', 1)">
+                    <input type="number" id="wd_slot1_parking" value="1503" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot2_hours" value="3-4" placeholder="3-4">
                     <input type="number" id="wd_slot2_tariff" value="150" min="0">
-                    <input type="number" id="wd_slot2_usage" value="7" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_slot2_parking" value="117" min="0">
+                    <input type="number" id="wd_slot2_usage" value="7" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 2)" onkeyup="calculateParkingCount('wd', 2)">
+                    <input type="number" id="wd_slot2_parking" value="117" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot3_hours" value="4-5" placeholder="4-5">
                     <input type="number" id="wd_slot3_tariff" value="175" min="0">
-                    <input type="number" id="wd_slot3_usage" value="2.19" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_slot3_parking" value="37" min="0">
+                    <input type="number" id="wd_slot3_usage" value="2.19" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 3)" onkeyup="calculateParkingCount('wd', 3)">
+                    <input type="number" id="wd_slot3_parking" value="37" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot4_hours" value="5-6" placeholder="5-6">
                     <input type="number" id="wd_slot4_tariff" value="200" min="0">
-                    <input type="number" id="wd_slot4_usage" value="0.77" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_slot4_parking" value="13" min="0">
+                    <input type="number" id="wd_slot4_usage" value="0.77" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 4)" onkeyup="calculateParkingCount('wd', 4)">
+                    <input type="number" id="wd_slot4_parking" value="13" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot5_hours" value="6-12" placeholder="6-12">
                     <input type="number" id="wd_slot5_tariff" value="250" min="0">
-                    <input type="number" id="wd_slot5_usage" value="0.02" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_slot5_parking" value="0" min="0">
+                    <input type="number" id="wd_slot5_usage" value="0.02" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 5)" onkeyup="calculateParkingCount('wd', 5)">
+                    <input type="number" id="wd_slot5_parking" value="0" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot6_hours" value="12-24" placeholder="12-24">
                     <input type="number" id="wd_slot6_tariff" value="500" min="0">
-                    <input type="number" id="wd_slot6_usage" value="0.02" min="0" max="100" step="0.01">
-                    <input type="number" id="wd_slot6_parking" value="0" min="0">
+                    <input type="number" id="wd_slot6_usage" value="0.02" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 6)" onkeyup="calculateParkingCount('wd', 6)">
+                    <input type="number" id="wd_slot6_parking" value="0" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
             </div>
 
@@ -2827,43 +2827,43 @@
                     <label>Saat Dilimi</label>
                     <label>Tarife (₺)</label>
                     <label>Kullanım %</label>
-                    <label>Park/Gün</label>
+                    <label>Parklanma Sayısı</label>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot1_hours" value="0-3" placeholder="0-3">
                     <input type="number" id="we_slot1_tariff" value="0" min="0">
-                    <input type="number" id="we_slot1_usage" value="85" min="0" max="100" step="0.01">
-                    <input type="number" id="we_slot1_parking" value="1828" min="0">
+                    <input type="number" id="we_slot1_usage" value="85" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 1)" onkeyup="calculateParkingCount('we', 1)">
+                    <input type="number" id="we_slot1_parking" value="1828" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot2_hours" value="3-4" placeholder="3-4">
                     <input type="number" id="we_slot2_tariff" value="150" min="0">
-                    <input type="number" id="we_slot2_usage" value="9" min="0" max="100" step="0.01">
-                    <input type="number" id="we_slot2_parking" value="194" min="0">
+                    <input type="number" id="we_slot2_usage" value="9" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 2)" onkeyup="calculateParkingCount('we', 2)">
+                    <input type="number" id="we_slot2_parking" value="194" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot3_hours" value="4-5" placeholder="4-5">
                     <input type="number" id="we_slot3_tariff" value="175" min="0">
-                    <input type="number" id="we_slot3_usage" value="3" min="0" max="100" step="0.01">
-                    <input type="number" id="we_slot3_parking" value="65" min="0">
+                    <input type="number" id="we_slot3_usage" value="3" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 3)" onkeyup="calculateParkingCount('we', 3)">
+                    <input type="number" id="we_slot3_parking" value="65" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot4_hours" value="5-6" placeholder="5-6">
                     <input type="number" id="we_slot4_tariff" value="200" min="0">
-                    <input type="number" id="we_slot4_usage" value="2" min="0" max="100" step="0.01">
-                    <input type="number" id="we_slot4_parking" value="43" min="0">
+                    <input type="number" id="we_slot4_usage" value="2" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 4)" onkeyup="calculateParkingCount('we', 4)">
+                    <input type="number" id="we_slot4_parking" value="43" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot5_hours" value="6-12" placeholder="6-12">
                     <input type="number" id="we_slot5_tariff" value="250" min="0">
-                    <input type="number" id="we_slot5_usage" value="0.5" min="0" max="100" step="0.01">
-                    <input type="number" id="we_slot5_parking" value="11" min="0">
+                    <input type="number" id="we_slot5_usage" value="0.5" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 5)" onkeyup="calculateParkingCount('we', 5)">
+                    <input type="number" id="we_slot5_parking" value="11" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot6_hours" value="12-24" placeholder="12-24">
                     <input type="number" id="we_slot6_tariff" value="500" min="0">
-                    <input type="number" id="we_slot6_usage" value="0.5" min="0" max="100" step="0.01">
-                    <input type="number" id="we_slot6_parking" value="11" min="0">
+                    <input type="number" id="we_slot6_usage" value="0.5" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 6)" onkeyup="calculateParkingCount('we', 6)">
+                    <input type="number" id="we_slot6_parking" value="11" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
             </div>
 
@@ -3158,6 +3158,41 @@
             const weekdayCapacity = parseFloat(document.getElementById('weekdayCapacity').value) || 0;
             const weekendCapacity = Math.round(weekdayCapacity * 1.5);
             document.getElementById('weekendCapacity').value = weekendCapacity;
+            
+            // Kapasite değiştiğinde tüm parklanma sayılarını yeniden hesapla
+            recalculateAllParkingCounts();
+        }
+
+        // Parklanma sayısını otomatik hesapla (Kapasite × Kullanım % / 100)
+        function calculateParkingCount(type, slotNumber) {
+            // Kapasite al (wd=hafta içi, we=hafta sonu)
+            let capacity;
+            if (type === 'wd') {
+                capacity = parseFloat(document.getElementById('weekdayCapacity').value) || 0;
+            } else {
+                capacity = parseFloat(document.getElementById('weekendCapacity').value) || 0;
+            }
+            
+            // Kullanım yüzdesini al
+            const usagePercent = parseFloat(document.getElementById(`${type}_slot${slotNumber}_usage`).value) || 0;
+            
+            // Parklanma sayısını hesapla: Kapasite × (Kullanım % / 100)
+            const parkingCount = Math.round(capacity * (usagePercent / 100));
+            
+            // Sonucu input'a yaz
+            document.getElementById(`${type}_slot${slotNumber}_parking`).value = parkingCount;
+        }
+
+        // Tüm parklanma sayılarını yeniden hesapla (kapasite değiştiğinde)
+        function recalculateAllParkingCounts() {
+            // Hafta içi 6 slot
+            for (let i = 1; i <= 6; i++) {
+                calculateParkingCount('wd', i);
+            }
+            // Hafta sonu 6 slot
+            for (let i = 1; i <= 6; i++) {
+                calculateParkingCount('we', i);
+            }
         }
 
         // TEMA YÖNETİMİ FONKSİYONLARI
@@ -6724,6 +6759,7 @@
                 <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e9ecef;">
                     <small style="color: #6c757d;">
                         💡 Hesap oluşturmak için admin ile iletişime geçin<br>
+                        <strong>Demo:</strong> admin@parkexpert.com / admin123
                     </small>
                 </div>
             </div>
