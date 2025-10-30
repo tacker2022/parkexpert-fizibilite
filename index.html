@@ -3357,6 +3357,27 @@
         });
 
         // Sayfa yüklendiğinde logo'yu kontrol et
+        // Analytics tracking function (GLOBAL - her yerden erişilebilir)
+        function trackEvent(category, action, label, value) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', action, {
+                    'event_category': category,
+                    'event_label': label,
+                    'value': value
+                });
+            }
+            // LocalStorage tracking for offline
+            const events = JSON.parse(localStorage.getItem('parkexpert-analytics') || '[]');
+            events.push({
+                category: category,
+                action: action,
+                label: label,
+                value: value,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('parkexpert-analytics', JSON.stringify(events));
+        }
+
         window.addEventListener('load', function() {
             // Tema ve renk tercihlerini yükle
             const savedTheme = localStorage.getItem('parkexpert-theme') || 'light';
@@ -3429,25 +3450,6 @@
             gtag('config', 'G-XXXXXXXXXX'); // Replace with your Google Analytics ID
 
             // Custom Analytics Events
-            function trackEvent(category, action, label, value) {
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', action, {
-                        'event_category': category,
-                        'event_label': label,
-                        'value': value
-                    });
-                }
-                // LocalStorage tracking for offline
-                const events = JSON.parse(localStorage.getItem('parkexpert-analytics') || '[]');
-                events.push({
-                    category: category,
-                    action: action,
-                    label: label,
-                    value: value,
-                    timestamp: new Date().toISOString()
-                });
-                localStorage.setItem('parkexpert-analytics', JSON.stringify(events));
-            }
 
             console.log('✅ Parkexpert Fizibilite Aracı hazır!');
         });
@@ -3739,7 +3741,7 @@
             // Goal Tracking Widget güncelle
             updateGoalWidget(monthlyNetProfit);
 
-            // Profitability Score hesapla (Başarımlar için)
+            // Profitability Score hesapla
             const profitMargin = (monthlyNetProfit / totalMonthlyRevenue) * 100;
             let profitabilityScore = 0;
             if (profitMargin > 30) profitabilityScore = 95;
