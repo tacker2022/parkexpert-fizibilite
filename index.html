@@ -2807,6 +2807,11 @@
                     <input type="number" id="wd_slot6_usage" value="0.02" min="0" max="100" step="0.01" onchange="calculateParkingCount('wd', 6)" onkeyup="calculateParkingCount('wd', 6)">
                     <input type="number" id="wd_slot6_parking" value="0" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
                 </div>
+                
+                <!-- Kullanım % Uyarısı (Hafta İçi) -->
+                <div id="wd_usage_warning" style="display: none; margin-top: 15px; padding: 15px; border-radius: 8px; font-size: 14px; font-weight: 500;">
+                    <!-- JavaScript tarafından doldurulacak -->
+                </div>
             </div>
 
             <!-- Hafta Sonu Tarifeleri -->
@@ -2864,6 +2869,11 @@
                     <input type="number" id="we_slot6_tariff" value="500" min="0">
                     <input type="number" id="we_slot6_usage" value="0.5" min="0" max="100" step="0.01" onchange="calculateParkingCount('we', 6)" onkeyup="calculateParkingCount('we', 6)">
                     <input type="number" id="we_slot6_parking" value="11" min="0" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                </div>
+                
+                <!-- Kullanım % Uyarısı (Hafta Sonu) -->
+                <div id="we_usage_warning" style="display: none; margin-top: 15px; padding: 15px; border-radius: 8px; font-size: 14px; font-weight: 500;">
+                    <!-- JavaScript tarafından doldurulacak -->
                 </div>
             </div>
 
@@ -3181,6 +3191,46 @@
             
             // Sonucu input'a yaz
             document.getElementById(`${type}_slot${slotNumber}_parking`).value = parkingCount;
+            
+            // Kullanım % toplamını kontrol et
+            validateUsagePercentage(type);
+        }
+
+        // Kullanım % toplamını kontrol et (Toplam = 100% olmalı)
+        function validateUsagePercentage(type) {
+            let total = 0;
+            
+            // 6 slotun toplamını hesapla
+            for (let i = 1; i <= 6; i++) {
+                const usage = parseFloat(document.getElementById(`${type}_slot${i}_usage`).value) || 0;
+                total += usage;
+            }
+            
+            // Toplam kontrolü
+            const typeName = type === 'wd' ? 'Hafta İçi' : 'Hafta Sonu';
+            const usageWarning = document.getElementById(`${type}_usage_warning`);
+            
+            if (!usageWarning) {
+                // Warning div yoksa oluştur (ilk çalıştırmada)
+                return;
+            }
+            
+            if (Math.abs(total - 100) > 0.01) { // Virgüllü sayı toleransı
+                usageWarning.style.display = 'block';
+                usageWarning.innerHTML = `
+                    ⚠️ <strong>${typeName}</strong> kullanım oranları toplamı <strong>${total.toFixed(2)}%</strong> 
+                    (Olması gereken: <strong>100%</strong>)
+                `;
+                usageWarning.style.background = '#fff3cd';
+                usageWarning.style.color = '#856404';
+                usageWarning.style.border = '2px solid #ffc107';
+            } else {
+                usageWarning.style.display = 'block';
+                usageWarning.innerHTML = `✅ <strong>${typeName}</strong> kullanım oranları toplamı: <strong>100%</strong> - Doğru!`;
+                usageWarning.style.background = '#d4edda';
+                usageWarning.style.color = '#155724';
+                usageWarning.style.border = '2px solid #28a745';
+            }
         }
 
         // Tüm parklanma sayılarını yeniden hesapla (kapasite değiştiğinde)
@@ -3486,6 +3536,12 @@
 
             // Custom Analytics Events
 
+            // Sayfa yüklendiğinde kullanım % kontrollerini yap
+            setTimeout(() => {
+                validateUsagePercentage('wd'); // Hafta içi kontrol
+                validateUsagePercentage('we'); // Hafta sonu kontrol
+            }, 100);
+
             console.log('✅ Parkexpert Fizibilite Aracı hazır!');
         });
 
@@ -3515,6 +3571,30 @@
         function calculate() {
             // Analytics Tracking
             trackEvent('Calculator', 'calculate', 'New Calculation', 1);
+
+            // Kullanım % kontrolü yap
+            let wdTotal = 0;
+            let weTotal = 0;
+            for (let i = 1; i <= 6; i++) {
+                wdTotal += parseFloat(document.getElementById(`wd_slot${i}_usage`).value) || 0;
+                weTotal += parseFloat(document.getElementById(`we_slot${i}_usage`).value) || 0;
+            }
+            
+            // Kullanım % toplamı 100 değilse uyar
+            if (Math.abs(wdTotal - 100) > 0.01 || Math.abs(weTotal - 100) > 0.01) {
+                let warningMessage = '⚠️ DİKKAT:\n\n';
+                if (Math.abs(wdTotal - 100) > 0.01) {
+                    warningMessage += `Hafta İçi kullanım oranları toplamı: ${wdTotal.toFixed(2)}% (Olması gereken: 100%)\n`;
+                }
+                if (Math.abs(weTotal - 100) > 0.01) {
+                    warningMessage += `Hafta Sonu kullanım oranları toplamı: ${weTotal.toFixed(2)}% (Olması gereken: 100%)\n`;
+                }
+                warningMessage += '\nHesaplama yapılacak ama sonuçlar hatalı olabilir. Devam etmek istiyor musunuz?';
+                
+                if (!confirm(warningMessage)) {
+                    return; // Kullanıcı iptal ederse hesaplamayı durdur
+                }
+            }
 
             // Genel Bilgiler
             const locationName = document.getElementById('locationName').value || 'Lokasyon';
@@ -6758,8 +6838,7 @@
                 </button>
                 <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e9ecef;">
                     <small style="color: #6c757d;">
-                        💡 Hesap oluşturmak için admin ile iletişime geçin<br>
-                        <strong>Demo:</strong> admin@parkexpert.com / admin123
+                        💡 Hesap oluşturmak için admin ile iletişime geçin
                     </small>
                 </div>
             </div>
