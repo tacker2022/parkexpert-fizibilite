@@ -3043,26 +3043,39 @@
                 margin: 1cm;
             }
         }
-    </style>
+    
+/* === Parkexpert minimal landing (scoped) === */
+#px-landing{min-height:100vh;display:flex;align-items:center;justify-content:center;
+background:radial-gradient(1200px 600px at 50% -10%,rgba(88,107,255,.25),transparent 60%),
+linear-gradient(160deg, #0b1222 0%, #10192d 40%, #0a0f1d 100%);
+color:#fff;text-align:center;padding:40px}
+#px-landing .px-wrap{max-width:760px;animation:pxFade .9s ease both}
+#px-landing .px-logo{width:90px;height:auto;display:block;margin:0 auto 20px;filter:drop-shadow(0 0 14px rgba(255,255,255,.35)) saturate(1.18)}
+#px-landing h1{font:800 34px/1.2 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:10px 0 12px}
+#px-landing p{opacity:.82;margin:0 auto 28px;line-height:1.6;font-size:15px;max-width:660px}
+#px-landing .px-btn{display:inline-block;padding:14px 20px;border-radius:12px;border:0;
+background:#586BFF;color:#fff;font-weight:700;cursor:pointer;min-width:280px;
+box-shadow:0 0 0 rgba(120,153,255,0);transition:.25s;animation:pxPulse 2.2s ease-in-out infinite}
+#px-landing .px-btn:hover{transform:translateY(-1px);background:#4556e0}
+@keyframes pxFade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pxPulse{0%{box-shadow:0 0 0 rgba(120,153,255,0)}50%{box-shadow:0 0 18px rgba(120,153,255,.55)}100%{box-shadow:0 0 0 rgba(120,153,255,0)}}
+
+</style>
 </head>
 <body>
-<div id="px-landing" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0b0f19;color:#fff;text-align:center;">
-  <div>
-    <img src="./parkexpert-logo.png" alt="Parkexpert Logo" class="logo">
-    <h1 style="font-size:32px;margin-bottom:12px;font-weight:700;">Fizibilite & Yatırım Analiz Sistemi</h1>
-    <p style="opacity:0.8;margin-bottom:30px;">Gerçek doluluk, tarife ve işletme maliyeti verilerine dayalı olarak otopark projelerinizin potansiyel kâr ve yatırım geri dönüş sürelerini analiz edin.</p>
-    <button onclick="startPxApp()" style="padding:16px 24px;border-radius:10px;background:#586BFF;color:white;border:none;font-size:16px;font-weight:600;cursor:pointer;">Yeni Proje Oluşturmak İçin Oturum Açın</button>
+
+<!-- Parkexpert Landing (scoped) -->
+<section id="px-landing">
+  <div class="px-wrap">
+    <img src="./parkexpert-logo.png" alt="Parkexpert Logo" class="px-logo"/>
+    <h1>Fizibilite & Yatırım Analiz Sistemi</h1>
+    <p>Gerçek doluluk, tarife ve işletme maliyeti verilerine dayalı olarak otopark projelerinizin potansiyel kâr ve yatırım geri dönüş sürelerini analiz edin.</p>
+    <button id="px-start" class="px-btn">Yeni Proje Oluşturmak İçin Oturum Açın</button>
   </div>
-</div>
+</section>
 
-<script>
-function startPxApp(){
-  document.getElementById('px-landing').style.display='none';
-  document.getElementById('app').style.display='block';
-}
-</script>
+<div id="px-app-root" style="display:none;">
 
-<div id="app" style="display:none;">>
     <div class="container">
         <div class="header">
             <!-- User Menu -->
@@ -8578,5 +8591,23 @@ function startPxApp(){
         </button>
     </div>
 
-</div></body>
+
+</div>
+<script>
+// Landing -> App toggle (no framework)
+(function(){
+  var startBtn = document.getElementById('px-start');
+  function startApp(){
+    var landing = document.getElementById('px-landing');
+    var app = document.getElementById('px-app-root');
+    if(landing) landing.style.display='none';
+    if(app) app.style.display='block';
+    window.scrollTo(0,0);
+  }
+  if(startBtn){ startBtn.addEventListener('click', startApp); }
+  // Optional: if a ?auto=1 param present, skip landing
+  if(new URLSearchParams(window.location.search).get('auto')==='1'){ startApp(); }
+})();
+</script>
+</body>
 </html>
