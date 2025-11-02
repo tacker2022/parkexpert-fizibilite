@@ -1766,6 +1766,25 @@
             padding: 25px;
             border-radius: 15px;
             border: 2px solid #e9ecef;
+            overflow-x: auto;
+        }
+
+        .section::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .section::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .section::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
         }
 
         .section h2 {
@@ -2019,40 +2038,59 @@
 
         .time-slot {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
-            gap: 10px;
-            margin-bottom: 15px;
+            grid-template-columns: 1fr 0.85fr 0.85fr 0.85fr 1.2fr;
+            gap: 6px;
+            margin-bottom: 12px;
             align-items: center;
         }
 
         .time-slot label {
             font-weight: 600;
             color: #495057;
-        }
-
-        .time-slot input {
-            padding: 8px;
-            border: 2px solid #dee2e6;
-            border-radius: 6px;
             font-size: 13px;
         }
 
-        .time-slot .revenue-display {
-            background: #e7f3ff;
-            border: 2px solid #667eea;
-            border-radius: 6px;
-            padding: 8px;
-            font-size: 11px;
-            line-height: 1.4;
-            color: #1e3c72;
-            font-weight: 600;
+        .time-slot input {
+            padding: 10px 8px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
         }
 
-        .time-slot .revenue-display small {
+        .time-slot input:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .time-slot .revenue-display {
+            background: linear-gradient(135deg, #e7f3ff 0%, #f0f8ff 100%);
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 12px;
+            line-height: 1.3;
+            color: #1e3c72;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .time-slot .revenue-display .daily {
+            font-size: 13px;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 2px;
+        }
+
+        .time-slot .revenue-display .period {
             display: block;
             font-size: 10px;
             color: #6c757d;
             font-weight: 500;
+            margin-top: 2px;
+            line-height: 1.2;
         }
 
         .calculate-btn {
@@ -2309,11 +2347,37 @@
 
             .time-slot {
                 grid-template-columns: 1fr;
-                gap: 10px;
+                gap: 8px;
+                background: #f8f9fa;
+                padding: 12px;
+                border-radius: 10px;
+                margin-bottom: 12px;
+            }
+
+            .time-slot label {
+                display: none;
             }
 
             .time-slot input {
-                font-size: 14px;
+                font-size: 15px;
+                padding: 12px;
+            }
+
+            .time-slot input::placeholder {
+                font-size: 13px;
+            }
+
+            .time-slot .revenue-display {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .time-slot .revenue-display .daily {
+                font-size: 15px;
+            }
+
+            .time-slot .revenue-display .period {
+                font-size: 11px;
             }
 
             .calculate-btn {
@@ -2465,7 +2529,32 @@
             }
 
             .time-slot {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr 1.2fr;
+                gap: 6px;
+                font-size: 13px;
+            }
+
+            .time-slot label {
+                display: block;
+                font-size: 12px;
+            }
+
+            .time-slot input {
+                padding: 8px 6px;
+                font-size: 13px;
+            }
+
+            .time-slot .revenue-display {
+                font-size: 11px;
+                padding: 5px 6px;
+            }
+
+            .time-slot .revenue-display .daily {
+                font-size: 12px;
+            }
+
+            .time-slot .revenue-display .period {
+                font-size: 9px;
             }
         }
 
@@ -3230,9 +3319,16 @@
                 <h2>💰 Maliyet ve Giderler</h2>
                 <div class="form-group">
                     <label>Yatırım Maliyeti KDV'li (₺) <span class="info-icon" data-tooltip="Otopark sisteminin kurulum maliyeti. Yazılım, donanım, montaj dahil toplam yatırım tutarı (KDV dahil).">i</span></label>
-                    <input type="text" id="investmentCost" value="1.074.165" 
-                           onkeyup="formatNumberInput(this)" 
-                           onblur="formatNumberInput(this)">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="investmentCost" value="1.074.165" 
+                               onkeyup="formatNumberInput(this)" 
+                               onblur="formatNumberInput(this)"
+                               style="flex: 1;">
+                        <button type="button" class="action-btn" onclick="openInvestmentBreakdown()" 
+                                style="background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 10px 20px; white-space: nowrap; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                            📋 Detaylı Maliyet
+                        </button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Amortisman Süresi (Ay) <span class="info-icon" data-tooltip="Yatırımın kaç ayda itfa edileceği. Örnek: 36 ay = 3 yıl. Bu sürede yatırım maliyeti aylık gider olarak dağıtılır.">i</span></label>
@@ -3285,12 +3381,12 @@
                     <input type="number" id="workingDays" value="22" min="1" max="31" onchange="recalculateAllRevenues()" onkeyup="recalculateAllRevenues()">
                 </div>
 
-                <div class="time-slot">
-                    <label>Saat Dilimi</label>
-                    <label>Tarife (₺)</label>
-                    <label>Kullanım %</label>
-                    <label>Parklanma Sayısı</label>
-                    <label>Hasılat (₺)</label>
+                <div class="time-slot" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 8px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                    <label style="color: white; font-weight: 700;">⏰ Saat Dilimi</label>
+                    <label style="color: white; font-weight: 700;">💰 Tarife</label>
+                    <label style="color: white; font-weight: 700;">📊 Kullanım %</label>
+                    <label style="color: white; font-weight: 700;">🚗 Park Sayısı</label>
+                    <label style="color: white; font-weight: 700;">💵 Hasılat</label>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot1_hours" value="0-3" placeholder="0-3">
@@ -3373,12 +3469,12 @@
                     <input type="number" id="weekendDays" value="8" min="0" max="31" onchange="recalculateAllRevenues()" onkeyup="recalculateAllRevenues()">
                 </div>
 
-                <div class="time-slot">
-                    <label>Saat Dilimi</label>
-                    <label>Tarife (₺)</label>
-                    <label>Kullanım %</label>
-                    <label>Parklanma Sayısı</label>
-                    <label>Hasılat (₺)</label>
+                <div class="time-slot" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 8px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                    <label style="color: white; font-weight: 700;">⏰ Saat Dilimi</label>
+                    <label style="color: white; font-weight: 700;">💰 Tarife</label>
+                    <label style="color: white; font-weight: 700;">📊 Kullanım %</label>
+                    <label style="color: white; font-weight: 700;">🚗 Park Sayısı</label>
+                    <label style="color: white; font-weight: 700;">💵 Hasılat</label>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot1_hours" value="0-3" placeholder="0-3">
@@ -3798,14 +3894,20 @@
             const revenueDiv = document.getElementById(`${type}_slot${slotNumber}_revenue`);
             if (revenueDiv) {
                 revenueDiv.innerHTML = `
-                    <div style="font-weight: 600; color: ${dailyRevenue > 0 ? '#28a745' : '#6c757d'};">
-                        Günlük: ${formatCurrency(dailyRevenue)}
-                    </div>
-                    <small style="color: #6c757d; font-size: 11px;">
-                        Aylık: ${formatCurrency(monthlyRevenue)} | Yıllık: ${formatCurrency(yearlyRevenue)}
-                    </small>
+                    <div class="daily">${formatCurrency(dailyRevenue)}</div>
+                    <span class="period">Ay: ${formatCurrencyShort(monthlyRevenue)} • Yıl: ${formatCurrencyShort(yearlyRevenue)}</span>
                 `;
             }
+        }
+
+        // Kısa para formatı (K/M için)
+        function formatCurrencyShort(value) {
+            if (value >= 1000000) {
+                return '₺' + (value / 1000000).toFixed(1) + 'M';
+            } else if (value >= 1000) {
+                return '₺' + (value / 1000).toFixed(0) + 'K';
+            }
+            return formatCurrency(value);
         }
 
         // Kullanım % toplamını kontrol et (Toplam = 100% olmalı)
@@ -7860,6 +7962,118 @@
             if (welcome) welcome.remove();
         }
 
+        // 💰 INVESTMENT COST BREAKDOWN FUNCTIONS
+        
+        // Open investment breakdown modal
+        function openInvestmentBreakdown() {
+            const modal = document.getElementById('investmentBreakdownModal');
+            if (modal) {
+                modal.classList.add('active');
+                modal.style.display = 'flex';
+                
+                // Load existing values if any
+                loadInvestmentBreakdownValues();
+                
+                // Calculate initial total
+                calculateTotalInvestment();
+            }
+        }
+
+        // Close investment breakdown modal
+        function closeInvestmentBreakdown() {
+            const modal = document.getElementById('investmentBreakdownModal');
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        }
+
+        // Calculate total investment from breakdown
+        function calculateTotalInvestment() {
+            const setup = parseFormattedNumber(document.getElementById('cost_setup').value);
+            const pts = parseFormattedNumber(document.getElementById('cost_pts').value);
+            const infrastructure = parseFormattedNumber(document.getElementById('cost_infrastructure').value);
+            const cabin = parseFormattedNumber(document.getElementById('cost_cabin').value);
+            const signage = parseFormattedNumber(document.getElementById('cost_signage').value);
+            const labor = parseFormattedNumber(document.getElementById('cost_labor').value);
+            const financing = parseFormattedNumber(document.getElementById('cost_financing').value);
+
+            const total = setup + pts + infrastructure + cabin + signage + labor + financing;
+
+            // Display formatted total
+            const displayEl = document.getElementById('totalInvestmentDisplay');
+            if (displayEl) {
+                displayEl.textContent = formatCurrency(total);
+            }
+
+            return total;
+        }
+
+        // Apply breakdown and transfer to main form
+        function applyInvestmentBreakdown() {
+            const total = calculateTotalInvestment();
+            
+            // Format and set to main investment cost input
+            const investmentInput = document.getElementById('investmentCost');
+            if (investmentInput) {
+                investmentInput.value = total.toLocaleString('tr-TR');
+            }
+
+            // Save breakdown values to localStorage
+            saveInvestmentBreakdownValues();
+
+            // Close modal
+            closeInvestmentBreakdown();
+
+            // Show success message
+            showToast('✅ Yatırım maliyeti güncellendi: ' + formatCurrency(total), 'success');
+
+            // Unlock achievement
+            unlockAchievement('investment_breakdown');
+        }
+
+        // Save breakdown values to localStorage
+        function saveInvestmentBreakdownValues() {
+            const breakdown = {
+                setup: document.getElementById('cost_setup').value,
+                pts: document.getElementById('cost_pts').value,
+                infrastructure: document.getElementById('cost_infrastructure').value,
+                cabin: document.getElementById('cost_cabin').value,
+                signage: document.getElementById('cost_signage').value,
+                labor: document.getElementById('cost_labor').value,
+                financing: document.getElementById('cost_financing').value
+            };
+            localStorage.setItem('parkexpert-investment-breakdown', JSON.stringify(breakdown));
+        }
+
+        // Load breakdown values from localStorage
+        function loadInvestmentBreakdownValues() {
+            const saved = localStorage.getItem('parkexpert-investment-breakdown');
+            if (saved) {
+                try {
+                    const breakdown = JSON.parse(saved);
+                    if (breakdown.setup) document.getElementById('cost_setup').value = breakdown.setup;
+                    if (breakdown.pts) document.getElementById('cost_pts').value = breakdown.pts;
+                    if (breakdown.infrastructure) document.getElementById('cost_infrastructure').value = breakdown.infrastructure;
+                    if (breakdown.cabin) document.getElementById('cost_cabin').value = breakdown.cabin;
+                    if (breakdown.signage) document.getElementById('cost_signage').value = breakdown.signage;
+                    if (breakdown.labor) document.getElementById('cost_labor').value = breakdown.labor;
+                    if (breakdown.financing) document.getElementById('cost_financing').value = breakdown.financing;
+                } catch (e) {
+                    console.log('Breakdown yüklenemedi:', e);
+                }
+            }
+        }
+
+        // Parse formatted number (with dots and commas)
+        function parseFormattedNumber(value) {
+            if (!value) return 0;
+            // Remove dots (thousand separators) and replace comma with dot
+            const cleaned = value.toString().replace(/\./g, '').replace(',', '.');
+            const parsed = parseFloat(cleaned) || 0;
+            return parsed;
+        }
+
         // Auto-start tutorial for first-time users
         window.addEventListener('load', function() {
             setTimeout(() => {
@@ -7872,6 +8086,104 @@
             }, 1000);
         });
     </script>
+
+    <!-- 💰 Detaylı Yatırım Maliyeti Modal -->
+    <div id="investmentBreakdownModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2>💰 Detaylı Yatırım Maliyeti Breakdown</h2>
+                <button class="close-modal" onclick="closeInvestmentBreakdown()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: #6c757d; margin-bottom: 20px;">
+                    Aşağıdaki maliyet kalemlerini doldurun. Toplam otomatik hesaplanacak ve ana forma aktarılacaktır.
+                </p>
+
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #1e3c72;">1️⃣ Kuruluş Maliyetleri (Ruhsat, Şube Açılış, Sigorta) - TAHMİNİ</label>
+                    <input type="text" id="cost_setup" value="0" 
+                           onkeyup="formatNumberInput(this); calculateTotalInvestment()" 
+                           onblur="formatNumberInput(this); calculateTotalInvestment()"
+                           placeholder="Örn: 50.000">
+                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">Ruhsat, şube açılış, sigorta ve yasal işlemler</div>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #1e3c72;">2️⃣ PTS Yazılım-Donanım Maliyeti</label>
+                    <input type="text" id="cost_pts" value="0" 
+                           onkeyup="formatNumberInput(this); calculateTotalInvestment()" 
+                           onblur="formatNumberInput(this); calculateTotalInvestment()"
+                           placeholder="Örn: 250.000">
+                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">Park Tahsilat Sistemi yazılım ve donanım</div>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #1e3c72;">3️⃣ Altyapı Maliyeti</label>
+                    <input type="text" id="cost_infrastructure" value="0" 
+                           onkeyup="formatNumberInput(this); calculateTotalInvestment()" 
+                           onblur="formatNumberInput(this); calculateTotalInvestment()"
+                           placeholder="Örn: 150.000">
+                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">Elektrik, kablolama, network altyapısı</div>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #1e3c72;">4️⃣ Ödeme Kabini (MOBO Zemin ve Giydirme)</label>
+                    <input type="text" id="cost_cabin" value="0" 
+                           onkeyup="formatNumberInput(this); calculateTotalInvestment()" 
+                           onblur="formatNumberInput(this); calculateTotalInvestment()"
+                           placeholder="Örn: 100.000">
+                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">Ödeme kabini, MOBO zemin ve giydirme maliyeti</div>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #1e3c72;">5️⃣ Yatay/Düşey İşaretleme (İletişim, Tanıtım, Bilgilendirme)</label>
+                    <input type="text" id="cost_signage" value="0" 
+                           onkeyup="formatNumberInput(this); calculateTotalInvestment()" 
+                           onblur="formatNumberInput(this); calculateTotalInvestment()"
+                           placeholder="Örn: 75.000">
+                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">Yönlendirme tabelaları, led ekranlar, bilgilendirme panoları</div>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #1e3c72;">6️⃣ İşçilik Maliyeti</label>
+                    <input type="text" id="cost_labor" value="0" 
+                           onkeyup="formatNumberInput(this); calculateTotalInvestment()" 
+                           onblur="formatNumberInput(this); calculateTotalInvestment()"
+                           placeholder="Örn: 120.000">
+                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">Montaj, kurulum ve devreye alma işçiliği</div>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: 700; color: #1e3c72;">7️⃣ Finansman Maliyeti</label>
+                    <input type="text" id="cost_financing" value="0" 
+                           onkeyup="formatNumberInput(this); calculateTotalInvestment()" 
+                           onblur="formatNumberInput(this); calculateTotalInvestment()"
+                           placeholder="Örn: 50.000">
+                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">Kredi faizi, finansman giderleri</div>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #e7f3ff, #f0f8ff); border: 3px solid #667eea; border-radius: 12px;">
+                    <h3 style="margin: 0 0 15px 0; color: #1e3c72; font-size: 18px;">
+                        💰 Toplam Yatırım Maliyeti (KDV Dahil)
+                    </h3>
+                    <div id="totalInvestmentDisplay" style="font-size: 32px; font-weight: 700; color: #28a745; text-align: center;">
+                        ₺0
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 25px;">
+                    <button onclick="closeInvestmentBreakdown()" class="action-btn" 
+                            style="flex: 1; background: #6c757d; color: white;">
+                        ❌ İptal
+                    </button>
+                    <button onclick="applyInvestmentBreakdown()" class="action-btn" 
+                            style="flex: 2; background: linear-gradient(135deg, #28a745, #20c997); color: white;">
+                        ✅ Uygula ve Aktar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Kayıtlı Hesaplamalar Modal -->
     <div id="loadModal" class="modal">
