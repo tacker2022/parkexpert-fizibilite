@@ -2038,7 +2038,7 @@
 
         .time-slot {
             display: grid;
-            grid-template-columns: 0.7fr 0.75fr 0.75fr 0.75fr 1.1fr;
+            grid-template-columns: 0.6fr 0.7fr 0.5fr 0.7fr 1.5fr;
             gap: 5px;
             margin-bottom: 10px;
             align-items: center;
@@ -8036,6 +8036,20 @@
 
         // Apply breakdown and transfer to main form
         function applyInvestmentBreakdown() {
+            // ⚠️ KDV'siz fiyat kontrolü
+            const confirmed = confirm(
+                '⚠️ FİYAT KONTROLÜ\n\n' +
+                '✅ Tüm fiyatları KDV HARİÇ yazdığınızdan emin misiniz?\n\n' +
+                '📌 KDV otomatik olarak %20 eklenecektir.\n' +
+                '📌 KDV\'li fiyat yazarsanız hesaplama yanlış olur!\n\n' +
+                'Devam etmek istiyor musunuz?'
+            );
+            
+            if (!confirmed) {
+                showToast('⚠️ İşlem iptal edildi. Fiyatları kontrol edin.', 'warning');
+                return; // İptal edildi, fonksiyondan çık
+            }
+            
             const totalWithVAT = calculateTotalInvestment();
             
             // Format and set to main investment cost input (KDV'li tutar)
@@ -8102,17 +8116,8 @@
             return parsed;
         }
 
-        // Auto-start tutorial for first-time users
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                if (!localStorage.getItem('parkexpert-tutorial-completed')) {
-                    if (!localStorage.getItem('parkexpert-session')) {
-                        // Brand new user
-                        startTutorial();
-                    }
-                }
-            }, 1000);
-        });
+        // Tutorial will auto-start after first login (not on page load)
+        // See login success handler for tutorial trigger
     </script>
 
     <!-- 💰 Detaylı Yatırım Maliyeti Modal -->
@@ -8123,6 +8128,19 @@
                 <button class="close-modal" onclick="closeInvestmentBreakdown()">&times;</button>
             </div>
             <div class="modal-body">
+                <!-- KDV Uyarısı -->
+                <div style="background: linear-gradient(135deg, #fff3cd, #ffeaa7); border: 3px solid #ffc107; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <span style="font-size: 32px;">⚠️</span>
+                        <h3 style="margin: 0; color: #856404; font-size: 18px;">ÖNEMLİ: Fiyatları KDV'siz Yazın!</h3>
+                    </div>
+                    <p style="margin: 0; color: #856404; font-weight: 600; line-height: 1.6;">
+                        📌 Tüm maliyet kalemlerini <strong>KDV HARİÇ</strong> olarak girin.<br>
+                        📌 KDV (%20) otomatik olarak hesaplanıp eklenecektir.<br>
+                        📌 Son adımda KDV'li toplam gösterilecektir.
+                    </p>
+                </div>
+
                 <p style="color: #6c757d; margin-bottom: 20px;">
                     Aşağıdaki maliyet kalemlerini doldurun. Toplam otomatik hesaplanacak ve ana forma aktarılacaktır.
                 </p>
