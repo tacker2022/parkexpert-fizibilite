@@ -4323,8 +4323,8 @@
             checkReminders();
             setInterval(checkReminders, 60000); // Her dakika kontrol et
 
-            // Multi-user sistem başlat
-            initUserSystem();
+            // Multi-user sistem başlat (ESKİ - ARTIK FİREBASE AUTH KULLANIYOR)
+            // initUserSystem();
 
             // Branding yükle
             loadBranding();
@@ -6384,7 +6384,8 @@
                 localStorage.setItem('parkexpert-users', JSON.stringify(users));
             }
             
-            // Session'ı kontrol et
+            // Session'ı kontrol et (ESKİ SİSTEM - ARTIK FİREBASE KULLANIYOR)
+            /* 
             const sessionUser = localStorage.getItem('parkexpert-session');
             if (sessionUser) {
                 currentUser = JSON.parse(sessionUser);
@@ -6394,6 +6395,8 @@
                 // Login modal'ı göster
                 document.getElementById('loginModal').classList.remove('hidden');
             }
+            */
+            // Firebase auth kontrolü artık window.addEventListener('load') içinde yapılıyor
         }
 
         function hashPassword(password) {
@@ -6411,6 +6414,7 @@
             return; // Artık sadece login
         }
 
+        /* ESKİ LOCALSTORAGEİ handleLogin - ŞİMDİ FİREBASE KULLANIYOR
         function handleLogin() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
@@ -6444,6 +6448,8 @@
                 showToast('❌ Email veya şifre hatalı!', 'error');
             }
         }
+        */
+        // YENİ FİREBASE handleLogin() ARTIK KULLANILIYOR (Satır ~8076)
 
         // ADMIN PANEL
         function openAdminPanel() {
@@ -8736,30 +8742,6 @@
             <button class="quick-reply-btn" onclick="askChatbot('öneri')">Öneri al</button>
             <button class="quick-reply-btn" onclick="askChatbot('şablon')">Şablon öner</button>
             <button class="quick-reply-btn" onclick="askChatbot('karlılık')">Karlılık arttır</button>
-        </div>
-    </div>
-
-    <!-- Login Modal -->
-    <div class="login-modal" id="loginModal">
-        <div class="login-box">
-            <h2 style="text-align: center; color: #1e3c72; margin: 0 0 10px 0;">🅿️ Parkexpert</h2>
-            <p style="text-align: center; color: #6c757d; margin: 0 0 30px 0; font-size: 14px;">
-                🔒 Güvenli Giriş - Sadece Kayıtlı Kullanıcılar
-            </p>
-
-            <!-- Login Form Only -->
-            <div class="login-form active">
-                <input type="email" class="form-input" id="loginEmail" placeholder="📧 Email" autocomplete="email">
-                <input type="password" class="form-input" id="loginPassword" placeholder="🔒 Şifre" autocomplete="current-password">
-                <button class="login-btn" onclick="handleLogin()">
-                    🔓 Giriş Yap
-                </button>
-                <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e9ecef;">
-                    <small style="color: #6c757d;">
-                        💡 Hesap oluşturmak için admin ile iletişime geçin
-                    </small>
-                </div>
-            </div>
         </div>
     </div>
 
