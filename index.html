@@ -217,6 +217,19 @@
             animation: fadeIn 0.3s;
         }
 
+        /* Auth Modal - LOCKED (cannot close) */
+        #authModal {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.9) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        #authModal .modal-content {
+            pointer-events: auto !important;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -3078,10 +3091,13 @@
 </head>
 <body>
     <!-- 🔐 Firebase Authentication Modal -->
-    <div id="authModal" class="modal" style="display: flex;">
-        <div class="modal-content" style="max-width: 450px;">
+    <div id="authModal" class="modal" style="display: flex;" onclick="event.stopPropagation();">
+        <div class="modal-content" style="max-width: 450px;" onclick="event.stopPropagation();">
             <div class="modal-header" style="background: linear-gradient(135deg, #667eea, #764ba2);">
                 <h2 style="color: white; margin: 0;">🔐 Parkexpert Giriş</h2>
+                <div style="color: white; font-size: 12px; margin-top: 5px; opacity: 0.9;">
+                    ⚠️ Devam etmek için giriş yapmanız gerekiyor
+                </div>
             </div>
             <div class="modal-body">
                 <!-- Tab Switcher -->
@@ -3135,7 +3151,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="mainContainer" style="display: none;">
         <div class="header">
             <!-- User Menu -->
             <div class="user-menu">
@@ -8102,8 +8118,9 @@
 
                 showToast('✅ Giriş başarılı! Hoş geldiniz!', 'success');
 
-                // Close auth modal
+                // Close auth modal and show main container
                 document.getElementById('authModal').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
 
                 // Update UI
                 updateUserUI(user.email);
@@ -8178,8 +8195,9 @@
 
                 showToast('✅ Hesap oluşturuldu! Hoş geldiniz!', 'success');
 
-                // Close auth modal
+                // Close auth modal and show main container
                 document.getElementById('authModal').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
 
                 // Update UI
                 updateUserUI(user.email);
@@ -8217,8 +8235,9 @@
 
                 showToast('👋 Çıkış yapıldı!', 'success');
 
-                // Show auth modal again
+                // Show auth modal and hide main container
                 document.getElementById('authModal').style.display = 'flex';
+                document.getElementById('mainContainer').style.display = 'none';
 
                 // Reset UI
                 document.getElementById('currentUserName').textContent = 'Misafir';
@@ -8309,8 +8328,9 @@
                     };
                     localStorage.setItem('firebaseUser', JSON.stringify(currentFirebaseUser));
                     
-                    // Hide auth modal
+                    // Hide auth modal and show main container
                     document.getElementById('authModal').style.display = 'none';
+                    document.getElementById('mainContainer').style.display = 'block';
                     
                     // Update UI
                     updateUserUI(user.email);
@@ -8321,12 +8341,39 @@
                     currentFirebaseUser = null;
                     localStorage.removeItem('firebaseUser');
                     
-                    // Show auth modal
+                    // Show auth modal and hide main container
                     document.getElementById('authModal').style.display = 'flex';
+                    document.getElementById('mainContainer').style.display = 'none';
                     
                     console.log('❌ User not authenticated');
                 }
             });
+        });
+
+        // Prevent ESC key from closing auth modal
+        document.addEventListener('keydown', function(event) {
+            const authModal = document.getElementById('authModal');
+            if (event.key === 'Escape' && authModal && authModal.style.display === 'flex') {
+                event.preventDefault();
+                event.stopPropagation();
+                showToast('⚠️ Devam etmek için giriş yapmanız gerekiyor', 'warning');
+                return false;
+            }
+        }, true);
+
+        // Prevent clicking outside auth modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const authModal = document.getElementById('authModal');
+            if (authModal) {
+                authModal.addEventListener('click', function(event) {
+                    // Only close if clicking the modal backdrop, not the content
+                    if (event.target === authModal) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        showToast('⚠️ Devam etmek için giriş yapmanız gerekiyor', 'warning');
+                    }
+                });
+            }
         });
 
         // Add logout button to user menu
