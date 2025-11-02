@@ -3118,10 +3118,10 @@
             <div class="modal-body">
                 <!-- Tab Switcher -->
                 <div style="display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #e9ecef;">
-                    <button id="loginTab" class="auth-tab active" onclick="switchAuthTab('login')" style="flex: 1; padding: 12px; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid #667eea; color: #667eea;">
+                    <button id="loginTab" class="auth-tab active" style="flex: 1; padding: 12px; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid #667eea; color: #667eea;">
                         Giriş Yap
                     </button>
-                    <button id="registerTab" class="auth-tab" onclick="switchAuthTab('register')" style="flex: 1; padding: 12px; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; color: #6c757d;">
+                    <button id="registerTab" class="auth-tab" style="flex: 1; padding: 12px; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; color: #6c757d;">
                         Kayıt Ol
                     </button>
                 </div>
@@ -3136,7 +3136,7 @@
                         <label style="font-weight: 600; color: #1e3c72; display: block; margin-bottom: 8px;">🔒 Şifre</label>
                         <input type="password" id="loginPassword" placeholder="••••••••" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px;">
                     </div>
-                    <button onclick="handleLogin()" class="action-btn" style="width: 100%; margin-top: 25px; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">
+                    <button id="loginSubmitBtn" class="action-btn" style="width: 100%; margin-top: 25px; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">
                         🚀 Giriş Yap
                     </button>
                 </div>
@@ -3155,7 +3155,7 @@
                         <label style="font-weight: 600; color: #1e3c72; display: block; margin-bottom: 8px;">🔒 Şifre Tekrar</label>
                         <input type="password" id="registerPasswordConfirm" placeholder="Şifreyi tekrar girin" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px;">
                     </div>
-                    <button onclick="handleRegister()" class="action-btn" style="width: 100%; margin-top: 25px; padding: 14px; background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">
+                    <button id="registerSubmitBtn" class="action-btn" style="width: 100%; margin-top: 25px; padding: 14px; background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">
                         ✨ Hesap Oluştur
                     </button>
                 </div>
@@ -8790,6 +8790,79 @@
 
         // Tutorial will auto-start after first login (not on page load)
         // See login success handler for tutorial trigger
+
+        // ===== FIXED: AUTH BUTTON EVENT LISTENERS =====
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔧 Setting up auth event listeners...');
+            
+            // Login tab
+            const loginTab = document.getElementById('loginTab');
+            if (loginTab) {
+                loginTab.addEventListener('click', () => {
+                    console.log('Login tab clicked');
+                    if (window.switchAuthTab) {
+                        window.switchAuthTab('login');
+                    }
+                });
+            }
+            
+            // Register tab
+            const registerTab = document.getElementById('registerTab');
+            if (registerTab) {
+                registerTab.addEventListener('click', () => {
+                    console.log('Register tab clicked');
+                    if (window.switchAuthTab) {
+                        window.switchAuthTab('register');
+                    }
+                });
+            }
+            
+            // Login submit button
+            const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+            if (loginSubmitBtn) {
+                loginSubmitBtn.addEventListener('click', () => {
+                    console.log('Login button clicked');
+                    if (window.handleLogin) {
+                        window.handleLogin();
+                    }
+                });
+            }
+            
+            // Register submit button
+            const registerSubmitBtn = document.getElementById('registerSubmitBtn');
+            if (registerSubmitBtn) {
+                registerSubmitBtn.addEventListener('click', () => {
+                    console.log('Register button clicked');
+                    if (window.handleRegister) {
+                        window.handleRegister();
+                    }
+                });
+            }
+            
+            // Enter key support for login
+            const loginPassword = document.getElementById('loginPassword');
+            if (loginPassword) {
+                loginPassword.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && window.handleLogin) {
+                        window.handleLogin();
+                    }
+                });
+            }
+            
+            // Enter key support for register
+            const registerPasswordConfirm = document.getElementById('registerPasswordConfirm');
+            if (registerPasswordConfirm) {
+                registerPasswordConfirm.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && window.handleRegister) {
+                        window.handleRegister();
+                    }
+                });
+            }
+            
+            console.log('✅ Auth event listeners setup complete!');
+        });
+        // ===== END FIX =====
     </script>
 
     <!-- 💰 Detaylı Yatırım Maliyeti Modal -->
