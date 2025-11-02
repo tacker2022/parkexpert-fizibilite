@@ -2038,23 +2038,23 @@
 
         .time-slot {
             display: grid;
-            grid-template-columns: 1fr 0.85fr 0.85fr 0.85fr 1.2fr;
-            gap: 6px;
-            margin-bottom: 12px;
+            grid-template-columns: 0.7fr 0.75fr 0.75fr 0.75fr 1.1fr;
+            gap: 5px;
+            margin-bottom: 10px;
             align-items: center;
         }
 
         .time-slot label {
             font-weight: 600;
             color: #495057;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .time-slot input {
-            padding: 10px 8px;
+            padding: 8px 6px;
             border: 2px solid #dee2e6;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             transition: border-color 0.2s;
         }
 
@@ -2067,10 +2067,10 @@
         .time-slot .revenue-display {
             background: linear-gradient(135deg, #e7f3ff 0%, #f0f8ff 100%);
             border: 2px solid #667eea;
-            border-radius: 8px;
-            padding: 6px 8px;
-            font-size: 12px;
-            line-height: 1.3;
+            border-radius: 6px;
+            padding: 5px 6px;
+            font-size: 11px;
+            line-height: 1.2;
             color: #1e3c72;
             font-weight: 600;
             text-align: center;
@@ -2078,7 +2078,7 @@
         }
 
         .time-slot .revenue-display .daily {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: #28a745;
             margin-bottom: 2px;
@@ -2086,7 +2086,7 @@
 
         .time-slot .revenue-display .period {
             display: block;
-            font-size: 10px;
+            font-size: 9px;
             color: #6c757d;
             font-weight: 500;
             margin-top: 2px;
@@ -7996,27 +7996,55 @@
             const cabin = parseFormattedNumber(document.getElementById('cost_cabin').value);
             const signage = parseFormattedNumber(document.getElementById('cost_signage').value);
             const labor = parseFormattedNumber(document.getElementById('cost_labor').value);
-            const financing = parseFormattedNumber(document.getElementById('cost_financing').value);
 
-            const total = setup + pts + infrastructure + cabin + signage + labor + financing;
-
-            // Display formatted total
-            const displayEl = document.getElementById('totalInvestmentDisplay');
-            if (displayEl) {
-                displayEl.textContent = formatCurrency(total);
+            // 🔥 Finansman maliyetini otomatik hesapla
+            // (PTS + Altyapı + Kabin + İşaretleme) × 0.48
+            // Kuruluş ve İşçilik HARİÇ
+            const financingBase = pts + infrastructure + cabin + signage;
+            const financing = financingBase * 0.48;
+            
+            // Finansman maliyetini input'a yaz (formatlanmış)
+            const financingInput = document.getElementById('cost_financing');
+            if (financingInput) {
+                financingInput.value = financing.toLocaleString('tr-TR', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
             }
 
-            return total;
+            // KDV'siz toplam
+            const totalNoVAT = setup + pts + infrastructure + cabin + signage + labor + financing;
+            
+            // KDV'li toplam (%20 KDV)
+            const totalWithVAT = totalNoVAT * 1.20;
+
+            // KDV'siz toplamı göster
+            const noVATEl = document.getElementById('totalInvestmentNoVAT');
+            if (noVATEl) {
+                noVATEl.textContent = formatCurrency(totalNoVAT);
+            }
+
+            // KDV'li toplamı göster
+            const withVATEl = document.getElementById('totalInvestmentWithVAT');
+            if (withVATEl) {
+                withVATEl.textContent = formatCurrency(totalWithVAT);
+            }
+
+            // KDV'li toplamı döndür (ana forma bu aktarılacak)
+            return totalWithVAT;
         }
 
         // Apply breakdown and transfer to main form
         function applyInvestmentBreakdown() {
-            const total = calculateTotalInvestment();
+            const totalWithVAT = calculateTotalInvestment();
             
-            // Format and set to main investment cost input
+            // Format and set to main investment cost input (KDV'li tutar)
             const investmentInput = document.getElementById('investmentCost');
             if (investmentInput) {
-                investmentInput.value = total.toLocaleString('tr-TR');
+                investmentInput.value = totalWithVAT.toLocaleString('tr-TR', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
             }
 
             // Save breakdown values to localStorage
@@ -8026,7 +8054,7 @@
             closeInvestmentBreakdown();
 
             // Show success message
-            showToast('✅ Yatırım maliyeti güncellendi: ' + formatCurrency(total), 'success');
+            showToast('✅ Yatırım maliyeti (KDV Dahil) güncellendi: ' + formatCurrency(totalWithVAT), 'success');
 
             // Unlock achievement
             unlockAchievement('investment_breakdown');
@@ -8154,20 +8182,44 @@
                 </div>
 
                 <div class="form-group">
-                    <label style="font-weight: 700; color: #1e3c72;">7️⃣ Finansman Maliyeti</label>
+                    <label style="font-weight: 700; color: #1e3c72;">7️⃣ Finansman Maliyeti (Otomatik)</label>
                     <input type="text" id="cost_financing" value="0" 
-                           onkeyup="formatNumberInput(this); calculateTotalInvestment()" 
-                           onblur="formatNumberInput(this); calculateTotalInvestment()"
-                           placeholder="Örn: 50.000">
-                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">Kredi faizi, finansman giderleri</div>
+                           readonly
+                           style="background: #f0f4ff; cursor: not-allowed; font-weight: 600; color: #667eea;"
+                           placeholder="Otomatik hesaplanıyor...">
+                    <div class="small-text" style="margin-top: 5px; color: #6c757d;">
+                        📊 <strong>Otomatik Hesaplama:</strong> (PTS + Altyapı + Kabin + İşaretleme) × 0.48<br>
+                        <em>Kuruluş maliyetleri ve işçilik hariç tutulur</em>
+                    </div>
                 </div>
 
                 <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #e7f3ff, #f0f8ff); border: 3px solid #667eea; border-radius: 12px;">
-                    <h3 style="margin: 0 0 15px 0; color: #1e3c72; font-size: 18px;">
-                        💰 Toplam Yatırım Maliyeti (KDV Dahil)
+                    <h3 style="margin: 0 0 20px 0; color: #1e3c72; font-size: 18px; text-align: center;">
+                        💰 Toplam Yatırım Maliyeti
                     </h3>
-                    <div id="totalInvestmentDisplay" style="font-size: 32px; font-weight: 700; color: #28a745; text-align: center;">
-                        ₺0
+                    
+                    <!-- KDV'siz Toplam -->
+                    <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 2px solid #dee2e6;">
+                        <div style="font-size: 14px; color: #6c757d; margin-bottom: 5px; text-align: center;">
+                            📄 KDV Hariç
+                        </div>
+                        <div id="totalInvestmentNoVAT" style="font-size: 24px; font-weight: 700; color: #667eea; text-align: center;">
+                            ₺0
+                        </div>
+                    </div>
+                    
+                    <!-- KDV'li Toplam -->
+                    <div style="background: linear-gradient(135deg, #28a745, #20c997); padding: 15px; border-radius: 8px; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);">
+                        <div style="font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 5px; text-align: center;">
+                            💵 KDV Dahil (%20)
+                        </div>
+                        <div id="totalInvestmentWithVAT" style="font-size: 32px; font-weight: 700; color: white; text-align: center;">
+                            ₺0
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 10px; text-align: center; font-size: 12px; color: #6c757d;">
+                        <em>Ana forma KDV dahil tutar aktarılacaktır</em>
                     </div>
                 </div>
 
