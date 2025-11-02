@@ -8287,6 +8287,11 @@
             }
 
             try {
+                if (!window.firebaseAuthMethods || !window.firebaseAuth) {
+                    showToast('❌ Firebase henüz hazır değil, lütfen bekleyin...', 'error');
+                    return;
+                }
+                
                 const { signInWithEmailAndPassword } = window.firebaseAuthMethods;
                 const userCredential = await signInWithEmailAndPassword(window.firebaseAuth, email, password);
                 const user = userCredential.user;
@@ -8358,6 +8363,11 @@
             }
 
             try {
+                if (!window.firebaseAuthMethods || !window.firebaseAuth) {
+                    showToast('❌ Firebase henüz hazır değil, lütfen bekleyin...', 'error');
+                    return;
+                }
+                
                 const { createUserWithEmailAndPassword } = window.firebaseAuthMethods;
                 const userCredential = await createUserWithEmailAndPassword(window.firebaseAuth, email, password);
                 const user = userCredential.user;
@@ -8412,6 +8422,11 @@
         // Handle Logout
         async function handleLogout() {
             try {
+                if (!window.firebaseAuthMethods || !window.firebaseAuth) {
+                    showToast('❌ Firebase henüz hazır değil, lütfen bekleyin...', 'error');
+                    return;
+                }
+                
                 const { signOut } = window.firebaseAuthMethods;
                 await signOut(window.firebaseAuth);
 
@@ -8505,6 +8520,22 @@
 
         // Check auth state on page load
         window.addEventListener('load', function() {
+            // Wait for Firebase to initialize
+            if (!window.firebaseAuthMethods || !window.firebaseAuth) {
+                console.log('⏳ Firebase not ready yet, waiting...');
+                setTimeout(() => {
+                    if (window.firebaseAuthMethods && window.firebaseAuth) {
+                        initAuthStateListener();
+                    }
+                }, 1000);
+                return;
+            }
+            
+            initAuthStateListener();
+        });
+        
+        // Initialize auth state listener
+        function initAuthStateListener() {
             const { onAuthStateChanged } = window.firebaseAuthMethods;
             
             onAuthStateChanged(window.firebaseAuth, (user) => {
@@ -8536,7 +8567,7 @@
                     console.log('❌ User not authenticated');
                 }
             });
-        });
+        }
 
         // Prevent ESC key from closing auth modal
         document.addEventListener('keydown', function(event) {
