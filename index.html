@@ -2098,8 +2098,8 @@
 
         .time-slot {
             display: grid;
-            grid-template-columns: 0.15fr 0.2fr 0.15fr 0.2fr 4fr;
-            gap: 6px;
+            grid-template-columns: 0.5fr 0.6fr 0.4fr 0.6fr 2.5fr;
+            gap: 8px;
             margin-bottom: 10px;
             align-items: center;
         }
@@ -2107,14 +2107,14 @@
         .time-slot label {
             font-weight: 600;
             color: #495057;
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .time-slot input {
-            padding: 6px 3px;
+            padding: 12px 10px;
             border: 2px solid #dee2e6;
-            border-radius: 6px;
-            font-size: 12px;
+            border-radius: 8px;
+            font-size: 14px;
             transition: border-color 0.2s;
             text-align: center;
         }
@@ -2128,30 +2128,29 @@
         .time-slot .revenue-display {
             background: linear-gradient(135deg, #e7f3ff 0%, #f0f8ff 100%);
             border: 2px solid #667eea;
-            border-radius: 10px;
-            padding: 10px 12px;
-            font-size: 14px;
-            line-height: 1.5;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 13px;
+            line-height: 1.4;
             color: #1e3c72;
             font-weight: 600;
             text-align: center;
-            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.15);
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.12);
         }
 
         .time-slot .revenue-display > div {
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 16px;
+            font-weight: 700;
             color: #28a745;
-            margin-bottom: 6px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 4px;
         }
 
         .time-slot .revenue-display small {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             color: #495057;
             font-weight: 500;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         .time-slot .revenue-display .daily {
@@ -3565,12 +3564,12 @@
                     <input type="number" id="workingDays" value="22" min="1" max="31" onchange="recalculateAllRevenues()" onkeyup="recalculateAllRevenues()">
                 </div>
 
-                <div class="time-slot" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 8px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-                    <label style="color: white; font-weight: 700; font-size: 13px;">⏰ Saat Dilimi</label>
-                    <label style="color: white; font-weight: 700; font-size: 13px;">💰 Tarife</label>
-                    <label style="color: white; font-weight: 700; font-size: 13px;">📊 Kullanım %</label>
-                    <label style="color: white; font-weight: 700; font-size: 13px;">🚗 Park Sayısı</label>
-                    <label style="color: white; font-weight: 700; font-size: 13px;">💵 Hasılat</label>
+                <div class="time-slot" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 10px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                    <label style="color: white; font-weight: 700; font-size: 12px;">⏰ Saat Dilimi</label>
+                    <label style="color: white; font-weight: 700; font-size: 12px;">💰 Tarife</label>
+                    <label style="color: white; font-weight: 700; font-size: 12px;">📊 Kullanım %</label>
+                    <label style="color: white; font-weight: 700; font-size: 12px;">🚗 Park Sayısı</label>
+                    <label style="color: white; font-weight: 700; font-size: 12px;">💵 Hasılat</label>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="wd_slot1_hours" value="0-3" placeholder="0-3">
@@ -3653,12 +3652,12 @@
                     <input type="number" id="weekendDays" value="8" min="0" max="31" onchange="recalculateAllRevenues()" onkeyup="recalculateAllRevenues()">
                 </div>
 
-                <div class="time-slot" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 8px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-                    <label style="color: white; font-weight: 700; font-size: 13px;">⏰ Saat Dilimi</label>
-                    <label style="color: white; font-weight: 700; font-size: 13px;">💰 Tarife</label>
-                    <label style="color: white; font-weight: 700; font-size: 13px;">📊 Kullanım %</label>
-                    <label style="color: white; font-weight: 700; font-size: 13px;">🚗 Park Sayısı</label>
-                    <label style="color: white; font-weight: 700; font-size: 13px;">💵 Hasılat</label>
+                <div class="time-slot" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 10px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                    <label style="color: white; font-weight: 700; font-size: 12px;">⏰ Saat Dilimi</label>
+                    <label style="color: white; font-weight: 700; font-size: 12px;">💰 Tarife</label>
+                    <label style="color: white; font-weight: 700; font-size: 12px;">📊 Kullanım %</label>
+                    <label style="color: white; font-weight: 700; font-size: 12px;">🚗 Park Sayısı</label>
+                    <label style="color: white; font-weight: 700; font-size: 12px;">💵 Hasılat</label>
                 </div>
                 <div class="time-slot">
                     <input type="text" id="we_slot1_hours" value="0-3" placeholder="0-3">
