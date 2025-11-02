@@ -23,7 +23,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc, updateDoc, or } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
         // Firebase Configuration
         const firebaseConfig = {
@@ -45,7 +45,7 @@
         window.firebaseAuth = auth;
         window.firebaseDb = db;
         window.firebaseAuthMethods = { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged };
-        window.firebaseDbMethods = { doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc, updateDoc };
+        window.firebaseDbMethods = { doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc, updateDoc, or };
         
         console.log('🔥 Firebase initialized successfully!');
     </script>
@@ -349,6 +349,22 @@
         .btn-delete:hover {
             background: #c82333;
             transform: translateY(-2px);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .empty-state {
@@ -5732,72 +5748,204 @@
             document.getElementById('saveModal').style.display = 'none';
         }
 
-        function confirmSave() {
+        async function confirmSave() {
             const saveName = document.getElementById('saveName').value.trim();
+            const isPublic = document.getElementById('savePublic').checked;
+            
             if (!saveName) {
-                alert('Lütfen bir kayıt adı girin!');
+                showToast('❌ Lütfen bir kayıt adı girin!', 'error');
+                return;
+            }
+
+            if (!currentFirebaseUser) {
+                showToast('❌ Lütfen giriş yapın!', 'error');
                 return;
             }
             
             const data = getAllFormData();
-            const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
-            
             const calculation = {
                 id: Date.now(),
                 name: saveName,
                 data: data,
-                savedAt: new Date().toISOString()
+                savedAt: new Date().toISOString(),
+                userId: currentFirebaseUser.uid,
+                userEmail: currentFirebaseUser.email,
+                isPublic: isPublic
             };
             
-            savedCalculations.push(calculation);
-            localStorage.setItem('parkexpertCalculations', JSON.stringify(savedCalculations));
-            
-            closeSaveModal();
-            alert('✅ Hesaplama başarıyla kaydedildi!');
-            
-            // Başarımları kontrol et
-            if (savedCalculations.length >= 5) {
-                unlockAchievement('saver');
+            try {
+                // 1. Firebase'e kaydet
+                const { doc, setDoc } = window.firebaseDbMethods;
+                const calcId = 'calc_' + Date.now();
+                
+                await setDoc(doc(window.firebaseDb, 'calculations', calcId), calculation);
+                
+                // 2. LocalStorage'a da kaydet (fallback)
+                const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+                savedCalculations.push(calculation);
+                localStorage.setItem('parkexpertCalculations', JSON.stringify(savedCalculations));
+                
+                closeSaveModal();
+                
+                const visibilityText = isPublic ? '(Herkese Açık 🌍)' : '(Özel 🔒)';
+                showToast(`✅ Hesaplama Firebase'e kaydedildi! ${visibilityText}`, 'success');
+                
+                // Başarımları kontrol et
+                if (savedCalculations.length >= 5) {
+                    unlockAchievement('saver');
+                }
+                
+                unlockAchievement('first_cloud_save');
+                
+            } catch (error) {
+                console.error('Error saving to Firebase:', error);
+                showToast('❌ Firebase kaydetme hatası! LocalStorage\'a kaydedildi.', 'error');
+                
+                // Fallback to localStorage only
+                const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+                savedCalculations.push(calculation);
+                localStorage.setItem('parkexpertCalculations', JSON.stringify(savedCalculations));
+                
+                closeSaveModal();
             }
         }
 
-        function showLoadModal() {
-            const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+        async function showLoadModal() {
+            document.getElementById('loadModal').style.display = 'block';
             const listContainer = document.getElementById('savedCalculationsList');
             
-            if (savedCalculations.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📂</div>
-                        <h3>Henüz kayıtlı hesaplama yok</h3>
-                        <p>Hesaplamalarınızı kaydetmek için "💾 Hesaplamayı Kaydet" butonunu kullanın.</p>
-                    </div>
-                `;
-            } else {
-                listContainer.innerHTML = savedCalculations.reverse().map(calc => {
-                    const date = new Date(calc.savedAt);
-                    const dateStr = date.toLocaleDateString('tr-TR', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
+            listContainer.innerHTML = '<div style="text-align: center; padding: 40px;"><div class="spinner"></div><br>Yükleniyor...</div>';
+            
+            try {
+                const { collection, query, where, getDocs, or } = window.firebaseDbMethods;
+                
+                if (!currentFirebaseUser) {
+                    throw new Error('Not authenticated');
+                }
+                
+                // Hem kendi hesaplamalarını hem de public hesaplamaları al
+                const q = query(
+                    collection(window.firebaseDb, 'calculations'),
+                    or(
+                        where('userId', '==', currentFirebaseUser.uid),
+                        where('isPublic', '==', true)
+                    )
+                );
+                
+                const querySnapshot = await getDocs(q);
+                const calculations = [];
+                
+                querySnapshot.forEach((doc) => {
+                    calculations.push({
+                        firestoreId: doc.id,
+                        ...doc.data()
                     });
-                    
-                    return `
-                        <div class="saved-calculation">
-                            <h3>${calc.name}</h3>
-                            <div class="saved-calculation-info">
-                                <span>📅 ${dateStr}</span>
-                                <span>📍 ${calc.data.locationName || 'Belirtilmemiş'}</span>
-                                <span>🚗 ${calc.data.weekdayCapacity || 0} Kapasite</span>
+                });
+                
+                // Sort by savedAt (newest first)
+                calculations.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+                
+                if (calculations.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📂</div>
+                            <h3>Henüz kayıtlı hesaplama yok</h3>
+                            <p>Hesaplamalarınızı kaydetmek için "💾 Hesaplamayı Kaydet" butonunu kullanın.</p>
+                        </div>
+                    `;
+                } else {
+                    listContainer.innerHTML = calculations.map(calc => {
+                        const date = new Date(calc.savedAt);
+                        const dateStr = date.toLocaleDateString('tr-TR', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        
+                        const isOwner = calc.userId === currentFirebaseUser.uid;
+                        const ownerBadge = isOwner ? 
+                            '<span style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; margin-left: 8px;">📱 Benim</span>' : 
+                            `<span style="background: #667eea; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; margin-left: 8px;">👤 ${calc.userEmail?.split('@')[0] || 'Anonim'}</span>`;
+                        
+                        const visibilityBadge = calc.isPublic ? 
+                            '<span style="background: #ffc107; color: #333; padding: 4px 8px; border-radius: 4px; font-size: 11px; margin-left: 4px;">🌍 Herkese Açık</span>' : 
+                            '<span style="background: #6c757d; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; margin-left: 4px;">🔒 Özel</span>';
+                        
+                        const deleteButton = isOwner ? 
+                            `<button class="btn-delete" onclick="deleteCalculationFromFirebase('${calc.firestoreId}')">
+                                🗑️ Sil
+                            </button>` : '';
+                        
+                        return `
+                            <div class="saved-calculation" style="border-left: 4px solid ${isOwner ? '#28a745' : '#667eea'};">
+                                <h3>${calc.name} ${ownerBadge} ${visibilityBadge}</h3>
+                                <div class="saved-calculation-info">
+                                    <span>📅 ${dateStr}</span>
+                                    <span>📍 ${calc.data?.locationName || 'Belirtilmemiş'}</span>
+                                    <span>🚗 ${calc.data?.weekdayCapacity || calc.data?.totalCapacity || 0} Kapasite</span>
+                                </div>
+                                <div class="saved-calculation-actions">
+                                    <button class="btn-load" onclick="loadCalculationFromFirebase('${calc.firestoreId}')">
+                                        📂 Yükle
+                                    </button>
+                                    ${deleteButton}
+                                </div>
                             </div>
-                            <div class="saved-calculation-actions">
-                                <button class="btn-load" onclick="loadCalculation(${calc.id})">
-                                    📂 Yükle
-                                </button>
-                                <button class="btn-delete" onclick="deleteCalculation(${calc.id})">
-                                    🗑️ Sil
+                        `;
+                    }).join('');
+                }
+                
+            } catch (error) {
+                console.error('Error loading from Firebase:', error);
+                
+                // Fallback to localStorage
+                const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+                
+                if (savedCalculations.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📂</div>
+                            <h3>Henüz kayıtlı hesaplama yok</h3>
+                            <p>Hesaplamalarınızı kaydetmek için "💾 Hesaplamayı Kaydet" butonunu kullanın.</p>
+                        </div>
+                    `;
+                } else {
+                    listContainer.innerHTML = savedCalculations.reverse().map(calc => {
+                        const date = new Date(calc.savedAt);
+                        const dateStr = date.toLocaleDateString('tr-TR', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        
+                        return `
+                            <div class="saved-calculation">
+                                <h3>${calc.name} <span style="background: #ffc107; color: #333; padding: 4px 8px; border-radius: 4px; font-size: 11px;">💾 LocalStorage</span></h3>
+                                <div class="saved-calculation-info">
+                                    <span>📅 ${dateStr}</span>
+                                    <span>📍 ${calc.data?.locationName || 'Belirtilmemiş'}</span>
+                                    <span>🚗 ${calc.data?.weekdayCapacity || 0} Kapasite</span>
+                                </div>
+                                <div class="saved-calculation-actions">
+                                    <button class="btn-load" onclick="loadCalculation(${calc.id})">
+                                        📂 Yükle
+                                    </button>
+                                    <button class="btn-delete" onclick="deleteCalculation(${calc.id})">
+                                        🗑️ Sil
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+            
+            document.getElementById('loadModal').style.display = 'block';
+        }
                                 </button>
                             </div>
                         </div>
@@ -5806,6 +5954,47 @@
             }
             
             document.getElementById('loadModal').style.display = 'block';
+        }
+
+        // Load calculation from Firebase
+        async function loadCalculationFromFirebase(firestoreId) {
+            try {
+                const { doc, getDoc } = window.firebaseDbMethods;
+                const docSnap = await getDoc(doc(window.firebaseDb, 'calculations', firestoreId));
+                
+                if (docSnap.exists()) {
+                    const calc = docSnap.data();
+                    setAllFormData(calc.data);
+                    closeLoadModal();
+                    showToast(`✅ "${calc.name}" yüklendi!`, 'success');
+                    calculateResults();
+                } else {
+                    showToast('❌ Hesaplama bulunamadı!', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading from Firebase:', error);
+                showToast('❌ Yükleme hatası!', 'error');
+            }
+        }
+
+        // Delete calculation from Firebase
+        async function deleteCalculationFromFirebase(firestoreId) {
+            if (!confirm('Bu hesaplamayı silmek istediğinize emin misiniz?')) {
+                return;
+            }
+            
+            try {
+                const { doc, deleteDoc } = window.firebaseDbMethods;
+                await deleteDoc(doc(window.firebaseDb, 'calculations', firestoreId));
+                
+                showToast('✅ Hesaplama silindi!', 'success');
+                
+                // Refresh the list
+                showLoadModal();
+            } catch (error) {
+                console.error('Error deleting from Firebase:', error);
+                showToast('❌ Silme hatası!', 'error');
+            }
         }
 
         function closeLoadModal() {
@@ -8722,6 +8911,30 @@
                     <input type="text" id="saveName" placeholder="Örn: Olivium AVM - Ocak 2025" 
                            style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px;">
                 </div>
+                
+                <div class="form-group" style="margin-top: 20px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid #dee2e6;">
+                        <input type="checkbox" id="savePublic" style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer;">
+                        <div>
+                            <div style="font-weight: 600; color: #1e3c72; margin-bottom: 3px;">
+                                🌍 Herkese Açık Yap
+                            </div>
+                            <div style="font-size: 12px; color: #6c757d;">
+                                Diğer kullanıcılar bu hesaplamayı görebilir ve kopyalayabilir
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <div style="margin-top: 15px; padding: 12px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <div style="font-size: 13px; color: #1e3c72; line-height: 1.6;">
+                        <strong>🔥 Firebase'e Kaydedilecek:</strong><br>
+                        • Tüm cihazlardan erişebilirsiniz<br>
+                        • Otomatik senkronizasyon<br>
+                        • Güvenli bulut depolama
+                    </div>
+                </div>
+
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button class="btn-load" onclick="confirmSave()" style="flex: 1;">
                         💾 Kaydet
