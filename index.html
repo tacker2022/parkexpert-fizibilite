@@ -19,6 +19,37 @@
     <!-- Analytics Placeholder -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z3E96YKGC"></script>
 
+    <!-- Firebase SDK (v10.7.0) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDLaWdr7vEpkHm3q7btf3NYr4pSyQ9Nvig",
+            authDomain: "parkexpert-fizibilite.firebaseapp.com",
+            projectId: "parkexpert-fizibilite",
+            storageBucket: "parkexpert-fizibilite.firebasestorage.app",
+            messagingSenderId: "65090870249",
+            appId: "1:65090870249:web:bcc3ef00a20982deb88978",
+            measurementId: "G-LY6T6Y3KZZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Make available globally
+        window.firebaseAuth = auth;
+        window.firebaseDb = db;
+        window.firebaseAuthMethods = { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged };
+        window.firebaseDbMethods = { doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc, updateDoc };
+        
+        console.log('🔥 Firebase initialized successfully!');
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -3046,6 +3077,64 @@
     </style>
 </head>
 <body>
+    <!-- 🔐 Firebase Authentication Modal -->
+    <div id="authModal" class="modal" style="display: flex;">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                <h2 style="color: white; margin: 0;">🔐 Parkexpert Giriş</h2>
+            </div>
+            <div class="modal-body">
+                <!-- Tab Switcher -->
+                <div style="display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #e9ecef;">
+                    <button id="loginTab" class="auth-tab active" onclick="switchAuthTab('login')" style="flex: 1; padding: 12px; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid #667eea; color: #667eea;">
+                        Giriş Yap
+                    </button>
+                    <button id="registerTab" class="auth-tab" onclick="switchAuthTab('register')" style="flex: 1; padding: 12px; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; color: #6c757d;">
+                        Kayıt Ol
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" style="display: block;">
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: #1e3c72; display: block; margin-bottom: 8px;">📧 Email</label>
+                        <input type="email" id="loginEmail" placeholder="ornek@email.com" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label style="font-weight: 600; color: #1e3c72; display: block; margin-bottom: 8px;">🔒 Şifre</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <button onclick="handleLogin()" class="action-btn" style="width: 100%; margin-top: 25px; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">
+                        🚀 Giriş Yap
+                    </button>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" style="display: none;">
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: #1e3c72; display: block; margin-bottom: 8px;">📧 Email</label>
+                        <input type="email" id="registerEmail" placeholder="ornek@email.com" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label style="font-weight: 600; color: #1e3c72; display: block; margin-bottom: 8px;">🔒 Şifre</label>
+                        <input type="password" id="registerPassword" placeholder="En az 6 karakter" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label style="font-weight: 600; color: #1e3c72; display: block; margin-bottom: 8px;">🔒 Şifre Tekrar</label>
+                        <input type="password" id="registerPasswordConfirm" placeholder="Şifreyi tekrar girin" style="width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <button onclick="handleRegister()" class="action-btn" style="width: 100%; margin-top: 25px; padding: 14px; background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">
+                        ✨ Hesap Oluştur
+                    </button>
+                </div>
+
+                <div style="margin-top: 20px; text-align: center; color: #6c757d; font-size: 13px;">
+                    🔒 Verileriniz güvenli bir şekilde Firebase'de saklanır
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <!-- User Menu -->
@@ -7949,6 +8038,305 @@
             // Unlock achievement
             unlockAchievement('tutorial_completed');
         }
+
+        // 🔥🔥🔥 FIREBASE AUTHENTICATION FUNCTIONS 🔥🔥🔥
+        
+        // Current user global variable
+        let currentFirebaseUser = null;
+
+        // Switch between login/register tabs
+        function switchAuthTab(tab) {
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+                loginTab.style.borderBottom = '3px solid #667eea';
+                loginTab.style.color = '#667eea';
+                registerTab.style.borderBottom = '3px solid transparent';
+                registerTab.style.color = '#6c757d';
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                registerTab.style.borderBottom = '3px solid #667eea';
+                registerTab.style.color = '#667eea';
+                loginTab.style.borderBottom = '3px solid transparent';
+                loginTab.style.color = '#6c757d';
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
+            }
+        }
+
+        // Handle Login
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showToast('❌ Email ve şifre gerekli!', 'error');
+                return;
+            }
+
+            try {
+                const { signInWithEmailAndPassword } = window.firebaseAuthMethods;
+                const userCredential = await signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                const user = userCredential.user;
+
+                // Save user to localStorage for session
+                currentFirebaseUser = {
+                    uid: user.uid,
+                    email: user.email
+                };
+                localStorage.setItem('firebaseUser', JSON.stringify(currentFirebaseUser));
+
+                showToast('✅ Giriş başarılı! Hoş geldiniz!', 'success');
+
+                // Close auth modal
+                document.getElementById('authModal').style.display = 'none';
+
+                // Update UI
+                updateUserUI(user.email);
+
+                // Load user data from Firestore
+                await loadUserDataFromFirestore(user.uid);
+
+                // Start tutorial if first time
+                const tutorialKey = 'tutorial-completed-' + user.uid;
+                if (!localStorage.getItem(tutorialKey)) {
+                    setTimeout(() => {
+                        startTutorial();
+                    }, 1000);
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                let errorMessage = 'Giriş başarısız!';
+                
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+                    errorMessage = '❌ Email veya şifre hatalı!';
+                } else if (error.code === 'auth/user-not-found') {
+                    errorMessage = '❌ Kullanıcı bulunamadı!';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = '❌ Çok fazla deneme! Lütfen bekleyin.';
+                }
+                
+                showToast(errorMessage, 'error');
+            }
+        }
+
+        // Handle Register
+        async function handleRegister() {
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+
+            if (!email || !password || !passwordConfirm) {
+                showToast('❌ Tüm alanları doldurun!', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showToast('❌ Şifre en az 6 karakter olmalı!', 'error');
+                return;
+            }
+
+            if (password !== passwordConfirm) {
+                showToast('❌ Şifreler eşleşmiyor!', 'error');
+                return;
+            }
+
+            try {
+                const { createUserWithEmailAndPassword } = window.firebaseAuthMethods;
+                const userCredential = await createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+                const user = userCredential.user;
+
+                // Save user to localStorage
+                currentFirebaseUser = {
+                    uid: user.uid,
+                    email: user.email
+                };
+                localStorage.setItem('firebaseUser', JSON.stringify(currentFirebaseUser));
+
+                // Create user document in Firestore
+                const { doc, setDoc } = window.firebaseDbMethods;
+                await setDoc(doc(window.firebaseDb, 'users', user.uid), {
+                    email: user.email,
+                    createdAt: Date.now(),
+                    plan: 'free'
+                });
+
+                showToast('✅ Hesap oluşturuldu! Hoş geldiniz!', 'success');
+
+                // Close auth modal
+                document.getElementById('authModal').style.display = 'none';
+
+                // Update UI
+                updateUserUI(user.email);
+
+                // Start tutorial
+                setTimeout(() => {
+                    startTutorial();
+                }, 1000);
+
+            } catch (error) {
+                console.error('Register error:', error);
+                let errorMessage = 'Kayıt başarısız!';
+                
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = '❌ Bu email zaten kullanılıyor!';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = '❌ Geçersiz email formatı!';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = '❌ Şifre çok zayıf!';
+                }
+                
+                showToast(errorMessage, 'error');
+            }
+        }
+
+        // Handle Logout
+        async function handleLogout() {
+            try {
+                const { signOut } = window.firebaseAuthMethods;
+                await signOut(window.firebaseAuth);
+
+                // Clear localStorage
+                localStorage.removeItem('firebaseUser');
+                currentFirebaseUser = null;
+
+                showToast('👋 Çıkış yapıldı!', 'success');
+
+                // Show auth modal again
+                document.getElementById('authModal').style.display = 'flex';
+
+                // Reset UI
+                document.getElementById('currentUserName').textContent = 'Misafir';
+                document.getElementById('userInitials').textContent = '?';
+
+            } catch (error) {
+                console.error('Logout error:', error);
+                showToast('❌ Çıkış yapılamadı!', 'error');
+            }
+        }
+
+        // Update user UI
+        function updateUserUI(email) {
+            const userName = email.split('@')[0];
+            const initials = userName.substring(0, 2).toUpperCase();
+
+            document.getElementById('currentUserName').textContent = userName;
+            document.getElementById('userInitials').textContent = initials;
+        }
+
+        // Load user data from Firestore
+        async function loadUserDataFromFirestore(userId) {
+            try {
+                const { collection, query, where, getDocs } = window.firebaseDbMethods;
+                
+                // Load calculations
+                const q = query(
+                    collection(window.firebaseDb, 'calculations'),
+                    where('userId', '==', userId)
+                );
+                
+                const querySnapshot = await getDocs(q);
+                console.log(`📊 Loaded ${querySnapshot.size} calculations from Firestore`);
+
+                // TODO: Display calculations in UI
+
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        // Save calculation to Firestore
+        async function saveCalculationToFirestore() {
+            if (!currentFirebaseUser) {
+                showToast('❌ Lütfen giriş yapın!', 'error');
+                return;
+            }
+
+            const calculationName = document.getElementById('locationName').value || 'İsimsiz Hesaplama';
+            
+            const calculationData = {
+                userId: currentFirebaseUser.uid,
+                name: calculationName,
+                data: {
+                    // Tüm form verilerini topla
+                    locationName: document.getElementById('locationName').value,
+                    totalCapacity: document.getElementById('totalCapacity').value,
+                    // ... diğer tüm alanlar
+                },
+                timestamp: Date.now()
+            };
+
+            try {
+                const { doc, setDoc } = window.firebaseDbMethods;
+                const calcId = 'calc_' + Date.now();
+                
+                await setDoc(doc(window.firebaseDb, 'calculations', calcId), calculationData);
+                
+                showToast('✅ Hesaplama Firebase\'e kaydedildi!', 'success');
+                unlockAchievement('first_cloud_save');
+
+            } catch (error) {
+                console.error('Error saving to Firestore:', error);
+                showToast('❌ Kaydetme hatası!', 'error');
+            }
+        }
+
+        // Check auth state on page load
+        window.addEventListener('load', function() {
+            const { onAuthStateChanged } = window.firebaseAuthMethods;
+            
+            onAuthStateChanged(window.firebaseAuth, (user) => {
+                if (user) {
+                    // User is signed in
+                    currentFirebaseUser = {
+                        uid: user.uid,
+                        email: user.email
+                    };
+                    localStorage.setItem('firebaseUser', JSON.stringify(currentFirebaseUser));
+                    
+                    // Hide auth modal
+                    document.getElementById('authModal').style.display = 'none';
+                    
+                    // Update UI
+                    updateUserUI(user.email);
+                    
+                    console.log('✅ User authenticated:', user.email);
+                } else {
+                    // User is signed out
+                    currentFirebaseUser = null;
+                    localStorage.removeItem('firebaseUser');
+                    
+                    // Show auth modal
+                    document.getElementById('authModal').style.display = 'flex';
+                    
+                    console.log('❌ User not authenticated');
+                }
+            });
+        });
+
+        // Add logout button to user menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const userDropdown = document.getElementById('userDropdown');
+            if (userDropdown) {
+                // Add logout button at the end
+                const logoutBtn = document.createElement('div');
+                logoutBtn.className = 'user-menu-item';
+                logoutBtn.style.color = '#dc3545';
+                logoutBtn.style.borderTop = '1px solid #e9ecef';
+                logoutBtn.innerHTML = '🚪 Çıkış Yap';
+                logoutBtn.onclick = handleLogout;
+                userDropdown.appendChild(logoutBtn);
+            }
+        });
 
         function closeTutorial() {
             const overlay = document.getElementById('tutorialOverlay');
