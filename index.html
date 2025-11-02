@@ -3099,6 +3099,47 @@
                 background: white;
             }
 
+            /* Help Button Styles */
+            .help-btn {
+                position: fixed;
+                top: 20px;
+                right: 100px;
+                background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 999;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .help-btn:hover {
+                transform: translateY(-3px) scale(1.1);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            }
+
+            .help-btn:active {
+                transform: translateY(-1px) scale(1.05);
+            }
+
+            @media (max-width: 768px) {
+                .help-btn {
+                    top: auto;
+                    bottom: 80px;
+                    right: 20px;
+                    width: 56px;
+                    height: 56px;
+                    font-size: 26px;
+                }
+            }
+
             @page {
                 margin: 1cm;
             }
@@ -3196,6 +3237,11 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Yardım Butonu -->
+            <button class="help-btn" onclick="showUserGuide()" title="Kullanım Kılavuzu">
+                ❓
+            </button>
 
             <!-- Tema Kontrolleri -->
             <div class="theme-controls">
@@ -5748,6 +5794,45 @@
             document.getElementById('saveModal').style.display = 'none';
         }
 
+        // 📚 User Guide Modal Functions
+        function showUserGuide() {
+            document.getElementById('userGuideModal').style.display = 'block';
+            // Smooth scroll to top of modal
+            const modalBody = document.querySelector('#userGuideModal .modal-body');
+            if (modalBody) {
+                modalBody.scrollTop = 0;
+            }
+            console.log('📚 User guide opened');
+        }
+
+        function closeUserGuide() {
+            document.getElementById('userGuideModal').style.display = 'none';
+            console.log('📚 User guide closed');
+        }
+
+        // Smooth scroll for guide links
+        document.addEventListener('DOMContentLoaded', function() {
+            const guideLinks = document.querySelectorAll('#userGuideModal a[href^="#guide-"]');
+            guideLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        });
+
+        // Close user guide when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('userGuideModal');
+            if (event.target === modal) {
+                closeUserGuide();
+            }
+        });
+
         async function confirmSave() {
             const saveName = document.getElementById('saveName').value.trim();
             const isPublic = document.getElementById('savePublic').checked;
@@ -5774,16 +5859,29 @@
             };
             
             try {
+                console.log('💾 Saving to Firebase...', { name: saveName, isPublic });
+                console.log('User:', currentFirebaseUser);
+                console.log('Firebase DB:', window.firebaseDb);
+                console.log('Firebase DB Methods:', window.firebaseDbMethods);
+                
+                // Check if Firebase is ready
+                if (!window.firebaseDb || !window.firebaseDbMethods) {
+                    throw new Error('Firebase not initialized');
+                }
+                
                 // 1. Firebase'e kaydet
                 const { doc, setDoc } = window.firebaseDbMethods;
                 const calcId = 'calc_' + Date.now();
                 
+                console.log('📤 Uploading to Firestore with ID:', calcId);
                 await setDoc(doc(window.firebaseDb, 'calculations', calcId), calculation);
+                console.log('✅ Firebase save successful!');
                 
                 // 2. LocalStorage'a da kaydet (fallback)
                 const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
                 savedCalculations.push(calculation);
                 localStorage.setItem('parkexpertCalculations', JSON.stringify(savedCalculations));
+                console.log('✅ LocalStorage save successful!');
                 
                 closeSaveModal();
                 
@@ -5798,6 +5896,8 @@
                 unlockAchievement('first_cloud_save');
                 
             } catch (error) {
+                console.error('❌ Firebase save error:', error);
+                console.error('Error details:', error.message, error.code);
                 console.error('Error saving to Firebase:', error);
                 showToast('❌ Firebase kaydetme hatası! LocalStorage\'a kaydedildi.', 'error');
                 
@@ -5817,12 +5917,18 @@
             listContainer.innerHTML = '<div style="text-align: center; padding: 40px;"><div class="spinner"></div><br>Yükleniyor...</div>';
             
             try {
+                console.log('📂 Loading from Firebase...');
+                console.log('User:', currentFirebaseUser);
+                console.log('Firebase DB:', window.firebaseDb);
+                console.log('Firebase DB Methods:', window.firebaseDbMethods);
+                
                 const { collection, query, where, getDocs, or } = window.firebaseDbMethods;
                 
                 if (!currentFirebaseUser) {
                     throw new Error('Not authenticated');
                 }
                 
+                console.log('🔍 Querying Firestore...');
                 // Hem kendi hesaplamalarını hem de public hesaplamaları al
                 const q = query(
                     collection(window.firebaseDb, 'calculations'),
@@ -5835,12 +5941,17 @@
                 const querySnapshot = await getDocs(q);
                 const calculations = [];
                 
+                console.log('📊 Documents found:', querySnapshot.size);
+                
                 querySnapshot.forEach((doc) => {
+                    console.log('📄 Document:', doc.id, doc.data());
                     calculations.push({
                         firestoreId: doc.id,
                         ...doc.data()
                     });
                 });
+                
+                console.log('✅ Total calculations loaded:', calculations.length);
                 
                 // Sort by savedAt (newest first)
                 calculations.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
@@ -5898,10 +6009,13 @@
                 }
                 
             } catch (error) {
-                console.error('Error loading from Firebase:', error);
+                console.error('❌ Error loading from Firebase:', error);
+                console.error('Error details:', error.message, error.code, error.stack);
+                console.log('📦 Falling back to localStorage...');
                 
                 // Fallback to localStorage
                 const savedCalculations = JSON.parse(localStorage.getItem('parkexpertCalculations') || '[]');
+                console.log('📦 LocalStorage calculations:', savedCalculations.length);
                 
                 if (savedCalculations.length === 0) {
                     listContainer.innerHTML = `
@@ -9007,6 +9121,307 @@
                         ❌ İptal
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📚 Kullanım Kılavuzu Modal -->
+    <div id="userGuideModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                <h2 style="color: white; margin: 0;">📚 Parkexpert Kullanım Kılavuzu</h2>
+                <button class="close-modal" onclick="closeUserGuide()" style="color: white;">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 30px;">
+                
+                <!-- İçindekiler -->
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                    <h3 style="margin: 0 0 15px 0; color: #1e3c72;">📑 İçindekiler</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <a href="#guide-login" style="color: #667eea; text-decoration: none;">1️⃣ Giriş & Kayıt</a>
+                        <a href="#guide-input" style="color: #667eea; text-decoration: none;">2️⃣ Veri Girişi</a>
+                        <a href="#guide-calculate" style="color: #667eea; text-decoration: none;">3️⃣ Hesaplama</a>
+                        <a href="#guide-graphs" style="color: #667eea; text-decoration: none;">4️⃣ Grafikler</a>
+                        <a href="#guide-save" style="color: #667eea; text-decoration: none;">5️⃣ Kaydetme</a>
+                        <a href="#guide-share" style="color: #667eea; text-decoration: none;">6️⃣ Paylaşım</a>
+                        <a href="#guide-export" style="color: #667eea; text-decoration: none;">7️⃣ Export</a>
+                        <a href="#guide-tips" style="color: #667eea; text-decoration: none;">8️⃣ İpuçları</a>
+                    </div>
+                </div>
+
+                <!-- 1. Giriş & Kayıt -->
+                <div id="guide-login" style="margin-bottom: 40px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">1️⃣ Giriş & Kayıt İşlemleri</h3>
+                    <div style="padding: 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px;">
+                        <h4 style="color: #1e3c72; margin-bottom: 10px;">🔐 Yeni Hesap Oluşturma</h4>
+                        <ol style="line-height: 1.8; color: #495057;">
+                            <li>Sayfa açıldığında <strong>"Kayıt Ol"</strong> sekmesine tıklayın</li>
+                            <li>Email adresinizi girin (örn: <code>kullanici@email.com</code>)</li>
+                            <li>En az 6 karakterlik bir şifre belirleyin</li>
+                            <li>Şifreyi tekrar girin</li>
+                            <li><strong>"✨ Hesap Oluştur"</strong> butonuna tıklayın</li>
+                            <li>✅ Başarılı! Otomatik giriş yapılacaktır</li>
+                        </ol>
+                        
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">🚀 Giriş Yapma</h4>
+                        <ol style="line-height: 1.8; color: #495057;">
+                            <li><strong>"Giriş Yap"</strong> sekmesine tıklayın</li>
+                            <li>Email ve şifrenizi girin</li>
+                            <li><strong>"🚀 Giriş Yap"</strong> butonuna basın</li>
+                            <li>✅ Kayıtlı hesaplamalarınız yüklenecektir</li>
+                        </ol>
+
+                        <div style="margin-top: 15px; padding: 12px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <strong>💡 İpucu:</strong> Enter tuşu ile de giriş yapabilirsiniz!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Veri Girişi -->
+                <div id="guide-input" style="margin-bottom: 40px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">2️⃣ Proje Verilerini Girme</h3>
+                    <div style="padding: 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px;">
+                        <h4 style="color: #1e3c72; margin-bottom: 10px;">📍 Konum Bilgileri</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li><strong>Konum Adı:</strong> Projeniz için açıklayıcı bir isim (örn: "Olivium AVM")</li>
+                            <li><strong>Şehir:</strong> Projenin bulunduğu şehir</li>
+                            <li><strong>İlçe:</strong> İlçe bilgisi</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">📐 Arsa ve Kapasite</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li><strong>Toplam Arsa (m²):</strong> İmar alanı büyüklüğü</li>
+                            <li><strong>Kat Sayısı:</strong> Toplam kat adedi</li>
+                            <li><strong>Kat Başına Kapasite:</strong> Her katta kaç araç park edebilir</li>
+                            <li><strong>Toplam Kapasite:</strong> Otomatik hesaplanır</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">💰 Maliyet Bilgileri</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li><strong>M² Başına Maliyet:</strong> İnşaat maliyeti (₺/m²)</li>
+                            <li><strong>Arsa Maliyeti:</strong> Toplam arsa bedeli</li>
+                            <li><strong>Ek Maliyetler:</strong> Diğer masraflar (proje, ruhsat vb.)</li>
+                        </ul>
+
+                        <div style="margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                            <strong>⚠️ Önemli:</strong> Tüm sayısal değerleri doğru girdiğinizden emin olun. Virgül yerine nokta kullanın.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Hesaplama -->
+                <div id="guide-calculate" style="margin-bottom: 40px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">3️⃣ Fizibilite Hesaplama</h3>
+                    <div style="padding: 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px;">
+                        <h4 style="color: #1e3c72; margin-bottom: 10px;">🧮 Hesaplama Başlatma</h4>
+                        <ol style="line-height: 1.8; color: #495057;">
+                            <li>Tüm zorunlu alanları doldurun</li>
+                            <li>Sayfayı aşağı kaydırın</li>
+                            <li><strong>"🧮 Fizibiliteyi Hesapla"</strong> butonuna tıklayın</li>
+                            <li>Sonuçlar anında görünecektir</li>
+                        </ol>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">📊 Sonuç Yorumlama</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li><strong>Yeşil 🟢:</strong> Kârlı proje, yatırım önerilir</li>
+                            <li><strong>Sarı 🟡:</strong> Marjinal, detaylı analiz gerekir</li>
+                            <li><strong>Kırmızı 🔴:</strong> Zararlı, yatırım önerilmez</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">💹 Önemli Metrikler</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li><strong>ROI:</strong> Yatırım getiri oranı (yüksek = iyi)</li>
+                            <li><strong>Geri Ödeme Süresi:</strong> Yatırımın ne kadar sürede karşılanacağı</li>
+                            <li><strong>Net Bugünkü Değer:</strong> Gelecekteki gelirlerin bugünkü değeri</li>
+                            <li><strong>İç Verim Oranı:</strong> Projenin karlılık oranı</li>
+                        </ul>
+
+                        <div style="margin-top: 15px; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                            <strong>✅ İpucu:</strong> Senaryo karşılaştırma ile farklı durumları test edebilirsiniz!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Grafikler -->
+                <div id="guide-graphs" style="margin-bottom: 40px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">4️⃣ Grafikleri İnceleme</h3>
+                    <div style="padding: 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px;">
+                        <h4 style="color: #1e3c72; margin-bottom: 10px;">📈 Grafik Türleri</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li><strong>Gelir-Gider Grafiği:</strong> Aylık nakit akışı görünümü</li>
+                            <li><strong>Kümülatif Nakit Akışı:</strong> Toplam kar/zarar trendi</li>
+                            <li><strong>Doluluk Oranı:</strong> Haftalık/hafta sonu kullanım</li>
+                            <li><strong>ROI Trendi:</strong> Yatırım getirisi gelişimi</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">🔍 Grafik İnteraktif Özellikleri</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li>Grafik üzerine gelin → Detaylı bilgi görün</li>
+                            <li>Noktaları tıklayın → Değerleri görün</li>
+                            <li>Legend'a tıklayın → Serileri gizle/göster</li>
+                            <li>Zoom yapabilirsiniz (bazı grafiklerde)</li>
+                        </ul>
+
+                        <div style="margin-top: 15px; padding: 12px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <strong>💡 İpucu:</strong> Grafikler üzerinde mouse ile gezerek detayları görebilirsiniz!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Kaydetme -->
+                <div id="guide-save" style="margin-bottom: 40px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">5️⃣ Hesaplama Kaydetme</h3>
+                    <div style="padding: 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px;">
+                        <h4 style="color: #1e3c72; margin-bottom: 10px;">💾 Firebase'e Kaydetme</h4>
+                        <ol style="line-height: 1.8; color: #495057;">
+                            <li><strong>"💾 Hesaplamayı Kaydet"</strong> butonuna tıklayın</li>
+                            <li>Anlamlı bir kayıt adı girin (örn: "Olivium AVM - Ocak 2025")</li>
+                            <li>🌍 <strong>"Herkese Açık"</strong> seçeneğini işaretleyebilirsiniz (opsiyonel)</li>
+                            <li><strong>"💾 Kaydet"</strong> butonuna basın</li>
+                            <li>✅ Firebase'e kaydedildi mesajını görün</li>
+                        </ol>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">📂 Kaydedilen Hesaplamaları Yükleme</h4>
+                        <ol style="line-height: 1.8; color: #495057;">
+                            <li><strong>"📂 Kayıtlı Hesaplamalar"</strong> butonuna tıklayın</li>
+                            <li>Kayıtlı hesaplamalarınız listelenir</li>
+                            <li><strong>"📂 Yükle"</strong> butonuna basarak yükleyin</li>
+                            <li>Hesaplama otomatik olarak form'a doldurulur</li>
+                        </ol>
+
+                        <div style="margin-top: 15px; padding: 12px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                            <strong>🔥 Firebase Avantajları:</strong>
+                            <ul style="margin: 5px 0 0 20px; padding: 0;">
+                                <li>Tüm cihazlardan erişim</li>
+                                <li>Otomatik senkronizasyon</li>
+                                <li>Güvenli bulut depolama</li>
+                                <li>Veri kaybı riski yok</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Paylaşım -->
+                <div id="guide-share" style="margin-bottom: 40px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">6️⃣ Paylaşım Özellikleri</h3>
+                    <div style="padding: 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px;">
+                        <h4 style="color: #1e3c72; margin-bottom: 10px;">🌍 Herkese Açık Paylaşım</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li>Kayıt yaparken <strong>"🌍 Herkese Açık Yap"</strong> seçeneğini işaretleyin</li>
+                            <li>Diğer kullanıcılar hesaplamanızı görebilir</li>
+                            <li>Kopyalayıp kendi analizlerini yapabilirler</li>
+                            <li>Siz her zaman düzenleyebilir ve silebilirsiniz</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">🔒 Özel Kayıtlar</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li>Varsayılan olarak kayıtlar özeldir</li>
+                            <li>Sadece siz görebilir ve düzenleyebilirsiniz</li>
+                            <li>Başkaları erişemez</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">👥 Başkalarının Hesaplamalarını Görme</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li><strong>"📂 Kayıtlı Hesaplamalar"</strong> açın</li>
+                            <li>Public olarak işaretlenmiş hesaplamalar görünür</li>
+                            <li>👤 Badge ile kimin paylaştığını görün</li>
+                            <li>Yükleyip inceleyebilirsiniz</li>
+                        </ul>
+
+                        <div style="margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                            <strong>⚠️ Not:</strong> Public yapılan hesaplamalar herkes tarafından görülebilir!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Export -->
+                <div id="guide-export" style="margin-bottom: 40px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">7️⃣ Rapor ve Export</h3>
+                    <div style="padding: 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px;">
+                        <h4 style="color: #1e3c72; margin-bottom: 10px;">📄 PDF Raporu Oluşturma</h4>
+                        <ol style="line-height: 1.8; color: #495057;">
+                            <li>Hesaplamayı tamamlayın</li>
+                            <li><strong>"📄 PDF Rapor"</strong> butonuna tıklayın</li>
+                            <li>Rapor otomatik oluşturulur</li>
+                            <li>İndir ve paylaş</li>
+                        </ol>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">📊 Excel Export</h4>
+                        <ol style="line-height: 1.8; color: #495057;">
+                            <li><strong>"📊 Excel İndir"</strong> butonuna tıklayın</li>
+                            <li>Tüm veriler Excel formatında indirilir</li>
+                            <li>Kendi analizlerinizi yapabilirsiniz</li>
+                        </ol>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">📋 Rapor İçeriği</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li>Proje özeti</li>
+                            <li>Mali analizler</li>
+                            <li>Grafikler</li>
+                            <li>Öneriler</li>
+                            <li>Detaylı hesaplamalar</li>
+                        </ul>
+
+                        <div style="margin-top: 15px; padding: 12px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <strong>💡 İpucu:</strong> PDF raporları yatırımcılara ve ortaklara sunmak için idealdir!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. İpuçları -->
+                <div id="guide-tips" style="margin-bottom: 40px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">8️⃣ İpuçları & Püf Noktaları</h3>
+                    <div style="padding: 20px; background: #fff; border: 2px solid #e9ecef; border-radius: 10px;">
+                        <h4 style="color: #1e3c72; margin-bottom: 10px;">⚡ Hızlı Erişim</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li><kbd>Enter</kbd> ile giriş yapabilirsiniz</li>
+                            <li><kbd>Ctrl + S</kbd> ile hızlı kayıt (gelecekte eklenecek)</li>
+                            <li>Sağ üst köşedeki <strong>❓</strong> butonu ile bu kılavuza erişin</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">🎨 Özelleştirme</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li>☀️/🌙 Butonu ile tema değiştirin</li>
+                            <li>🎨 Renk paleti ile özel renkler seçin</li>
+                            <li>💱 Para birimi değiştirin (₺, $, €, £)</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">📊 Senaryo Analizi</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li>Senaryo A ve B'yi karşılaştırın</li>
+                            <li>Farklı doluluk oranlarını test edin</li>
+                            <li>En iyi stratejiye karar verin</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">🔐 Güvenlik</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li>Güçlü şifre kullanın (en az 6 karakter)</li>
+                            <li>Public yaparken dikkatli olun</li>
+                            <li>Düzenli olarak verilerinizi yedekleyin</li>
+                        </ul>
+
+                        <h4 style="color: #1e3c72; margin: 20px 0 10px 0;">❓ Sorun Giderme</h4>
+                        <ul style="line-height: 1.8; color: #495057;">
+                            <li><strong>Giriş yapamıyorum:</strong> Email/şifre doğru mu kontrol edin</li>
+                            <li><strong>Kayıt edilmiyor:</strong> İnternet bağlantınızı kontrol edin</li>
+                            <li><strong>Grafik görünmüyor:</strong> Sayfayı yenileyin (F5)</li>
+                            <li><strong>Hesaplama hatalı:</strong> Tüm alanların dolu olduğundan emin olun</li>
+                        </ul>
+
+                        <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; color: white; text-align: center;">
+                            <strong style="font-size: 18px;">🎉 Parkexpert'i Kullandığınız İçin Teşekkürler!</strong>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">Sorularınız için: support@parkexpert.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kapat Butonu -->
+                <div style="text-align: center; margin-top: 30px;">
+                    <button onclick="closeUserGuide()" style="padding: 15px 40px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        ✅ Anladım, Kapat
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
