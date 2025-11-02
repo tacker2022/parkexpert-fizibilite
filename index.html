@@ -8282,6 +8282,8 @@
                 loginForm.style.display = 'none';
             }
         }
+        // Expose to window for onclick handlers
+        window.switchAuthTab = switchAuthTab;
 
         // Handle Login
         async function handleLogin() {
@@ -8340,6 +8342,8 @@
                 showToast(errorMessage, 'error');
             }
         }
+        // Expose to window for onclick handlers
+        window.handleLogin = handleLogin;
 
         // Handle Register
         async function handleRegister() {
@@ -8411,6 +8415,8 @@
                 showToast(errorMessage, 'error');
             }
         }
+        // Expose to window for onclick handlers
+        window.handleRegister = handleRegister;
 
         // Handle Logout
         async function handleLogout() {
@@ -8437,6 +8443,8 @@
                 showToast('❌ Çıkış yapılamadı!', 'error');
             }
         }
+        // Expose to window for onclick handlers
+        window.handleLogout = handleLogout;
 
         // Update user UI
         function updateUserUI(email) {
@@ -8560,6 +8568,40 @@
                         event.preventDefault();
                         event.stopPropagation();
                         showToast('⚠️ Devam etmek için giriş yapmanız gerekiyor', 'warning');
+                    }
+                });
+            }
+        });
+
+        // Add Enter key support for auth forms
+        document.addEventListener('DOMContentLoaded', function() {
+            // Login form enter key
+            const loginEmail = document.getElementById('loginEmail');
+            const loginPassword = document.getElementById('loginPassword');
+            
+            if (loginEmail) {
+                loginEmail.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleLogin();
+                    }
+                });
+            }
+            
+            if (loginPassword) {
+                loginPassword.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleLogin();
+                    }
+                });
+            }
+            
+            // Register form enter key
+            const registerPasswordConfirm = document.getElementById('registerPasswordConfirm');
+            
+            if (registerPasswordConfirm) {
+                registerPasswordConfirm.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleRegister();
                     }
                 });
             }
