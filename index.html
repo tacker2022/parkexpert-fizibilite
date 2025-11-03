@@ -67,6 +67,7 @@
             --danger-color: #dc3545;
             --warning-color: #ffc107;
             --header-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --slot-h: 44px;
         }
 
         [data-theme="dark"] {
@@ -2096,27 +2097,40 @@
             font-size: 20px;
         }
 
+        /* Grid ve kolon oranları (taşma yok, responsive) */
         .time-slot {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1.5fr;
+            grid-template-columns:
+                minmax(110px, 1fr)
+                minmax(110px, 1fr)
+                minmax(110px, 1fr)
+                minmax(110px, 1fr)
+                minmax(160px, 1.4fr); /* Hasılat biraz geniş */
             gap: 8px;
+            align-items: stretch; /* hepsi aynı yükseklikte */
             margin-bottom: 10px;
-            align-items: center;
         }
 
-        .time-slot label {
-            font-weight: 600;
-            color: #495057;
-            font-size: 13px;
+        .time-slot > * {
+            min-width: 0; /* metin taşmalarını engelle */
         }
 
-        .time-slot input {
-            padding: 10px 8px;
-            border: 2px solid #dee2e6;
+        /* Tüm kutularda aynı yükseklik ve kutu hesabı */
+        .time-slot input,
+        .time-slot .revenue-display {
+            height: var(--slot-h);
+            box-sizing: border-box;
             border-radius: 8px;
+            border: 2px solid #dee2e6;
+        }
+
+        /* Inputlar */
+        .time-slot input {
+            padding: 0 10px; /* sabit yükseklik için padding 0-yatay 10 */
             font-size: 13px;
-            transition: border-color 0.2s;
             text-align: center;
+            line-height: calc(var(--slot-h) - 4px); /* border düşülmüş line-height */
+            transition: border-color 0.2s;
         }
 
         .time-slot input:focus {
@@ -2125,37 +2139,40 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
+        /* Hasılat kutusu */
         .time-slot .revenue-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+            border-color: #667eea; /* mor hat */
             background: linear-gradient(135deg, #e7f3ff 0%, #f0f8ff 100%);
-            border: 2px solid #667eea;
-            border-radius: 8px;
-            padding: 8px 10px;
-            font-size: 13px;
-            line-height: 1.4;
-            color: #1e3c72;
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.12);
             font-weight: 600;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.12);
         }
 
+        /* İç tipografi: yüksekliği bozmasın */
         .time-slot .revenue-display > div {
-            font-size: 16px;
             font-weight: 700;
+            font-size: 14px; /* 16px yerine 14px -> yükseklik taşmasını keser */
+            line-height: 1;
             color: #28a745;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .time-slot .revenue-display small {
-            display: block;
             font-size: 11px;
+            line-height: 1;
             color: #495057;
             font-weight: 500;
-            line-height: 1.3;
         }
 
         .time-slot .revenue-display .daily {
-            font-size: 15px;
             font-weight: 700;
+            font-size: 14px;
+            line-height: 1;
             color: #28a745;
             margin-bottom: 3px;
         }
@@ -2163,10 +2180,15 @@
         .time-slot .revenue-display .period {
             display: block;
             font-size: 11px;
+            line-height: 1;
             color: #6c757d;
             font-weight: 500;
-            margin-top: 2px;
-            line-height: 1.2;
+        }
+
+        .time-slot label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 13px;
         }
 
         .calculate-btn {
@@ -3068,6 +3090,17 @@
 
             .tutorial-welcome h2 {
                 font-size: 22px;
+            }
+        }
+
+        /* Dar ekran düzeni - time-slot responsive */
+        @media (max-width: 960px) {
+            .time-slot {
+                grid-template-columns: 1fr 1fr;
+                grid-auto-rows: var(--slot-h);
+            }
+            .time-slot .revenue-display {
+                grid-column: 1 / -1;
             }
         }
 
